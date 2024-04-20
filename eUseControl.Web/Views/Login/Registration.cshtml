@@ -1,0 +1,54 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAuth.cshtml";
+    ViewBag.Title = "Registartion";
+}
+
+@using System.Web.Optimization
+@model eUseControl.Web.Models.LoginData
+
+<!-- SECTION -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-7">
+                <div class="Reg-details">
+                    <div class="section-title">
+                        <h3 class="title">Registration</h3>
+                    </div>
+                    <div class="form-group">
+                        <input class="input" type="text" name="first-name" placeholder="First Name">
+                    </div>
+                    <div class="form-group">
+                        <input class="input" type="text" name="last-name" placeholder="Last Name">
+                    </div>
+                    <div class="form-group">
+                        <input class="input" type="email" name="email" placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                        <input class="input" type="password" name="password" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <input class="input" type="password" name="passwordconfirm" placeholder="Confirm password">
+                    </div>
+
+                    <div class="input-checkbox">
+                        <input type="checkbox" id="terms">
+                        <label for="terms">
+                            <span></span>
+                            I've read and accept the <a href="#">terms & conditions</a>
+                        </label>
+                    </div>
+
+                    <div class="col-md-5">
+                        <a href="#" class="primary-btn">Confirm</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /SECTION -->

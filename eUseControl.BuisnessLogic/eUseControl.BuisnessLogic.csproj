@@ -43,6 +43,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,17 +52,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseBL\SessionAdminBL.cs" />
+    <Compile Include="BaseBL\SessionBL.cs" />
     <Compile Include="BuisnessLogic.cs" />
-    <Compile Include="Core\Levels\AdminApi.cs" />
-    <Compile Include="Core\Levels\ModeratorApi.cs" />
-    <Compile Include="Core\Levels\UserApi.cs" />
-    <Compile Include="Core\Poco\PocoProducts.cs" />
-    <Compile Include="Interfaces\IAdministration.cs" />
-    <Compile Include="Interfaces\IProduct.cs" />
+    <Compile Include="DbModel\CartContext.cs" />
+    <Compile Include="DbModel\FavContext.cs" />
+    <Compile Include="DbModel\ImgContext.cs" />
+    <Compile Include="DbModel\ProductContext.cs" />
+    <Compile Include="DbModel\ReviewContext.cs" />
+    <Compile Include="DbModel\SessionContext.cs" />
+    <Compile Include="DbModel\UserContext.cs" />
+    <Compile Include="Interfaces\ISessionAdmin.cs" />
     <Compile Include="Interfaces\ISession.cs" />
-    <Compile Include="MainBL\AdministrationBL.cs" />
-    <Compile Include="MainBL\ProductBL.cs" />
-    <Compile Include="MainBL\SessionBL.cs" />
+    <Compile Include="MainAPI\AdminAPI.cs" />
+    <Compile Include="MainAPI\UserAPI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -78,7 +82,9 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="DbModel\Seed\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

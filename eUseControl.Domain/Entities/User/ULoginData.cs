@@ -10,7 +10,7 @@ namespace eUseControl.Domain.Entities.User
     {
         public string Credential { get; set; }
         public string Password { get; set; }
-        public string FirstIp { get; set; }
-        public DateTime FirstLoginTime { get; set; }
+        public string LastIp { get; set; }
+        public DateTime LastLogin { get; set; }
     }
 }

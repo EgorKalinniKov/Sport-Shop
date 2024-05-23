@@ -1,10 +1,10 @@
-﻿using System;
+﻿using eUseControl.BuisnessLogic.BaseBL;
+using eUseControl.BuisnessLogic.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using eUseControl.BuisnessLogic.Interfaces;
-using eUseControl.BuisnessLogic.MainBL;
 
 namespace eUseControl.BuisnessLogic
 {
@@ -14,15 +14,9 @@ namespace eUseControl.BuisnessLogic
         {
             return new SessionBL();
         }
-
-        public IProduct GetProductBL()
+        public ISessionAdmin GetProductBL()
         {
-            return new ProductBL();
-        }
-
-        public IAdministration GetAdministrationBL()
-        {
-            return new AdministrationBL();
+            return new SessionAdminBL();
         }
     }
 }

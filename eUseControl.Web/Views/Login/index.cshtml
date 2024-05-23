@@ -4,53 +4,50 @@
 }
 
 @using System.Web.Optimization
-@model eUseControl.Web.Models.LoginData
+@model eUseControl.Web.Models.Authorization.LoginData
 
 <div class="section">
     <!-- container -->
     <div class="container">
         <!-- row -->
         <div class="row">
-            @Html.ValidationSummary(true)
-            @using (Html.BeginForm("Index", "Login", FormMethod.Post, new { @id = "LoginForm" }))
+            @using (Html.BeginForm("Login", "Login", FormMethod.Post, new { @id = "LoginForm" }))
             {
-                <div class="col-md-7">
+                <div class="col-md-4">
                     <div class="Auth-details">
+                        @Html.AntiForgeryToken()
                         <div class="section-title">
                             <h3 class="title">Authentication</h3>
                         </div>
-                        @Html.AntiForgeryToken()
                         <div class="form-group">
-                            @Html.LabelFor(m => m.Username, new { @class = "control-label" })
-                            @Html.TextBoxFor(m => m.Username, new
-                       {
-                           placeholder = "Login",
-                           title = "Please enter you username",
-                           value = "",
-                           name = "username",
-                           id = "username",
-                           @class = "form-control"
-                       })
+                            @Html.TextBoxFor(m => m.Credential, new
+                            {
+                                placeholder = "Credential",
+                                title = "Please enter your username or email",
+                                value = "",
+                                name = "credential",
+                                id = "credential",
+                                @class = "form-control"
+                            })
                         </div>
                         <div class="form-group">
-                            @Html.LabelFor(m => m.Password, new { @class = "control-label" })
                             @Html.TextBoxFor(m => m.Password, new
-                       {
-                           @class = "form-control",
-                           type = "password",
-                           title = "Please enter your password",
-                           placeholder = "******",
-                           value = "",
-                           name = "password",
-                           id = "password"
-                       })
+                            {
+                                @class = "form-control",
+                                type = "password",
+                                title = "Please enter your password",
+                                placeholder = "***********",
+                                value = "",
+                                name = "password",
+                                id = "password"
+                            })
                         </div>
                     </div>
                     <div class="col-md-5">
-                        <a href="#" class="primary-btn">Enter</a>
+                        <button type="submit" class="primary-btn">Enter</button>
                     </div>
-                    <p class="forgotpassword"><a href="#">Forgot password?</a></p>
-                    <p class="registration"><a href="#">Registration</a>
+                    <p><a href="@Url.Action("ForgotPassword1", "Login")">Forgot password?</a></p>
+                    <p><a href="@Url.Action("Registration", "Login")">Registration</a></p>
                 </div>
             }
         </div>

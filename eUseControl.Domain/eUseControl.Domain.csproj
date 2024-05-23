@@ -43,6 +43,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,14 +52,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\Auth\UCoockieData.cs" />
-    <Compile Include="Entities\GeneralResponce\GeneralResponce.cs" />
-    <Compile Include="Entities\Product\DBModel\Product.cs" />
-    <Compile Include="Entities\Product\ProductDataModel.cs" />
-    <Compile Include="Entities\User\DBModel\User.cs" />
-    <Compile Include="Entities\User\UDBTables.cs" />
+    <Compile Include="Entities\Administration\SessionTable.cs" />
+    <Compile Include="Entities\Product\PDbTable.cs" />
+    <Compile Include="Entities\Product\PImgTable.cs" />
+    <Compile Include="Entities\Product\PRegisterData.cs" />
+    <Compile Include="Entities\Product\PRegTo.cs" />
+    <Compile Include="Entities\Responces\BaseResponces.cs" />
+    <Compile Include="Entities\Review\RDbTable.cs" />
+    <Compile Include="Entities\Review\RRegisterData.cs" />
+    <Compile Include="Entities\User\CartTable.cs" />
+    <Compile Include="Entities\User\FavTable.cs" />
+    <Compile Include="Entities\User\UDbTable.cs" />
     <Compile Include="Entities\User\ULoginData.cs" />
-    <Compile Include="Enums\ULevel.cs" />
+    <Compile Include="Entities\User\URegisterData.cs" />
+    <Compile Include="Entities\User\UserMinimal.cs" />
+    <Compile Include="Enums\URole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +79,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

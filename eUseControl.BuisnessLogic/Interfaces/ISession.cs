@@ -1,18 +1,21 @@
-﻿using System;
+﻿using eUseControl.Domain.Entities.Product;
+using eUseControl.Domain.Entities.Responces;
+using eUseControl.Domain.Entities.User;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using eUseControl.Domain.Entities.Auth;
-using eUseControl.Domain.Entities.User.DBModel;
-using eUseControl.Domain.Entities.User;
-using eUseControl.Domain.Entities.GeneralResponce;
+using System.Web;
 
 namespace eUseControl.BuisnessLogic.Interfaces
 {
     public interface ISession
     {
-        GeneralResponce UserLoginAction(ULoginData data);
-        UCoockieData GenCoockieAlgo(User dataUser);
+        BaseResponces ValidateUserCredentialAction(ULoginData ulData);
+        BaseResponces RegisterUserActionFlow(URegisterData uData);
+        BaseResponces GenerateUserSessionActionFlow(ULoginData ulData);
+        HttpCookie GenCookie(string loginCredential);
+        UserMinimal GetUserByCookie(string apiCookieValue);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using eUseControl.BuisnessLogic.Interfaces;
@@ -52,7 +53,7 @@ namespace eUseControl.Web.Controllers
 
             BaseResponces resp = _session.ValidateUserCredentialAction(ulData);
 
-            if(resp.Status)
+            if (resp.Status)
             {
                 BaseResponces auth = _session.GenerateUserSessionActionFlow(ulData);
             }
@@ -65,7 +66,7 @@ namespace eUseControl.Web.Controllers
             var adress = base.Request.UserHostAddress;
             var uData = new URegisterData
             {
-                UserName = data.UserName,
+                Username = data.Username,
                 Password = data.Password,
                 Email = data.Email,
                 LastIp = adress,
@@ -74,7 +75,7 @@ namespace eUseControl.Web.Controllers
 
             BaseResponces resp = _session.RegisterUserActionFlow(uData);
 
-            return null;
+            return RedirectToAction("Index", "Home");
         }
     }
 }

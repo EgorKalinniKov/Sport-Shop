@@ -13,7 +13,7 @@ namespace eUseControl.Domain.Entities.Product
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ProductId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [Display(Name = "Product Article")]
@@ -31,17 +31,17 @@ namespace eUseControl.Domain.Entities.Product
         public string Description { get; set; }
 
         [Required]
-        public int Cost { get; set; }
+        public int Price { get; set; }
         public int Discount { get; set; }
 
         [Required]
         public bool AvailableStatus { get; set; }
+        [Required]
+        public string Image { get; set; }
         public int TotalRatings { get; set; }
         public double AvarageRating { get; set; }
         [DataType(DataType.Date)]
         public DateTime DateCreated { get; set; }
-
-        [DataType(DataType.Date)]
         public DateTime DateChanged { get; set; }
 
         public string Brend { get; set; }

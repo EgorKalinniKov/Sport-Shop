@@ -5,8 +5,9 @@ using System.Web;
 
 namespace eUseControl.Web.Models.Product
 {
-    public class Cart_FavData//Модель корзины и избранного
+    public class SearchData
     {
-        public List<ProdMin> Products { get; set; }
+        public string Credential { get; set; }
+        public string Category { get; set; }
     }
 }

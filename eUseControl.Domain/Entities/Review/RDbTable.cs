@@ -19,6 +19,7 @@ namespace eUseControl.Domain.Entities.Review
         public string Article { get; set; }
         [Required]
         public int UserId { get; set; }
+        public string Username { get; set; }
         [Required]
         [StringLength(150)]
         public string Message { get; set; }

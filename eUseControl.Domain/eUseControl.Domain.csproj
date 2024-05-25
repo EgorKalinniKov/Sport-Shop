@@ -53,15 +53,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\Administration\SessionTable.cs" />
+    <Compile Include="Entities\Product\Item.cs" />
     <Compile Include="Entities\Product\PDbTable.cs" />
     <Compile Include="Entities\Product\PImgTable.cs" />
     <Compile Include="Entities\Product\PRegisterData.cs" />
-    <Compile Include="Entities\Product\PRegTo.cs" />
+    <Compile Include="Entities\Product\ProdMin.cs" />
+    <Compile Include="Entities\Product\PSearch.cs" />
     <Compile Include="Entities\Responces\BaseResponces.cs" />
     <Compile Include="Entities\Review\RDbTable.cs" />
+    <Compile Include="Entities\Review\ReviewData.cs" />
     <Compile Include="Entities\Review\RRegisterData.cs" />
-    <Compile Include="Entities\User\CartTable.cs" />
-    <Compile Include="Entities\User\FavTable.cs" />
     <Compile Include="Entities\User\UDbTable.cs" />
     <Compile Include="Entities\User\ULoginData.cs" />
     <Compile Include="Entities\User\URegisterData.cs" />

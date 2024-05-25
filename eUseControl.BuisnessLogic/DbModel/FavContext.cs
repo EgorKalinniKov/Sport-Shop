@@ -1,4 +1,4 @@
-﻿using eUseControl.Domain.Entities.User;
+﻿using eUseControl.Domain.Entities.Product;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -12,6 +12,6 @@ namespace eUseControl.BuisnessLogic.DbModel
     {
         public FavContext() : base("name=eUseControl") { }
 
-        public virtual DbSet<FavTable> Favs { get; set; }
+        public virtual DbSet<Item> Favourites { get; set; }
     }
 }

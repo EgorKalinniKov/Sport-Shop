@@ -16,7 +16,7 @@ namespace eUseControl.Domain.Entities.Administration
 
         [Required]
         [StringLength(30)]
-        public string Username { get; set; }
+        public string Email { get; set; }
         public int UserId { get; set; }
 
         [StringLength(30)]

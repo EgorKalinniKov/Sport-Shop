@@ -3,43 +3,66 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using eUseControl.BuisnessLogic.Interfaces;
+using eUseControl.Domain.Entities.Product;
+using eUseControl.Domain.Entities.Responces;
+using eUseControl.Domain.Entities.Review;
 using eUseControl.Web.Attribute;
+using eUseControl.Web.Extension;
 using eUseControl.Web.Models;
+using eUseControl.Web.Models.Product;
 using eUseControl.Web.Models.User;
 
 namespace eUseControl.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ISession _session;
+        private readonly IProduct _product;
+        private readonly ISessionAdmin _session_admin;
+        public HomeController()
+        {
+            var bl = new BuisnessLogic.BuisnessLogic();
+            _session = bl.GetSessionBL();
+            _product = bl.GetProductBL();
+            _session_admin = bl.GetSessionAdminBL();
+        }
         // GET: Home
         public ActionResult Index()
         {
-            UserData u = new UserData();
-            u.Username = "Customer";
-            u.Products = new List<string> { "Product #1", "Product #2", "Product #3", "Product #4", "Product #5", "Product #6" };
+            ViewBag.Products = _product.GetAllProductsActionFlow();
+            ViewBag.NewProducts = _product.GetNewProductsActionFlow();
+            ViewBag.TopProducts = _product.GetTopProductsActionFlow();
 
-            return View(u);
+            return View();
         }
 
-        public ActionResult Product()
+        public ActionResult Product(string Art)
         {
-            var product = Request.QueryString["p"];
-
-            UserData u = new UserData();
-            u.Username = "Customer";
-            u.SingleProduct = product;
-
-            return View(u);
+            ViewBag.Product = _product.GetProductByArticleActionFlow(Art);
+            ViewBag.ProductImgs = _product.GetProductImgsActionFlow(Art);
+            ViewBag.ProdReview = _product.GetProductReviewsActionFlow(Art);
+            return View();
         }
 
         public ActionResult Store()
         {
+            ViewBag.Products =  _product.GetAllProductsActionFlow();
             return View();
         }
-        [AdminMod]
-        public ActionResult SuccessfulOperation()
+        [HttpPost]
+        public ActionResult AddReview(ReviewData data)
         {
-            return View();
+            var rData = new RRegisterData
+            {
+                UserId = 1,
+                Article = "1",
+                Message = data.Message,
+                Rate = data.Rate,
+            };
+
+            return null; 
         }
+
     }
 }

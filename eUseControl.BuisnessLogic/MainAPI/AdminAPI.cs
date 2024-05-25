@@ -29,8 +29,10 @@ namespace eUseControl.BuisnessLogic.MainAPI
                 Name = data.Name,
                 Article = data.Article,
                 Description = data.Description,
-                Cost = data.Cost,
+                Price = data.Price,
                 Discount = 0,
+                TotalRatings = 0,
+                AvarageRating = 0,
                 Brend = data.Brend,
                 Category = data.Category,
                 Tag = data.Tag,
@@ -38,7 +40,11 @@ namespace eUseControl.BuisnessLogic.MainAPI
                 DateCreated = DateTime.Now,
                 DateChanged = DateTime.Now,
                 AvailableStatus = data.AvailableStatus,
+                Image = ""
             };
+
+            if (data.Images != null)
+                product.Image = data.Images.First();
 
             //Занесение товара в таблицу
             using (var db = new ProductContext())
@@ -49,17 +55,13 @@ namespace eUseControl.BuisnessLogic.MainAPI
 
             if (data.Images != null)
             {
-                using (var db = new ProductContext())
-                {
-                    local = db.Products.FirstOrDefault(x => x.Article == data.Article);
-                }
                 using (var db = new ImgContext())
                 {
                     foreach (var img in data.Images)
                     {
                         var strImg = new PImgTable
                         {
-                            ProdId = local.ProductId,
+                            ProdArticle = data.Article,
                             Img = img,
                         };
 
@@ -83,7 +85,7 @@ namespace eUseControl.BuisnessLogic.MainAPI
                 List<PImgTable> local = new List<PImgTable>();
                 using (var db1 = new ImgContext())
                 {
-                    local = db1.Imgs.Where(x => x.ProdId == deleteProd.ProductId).ToList();
+                    local = db1.Imgs.Where(x => x.ProdArticle == pCred).ToList();
                     if (local != null)
                         foreach (var item in local)
                         {
@@ -140,7 +142,7 @@ namespace eUseControl.BuisnessLogic.MainAPI
                 BanUser = db.Users.FirstOrDefault(x => x.Email == data);
             }
 
-            if(BanUser != null)
+            if (BanUser != null)
             {
                 BanUser.Level = Domain.Enums.URole.Banned;
             }

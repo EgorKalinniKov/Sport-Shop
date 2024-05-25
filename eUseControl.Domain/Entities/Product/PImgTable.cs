@@ -14,7 +14,7 @@ namespace eUseControl.Domain.Entities.Product
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ImgId { get; set; }
         [Required]
-        public int ProdId { get; set; }
+        public string ProdArticle { get; set; }
         [Required]
         public string Img { get; set; }
     }

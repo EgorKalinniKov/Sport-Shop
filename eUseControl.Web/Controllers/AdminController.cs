@@ -2,6 +2,7 @@
 using eUseControl.Domain.Entities.Product;
 using eUseControl.Domain.Entities.Responces;
 using eUseControl.Domain.Entities.User;
+using eUseControl.Web.Attribute;
 using eUseControl.Web.Models.Product;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,12 @@ namespace eUseControl.Web.Controllers
     public class AdminController : Controller
     {
         private readonly ISessionAdmin _admin;
+        private readonly IProduct _product;
         public AdminController()
         {
             var bl = new BuisnessLogic.BuisnessLogic();
-            _admin = bl.GetProductBL();
+            _admin = bl.GetSessionAdminBL();
+            _product = bl.GetProductBL();
         }
         // GET: Admin
         public ActionResult Index()
@@ -54,6 +57,8 @@ namespace eUseControl.Web.Controllers
         {
             return View();
         }
+
+        [AdminMod]
         [HttpPost]
         public ActionResult ProductRegistration(ProductRegistration data)
         {
@@ -72,15 +77,16 @@ namespace eUseControl.Web.Controllers
                         directory = path;
                     }
                     img.SaveAs(Path.Combine(@path, ImageName));
-                    Imgs.Add(Path.Combine(@path, ImageName));
+                    Imgs.Add("/Content/Images/" + data.Name + '/' + ImageName);
                 }
             }
-            var uData = new PRegisterData
+
+            var pData = new PRegisterData
             {
                 Name = data.Name,
                 Article = data.Article,
                 Description = data.Description,
-                Cost = data.Cost,
+                Price = data.Price,
                 Brend = data.Brend,
                 Category = data.Category,
                 Tag = data.Tag,
@@ -89,8 +95,43 @@ namespace eUseControl.Web.Controllers
                 AvailableStatus = data.AvailableStatus,
             };
 
-            BaseResponces resp = _admin.RegisterProductActionFlow(uData);
+            BaseResponces resp = _admin.RegisterProductActionFlow(pData);
             Imgs = null;
+            return RedirectToAction("NewProduct", "Admin");
+        }
+
+        [AdminMod]
+        [HttpPost]
+        public ActionResult ProductEdit ()
+        {
+            return null;
+        }
+
+        [AdminMod]
+        [HttpPost]
+        public ActionResult ProductDelete()
+        {
+            return null;
+        }
+
+        [AdminMod]
+        [HttpPost]
+        public ActionResult DeleteReview()
+        {
+            return null;
+        }
+
+        [AdminMod]
+        [HttpPost]
+        public ActionResult UserBan()
+        {
+            return null;
+        }
+
+        [AdminMod]
+        [HttpPost]
+        public ActionResult UserEdit()
+        {
             return null;
         }
     }

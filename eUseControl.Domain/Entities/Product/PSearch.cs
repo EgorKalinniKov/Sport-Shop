@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace eUseControl.Domain.Entities.Product
 {
-    public class PRegTo
+    public class PSearch
     {
-        public int UserId { get; set; }
-        public string ProdArt { get; set; }
-        public int ProdCost { get; set; }
+        public string Credential { get; set; }
+        public string Category { get; set; }
     }
 }

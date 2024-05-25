@@ -14,9 +14,13 @@ namespace eUseControl.BuisnessLogic
         {
             return new SessionBL();
         }
-        public ISessionAdmin GetProductBL()
+        public ISessionAdmin GetSessionAdminBL()
         {
             return new SessionAdminBL();
+        }
+        public IProduct GetProductBL()
+        {
+            return new ProductBL();
         }
     }
 }

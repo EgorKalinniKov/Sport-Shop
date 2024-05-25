@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseBL\ProductBL.cs" />
     <Compile Include="BaseBL\SessionAdminBL.cs" />
     <Compile Include="BaseBL\SessionBL.cs" />
     <Compile Include="BuisnessLogic.cs" />
@@ -62,9 +63,11 @@
     <Compile Include="DbModel\ReviewContext.cs" />
     <Compile Include="DbModel\SessionContext.cs" />
     <Compile Include="DbModel\UserContext.cs" />
+    <Compile Include="Interfaces\IProduct.cs" />
     <Compile Include="Interfaces\ISessionAdmin.cs" />
     <Compile Include="Interfaces\ISession.cs" />
     <Compile Include="MainAPI\AdminAPI.cs" />
+    <Compile Include="MainAPI\ProductApi.cs" />
     <Compile Include="MainAPI\UserAPI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

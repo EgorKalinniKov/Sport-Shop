@@ -40,6 +40,7 @@ namespace eUseControl.Web.Controllers
         }
         public ActionResult DeleteProduct()
         {
+            ViewBag.Products = _product.GetAllProductsActionFlow();
             return View();
         }
         public ActionResult Users()
@@ -126,9 +127,10 @@ namespace eUseControl.Web.Controllers
 
         [AdminMod]
         [HttpPost]
-        public ActionResult ProductDelete()
+        public ActionResult ProductDelete(string Art)
         {
-            return null;
+            BaseResponces resp = _admin.DeleteProductActionFlow(Art);
+            return RedirectToAction("DeleteProduct", "Admin");
         }
 
         [AdminMod]

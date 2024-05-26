@@ -23,7 +23,7 @@
                     <h3 class="aside-title">Number</h3>
                     <ul class="aside">
                         <li><a href="@Url.Action("Index", "Admin")">Number</a></li>
-                        <li><a href="@Url.Action("Products", "Admin")">New product</a></li>
+                        <li><a href="@Url.Action("NewProduct", "Admin")">New product</a></li>
                         <li><a class="active" href="@Url.Action("Products", "Admin")">Products</a></li>
                         <li><a href="@Url.Action("DeleteProducts", "Admin")">Delete product</a></li>
                         <li><a href="@Url.Action("Users", "Admin")">View users</a></li>
@@ -39,7 +39,7 @@
                 <div class="container">
                     <!-- row -->
                     <div class="row">
-                        @using (Html.BeginForm("ProductEdit", "Admin", FormMethod.Post, new { Id = ViewBag.Product.Id }))
+                        @using (Html.BeginForm("ProductEdit", "Admin", FormMethod.Post))
                         {
                             <input hidden name="@Html.NameFor(x => x.Article)" id="@Html.IdFor(x => x.Article)" value="@ViewBag.Product.Article">
                             <!-- Product main img -->
@@ -78,9 +78,7 @@
                             <div class="col-md-3">
                                 <div class="product-details">
                                     <p>#@ViewBag.Product.Article</p>
-                                    <h2 class="product-name">@ViewBag.Product.Name</h2>
-                                    <label>New Name:</label>
-                                    <input name="@Html.NameFor(x => x.Name)" id="@Html.IdFor(x => x.Name)" value="">
+                                    <h2 class="product-name"><input name="@Html.NameFor(x => x.Name)" id="@Html.IdFor(x => x.Name)" value="@ViewBag.Product.Name"></h2>        
                                     <div>
                                         <div class="product-rating">
                                             @for (int i = 1; i <= 5; i++)
@@ -91,32 +89,18 @@
                                         <a class="review-link" href="#">@ViewBag.ProdReview.Count Review(s)</a>
                                     </div>
                                     <div>
-                                        @if (ViewBag.Product.Discount > 0)
-                                        {
-                                            var PriceDiscount = ViewBag.Product.Price - ViewBag.Product.Price / 100 * ViewBag.Product.Discount;
-                                            <h4 class="product-price">@PriceDiscount <del class="product-old-price">@ViewBag.Product.Price</del></h4>}
-                                        else
-                                        { <h4 class="product-price">@ViewBag.Product.Price</h4>}
-
-                                        <div class="input-radio">
-                                            @Html.RadioButtonFor(m => m.AvailableStatus, true)
-                                            <label for="instock">
-                                                <span></span>
-                                                In Stock
-                                            </label>
-                                        </div>
-                                        <div class="input-radio">
-                                            @Html.RadioButtonFor(m => m.AvailableStatus, false)
-                                            <label for="outofstock">
-                                                <span></span>
-                                                Out Of Stock
-                                            </label>
+                                        <h4 class="product-price"><input name="@Html.NameFor(x => x.Price)" id="@Html.IdFor(x => x.Price)" value="@ViewBag.Product.Price"></h4>
+                                        <h4 ><input name="@Html.NameFor(x => x.Discount)" id="@Html.IdFor(x => x.Discount)" value="@ViewBag.Product.Discount"></h4>
+                                        <div>
+                                            @Html.CheckBoxFor(m => m.AvailableStatus)
+                                            <label>Avaliable</label>
+                                            <p>Current status:<p>
+                                                @if (ViewBag.Product.AvailableStatus)
+                                                {<span>In Stock</span> }
+                                                else
+                                                {<span>Out of Stock</span>}
                                         </div>
                                     </div>
-                                    <label>New Price:</label>
-                                    <input name="@Html.NameFor(x => x.Price)" id="@Html.IdFor(x => x.Price)" value="">
-                                    <label>New Discount:</label>
-                                    <input name="@Html.NameFor(x => x.Discount)" id="@Html.IdFor(x => x.Discount)" value="">
                                     <div class="add-to-cart">
                                         <button> save changing</button>
                                     </div>
@@ -170,7 +154,9 @@
                                         <div id="tab1" class="tab-pane fade in active">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <input name="@Html.NameFor(x => x.Description)" id="@Html.IdFor(x => x.Description)" value="@ViewBag.Product.Description">
+                                                    <div class="order-notes">
+                                                        <textarea class="input" name="@Html.NameFor(x => x.Description)" id="@Html.IdFor(x => x.Description)" value="">@ViewBag.Product.Description</textarea>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

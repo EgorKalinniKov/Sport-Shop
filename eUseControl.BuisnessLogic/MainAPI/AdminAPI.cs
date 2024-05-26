@@ -109,23 +109,45 @@ namespace eUseControl.BuisnessLogic.MainAPI
                 deleteProd = db.Products.FirstOrDefault(x => x.Article == pCred);
             }
             if (deleteProd == null) { return new BaseResponces { Status = false, StatusMessage = "Product doesn't exist" }; }
-            using (var db = new ProductContext())
-            {
-                List<PImgTable> local = new List<PImgTable>();
-                using (var db1 = new ImgContext())
-                {
-                    local = db1.Imgs.Where(x => x.ProdArticle == pCred).ToList();
-                    if (local != null)
-                        foreach (var item in local)
-                        {
-                            db1.Imgs.Remove(item);
-                        }
-                    db1.SaveChanges();
-                }
 
+            List<RDbTable> deleteReviews = null;
+            using (var db = new ReviewContext())
+            {
+                deleteReviews = db.Reviews.Where(x => x.Article == pCred).ToList();
+            }
+
+            if (deleteReviews.Count() > 0)
+            {
+                using (var db = new ReviewContext())
+                {
+                    foreach (var rev in deleteReviews)
+                    {
+                        db.Reviews.Remove(rev);
+                    }
+                    db.SaveChanges();
+                }
+            }
+
+
+            List<PImgTable> local = new List<PImgTable>();
+            using (var db1 = new ImgContext())
+            {
+                local = db1.Imgs.Where(x => x.ProdArticle == pCred).ToList();
+                if (local.Count() > 0)
+                    foreach (var item in local)
+                    {
+                        db1.Imgs.Remove(item);
+                    }
+                db1.SaveChanges();
+            }
+
+            if (Directory.Exists(deleteProd.Directory))
                 Directory.Delete(deleteProd.Directory, true);
 
-                db.Products.Remove(deleteProd);
+            using (var db = new ProductContext())
+            {
+                var tmp = db.Products.FirstOrDefault(x => x.Article == pCred);
+                db.Products.Remove(tmp);
                 db.SaveChanges();
 
             }

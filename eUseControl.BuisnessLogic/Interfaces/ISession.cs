@@ -17,6 +17,7 @@ namespace eUseControl.BuisnessLogic.Interfaces
         BaseResponces ValidateUserCredentialAction(ULoginData ulData);
         BaseResponces RegisterUserActionFlow(URegisterData uData);
         BaseResponces GenerateUserSessionActionFlow(ULoginData ulData);
+        BaseResponces RegisterUReviewActionFlow(RRegisterData rData);
         HttpCookie GenCookie(string loginCredential);
         UserMinimal GetUserByCookie(string apiCookieValue);
     }

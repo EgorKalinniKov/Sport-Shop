@@ -124,7 +124,7 @@
                                             <div class="rating-stars">
                                                 @for (int i = 1; i <= 5; i++)
                                                 {
-                                                    <i class="fa @(i <= ViewBag.Product.AvarageRating ? "fa-star" : "fa-star-o")"></i>
+                                                    <i class="fa @(i <= @ViewBag.Product.AvarageRating ? "fa-star" : "fa-star-o")"></i>
                                                 }
                                             </div>
                                         </div>
@@ -202,29 +202,29 @@
                                 <div class="col-md-6">
                                     <div id="reviews">
                                         <ul class="reviews">
-                                            <li>
-                                                @if (ViewBag.ProdReview.Count > 0)
+                                            @if (ViewBag.ProdReview.Count > 0)
+                                            {
+                                                foreach (var rev in ViewBag.ProdReview)
                                                 {
-                                                    foreach (var rev in ViewBag.ProdReview)
-                                                    {
-                                                        ReviewCount++;
+                                                    ReviewCount++;
+                                                    <li>
                                                         <div class="review-heading">
                                                             <h5 class="name">@rev.Username</h5>
                                                             <p class="date">@rev.DateEdited</p>
                                                             <div class="review-rating">
                                                                 @for (int i = 1; i <= 5; i++)
                                                                 {
-                                                                    <i class="fa @(i <= rev.Rate ? "fa-star" : "fa-star-o")"></i>
+                                                                    <i class="fa @(i <= @rev.Rate ? "fa-star" : "fa-star-o")"></i>
                                                                 }
                                                             </div>
                                                         </div>
                                                         <div class="review-body">
                                                             <p>@rev.Message</p>
                                                         </div>
-                                                        if (ReviewCount >= 4) { break; }
-                                                    }
+                                                    </li>
+                                                    if (ReviewCount >= 4) { break; }
                                                 }
-                                            </li>
+                                            }
                                         </ul>
                                         <ul class="reviews-pagination">
                                             <li><a href="#"><i class="fa fa-angle-left"></i></a></li>
@@ -236,10 +236,9 @@
                                 <!-- Review Form -->
                                 <div class="col-md-3">
                                     <div id="review-form">
-                                        <form class="review-form">
+                                        <div class="review-form">
                                             @using (Html.BeginForm("AddReview", "Home", FormMethod.Post, new { @id = "ReviewForm" }))
                                             {
-                                                <input class="input" type="text" name="@Html.NameFor(x => x.Username)" placeholder="Your Name">
                                                 <textarea class="input" name="@Html.NameFor(x => x.Message)" placeholder="Your Review"></textarea>
                                                 <div class="input-rating">
                                                     <span>Your Rating: </span>
@@ -251,11 +250,13 @@
                                                         <input id="star1" name="@Html.NameFor(x => x.Rate)" value="1" type="radio"><label for="star1"></label>
                                                     </div>
                                                 </div>
+
+                                                <input hidden name="@Html.NameFor(x => x.Article)" id="@Html.IdFor(x => x.Article)" value="@ViewBag.Product.Article">
                                                 <button class="primary-btn">Submit</button>
                                             }
-                                        </form>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
                                 <!-- /Review Form -->
                             </div>
                         </div>

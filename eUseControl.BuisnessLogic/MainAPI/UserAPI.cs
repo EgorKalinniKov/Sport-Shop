@@ -104,6 +104,49 @@ namespace eUseControl.BuisnessLogic.MainAPI
 
             return new BaseResponces { Status = true };
         }
+        internal BaseResponces RegisterUReviewAction(RRegisterData data)
+        {
+            RDbTable local = null;
+            using (var db = new ReviewContext())
+            {
+                local = db.Reviews.FirstOrDefault(x => x.Message == data.Message);
+            }
+            if (local != null) { return new BaseResponces { Status = false, StatusMessage = "Message already exist" }; }
+
+            var review = new RDbTable
+            {
+                UserId = data.UserId,
+                Username = data.Username,
+                Article = data.Article,
+                Message = data.Message,
+                Rate = data.Rate,
+                DateCreated= DateTime.Now,
+                DateEdited= DateTime.Now,
+            };
+
+            using (var db = new ReviewContext())
+            {
+                db.Reviews.Add(review);
+                db.SaveChanges();
+            }
+
+            PDbTable product = null;
+            using (var db = new ProductContext())
+            {
+                product = db.Products.FirstOrDefault(x => x.Article == data.Article);
+            }
+            if(product != null)
+            {
+                product.AvarageRating = (product.AvarageRating * product.TotalRatings + data.Rate)/(product.TotalRatings + 1);
+                product.TotalRatings++;
+            }
+            using (var db = new ProductContext())
+            {
+                db.Entry(product).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            return new BaseResponces { Status = true };
+        }
         internal HttpCookie Cookie(string loginCredential)
         {
             var apiCookie = new HttpCookie("X-KEY")

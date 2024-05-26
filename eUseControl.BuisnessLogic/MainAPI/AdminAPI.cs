@@ -120,10 +120,8 @@ namespace eUseControl.BuisnessLogic.MainAPI
             {
                 using (var db = new ReviewContext())
                 {
-                    foreach (var rev in deleteReviews)
-                    {
-                        db.Reviews.Remove(rev);
-                    }
+                    var reviews = db.Reviews.Where(x => x.Article == pCred).ToList();
+                    db.Reviews.RemoveRange(reviews);
                     db.SaveChanges();
                 }
             }
@@ -146,8 +144,8 @@ namespace eUseControl.BuisnessLogic.MainAPI
 
             using (var db = new ProductContext())
             {
-                var tmp = db.Products.FirstOrDefault(x => x.Article == pCred);
-                db.Products.Remove(tmp);
+                var prod = db.Products.FirstOrDefault(x => x.Article == pCred);
+                db.Products.Remove(prod);
                 db.SaveChanges();
 
             }

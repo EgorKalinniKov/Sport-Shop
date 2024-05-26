@@ -74,7 +74,7 @@ namespace eUseControl.Web.Controllers
                 if (img != null)
                 {
                     string ImageName = System.IO.Path.GetFileName(img.FileName);
-                    string path = Server.MapPath("~/Content/Images/" + data.Name);
+                    string path = Server.MapPath("~/Content/Images/" + data.Article);
                     // save image in folder
                     if (!Directory.Exists(path))
                     {
@@ -82,7 +82,7 @@ namespace eUseControl.Web.Controllers
                         directory = path;
                     }
                     img.SaveAs(Path.Combine(@path, ImageName));
-                    Imgs.Add("/Content/Images/" + data.Name + '/' + ImageName);
+                    Imgs.Add("/Content/Images/" + data.Article + '/' + ImageName);
                 }
             }
 

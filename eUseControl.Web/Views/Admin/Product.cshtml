@@ -25,7 +25,7 @@
                         <li><a href="@Url.Action("Index", "Admin")">Number</a></li>
                         <li><a href="@Url.Action("NewProduct", "Admin")">New product</a></li>
                         <li><a class="active" href="@Url.Action("Products", "Admin")">Products</a></li>
-                        <li><a href="@Url.Action("DeleteProducts", "Admin")">Delete product</a></li>
+                        <li><a href="@Url.Action("DeleteProduct", "Admin")">Delete product</a></li>
                         <li><a href="@Url.Action("Users", "Admin")">View users</a></li>
                         <li><a href="@Url.Action("BanUsers", "Admin")">Ban User</a></li>
                         <li><a href="@Url.Action("Comments", "Admin")">View comments</a></li>
@@ -78,7 +78,7 @@
                             <div class="col-md-3">
                                 <div class="product-details">
                                     <p>#@ViewBag.Product.Article</p>
-                                    <h2 class="product-name"><input name="@Html.NameFor(x => x.Name)" id="@Html.IdFor(x => x.Name)" value="@ViewBag.Product.Name"></h2>        
+                                    <h2 class="product-name"><input name="@Html.NameFor(x => x.Name)" id="@Html.IdFor(x => x.Name)" value="@ViewBag.Product.Name"></h2>
                                     <div>
                                         <div class="product-rating">
                                             @for (int i = 1; i <= 5; i++)
@@ -90,7 +90,7 @@
                                     </div>
                                     <div>
                                         <h4 class="product-price"><input name="@Html.NameFor(x => x.Price)" id="@Html.IdFor(x => x.Price)" value="@ViewBag.Product.Price"></h4>
-                                        <h4 ><input name="@Html.NameFor(x => x.Discount)" id="@Html.IdFor(x => x.Discount)" value="@ViewBag.Product.Discount"></h4>
+                                        <h4><input name="@Html.NameFor(x => x.Discount)" id="@Html.IdFor(x => x.Discount)" value="@ViewBag.Product.Discount"></h4>
                                         <div>
                                             @Html.CheckBoxFor(m => m.AvailableStatus)
                                             <label>Avaliable</label>

@@ -51,17 +51,20 @@ namespace eUseControl.Web.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult AddReview(ReviewData data)
+        public ActionResult AddReview(ReviewReg data)
         {
             var rData = new RRegisterData
             {
-                UserId = 1,
-                Article = "1",
+                UserId = 1,//System.Web.HttpContext.Current.GetMySessionObject().UserId;
+                Username = "2",//System.Web.HttpContext.Current.GetMySessionObject().Username;
+                Article = data.Article, 
                 Message = data.Message,
                 Rate = data.Rate,
             };
 
-            return null; 
+            BaseResponces resp = _session.RegisterUReviewActionFlow(rData);
+
+            return RedirectToAction("Product", "Home", new {Art = data.Article }); 
         }
 
     }

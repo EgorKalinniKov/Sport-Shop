@@ -29,6 +29,10 @@ namespace eUseControl.BuisnessLogic.BaseBL
         {
             return GenerateUserSession(ulData);
         }
+        public BaseResponces RegisterUReviewActionFlow(RRegisterData rData)
+        {
+            return RegisterUReviewAction(rData);
+        }
         public HttpCookie GenCookie(string loginCredential)
         {
             return Cookie(loginCredential);

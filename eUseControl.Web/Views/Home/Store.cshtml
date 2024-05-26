@@ -233,8 +233,8 @@
                                     {
                                         var PriceDiscount = prod.Price - prod.Price / 100 * prod.Discount;
                                         <h4 class="product-price">@PriceDiscount <del class="product-old-price">@prod.Price</del></h4>}
-                                else
-                                { <h4 class="product-price">@prod.Price</h4>}
+                                    else
+                                    { <h4 class="product-price">@prod.Price</h4>}
                                 <div class="product-rating">
                                     @for (int i = 1; i <= 5; i++)
                                     {

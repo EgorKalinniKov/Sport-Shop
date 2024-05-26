@@ -11,7 +11,8 @@ namespace eUseControl.BuisnessLogic.Interfaces
 {
     public interface ISessionAdmin
     {
-        BaseResponces RegisterProductActionFlow(PRegisterData uData);
+        BaseResponces RegisterProductActionFlow(PRegisterData pData);
+        BaseResponces EditProductActionFlow(PRegisterData pData);
         BaseResponces DeleteProductActionFlow(string pData);
         BaseResponces DeleteReviewActionFlow(string Msg);
     }

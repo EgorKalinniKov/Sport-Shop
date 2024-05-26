@@ -174,6 +174,7 @@ namespace eUseControl.BuisnessLogic.MainAPI
                     {
                         var Rev = new ReviewData
                         {
+                            Id = r.ReviewId,
                             UserId = r.UserId,
                             Username = r.Username,
                             Message = r.Message,

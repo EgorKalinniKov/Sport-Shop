@@ -16,6 +16,10 @@ namespace eUseControl.BuisnessLogic.BaseBL
         {
             return RegisterProdAction(pData);
         }
+        public BaseResponces EditProductActionFlow(PRegisterData pData)
+        {
+            return EditProdAction(pData);
+        }
         public BaseResponces DeleteProductActionFlow(string pData)
         {
             return DeleteProdAction(pData);

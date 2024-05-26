@@ -72,6 +72,35 @@ namespace eUseControl.BuisnessLogic.MainAPI
             }
             return new BaseResponces { Status = true };
         }
+        internal BaseResponces EditProdAction(PRegisterData data)
+        {
+            PDbTable local;
+
+            using (var db = new ProductContext())
+            {
+                local = db.Products.FirstOrDefault(x => x.Article == data.Article);
+            }
+
+            if (local == null) { return new BaseResponces { Status = false, StatusMessage = "Product doen't exist" }; }
+
+            local.Name = data.Name;
+            local.Description = data.Description;
+            local.Price = data.Price;
+            local.Discount = data.Discount;
+            local.Brend = data.Brend;
+            local.Category = data.Category;
+            local.Tag = data.Tag;
+            local.DateChanged = DateTime.Now;
+            local.AvailableStatus = data.AvailableStatus;
+
+            using (var db = new ProductContext())
+            {
+                db.Entry(local).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            return new BaseResponces { Status = true };
+
+        }
         internal BaseResponces DeleteProdAction(string pCred)
         {
             PDbTable deleteProd = null;
@@ -149,7 +178,7 @@ namespace eUseControl.BuisnessLogic.MainAPI
             return new BaseResponces { Status = true };
         }
         //internal BaseResponces EditUserAction(... data)
-        //internal BaseResponces EditProdAction(... data)
+
     }
 
 }

@@ -5,7 +5,10 @@
 
 @using System.Web.Optimization
 @model eUseControl.Web.Models.Product.ReviewReg
-
+@{
+    var ReviewPerPage = 5;
+    var ReviewCount = 0;
+}
 
 <!-- SECTION -->
 <div class="section">
@@ -50,7 +53,7 @@
                 <div class="product-details">
                     <p>#@ViewBag.Product.Article</p>
                     <h2 class="product-name">@ViewBag.Product.Name</h2>
-                    
+
                     <div>
                         <div class="product-rating">
                             @for (int i = 1; i <= 5; i++)
@@ -58,64 +61,33 @@
                                 <i class="fa @(i <= ViewBag.Product.AvarageRating ? "fa-star" : "fa-star-o")"></i>
                             }
                         </div>
-                        <a class="review-link" href="#">@ViewBag.ProdReview.Count Review(s) | Add your review</a>
+                        <a class="review-link" href="#">@ViewBag.ProdReview.Count Review(s)</a>
                     </div>
                     <div>
                         @if (ViewBag.Product.Discount > 0)
-                        {<h3 class="product-price">@ViewBag.Product.PriceDiscount <del class="product-old-price">@ViewBag.Product.Price</del></h3>}
-                    else
-                    { <h3 class="product-price">@ViewBag.Product.Price</h3>}
+                        {
+                            var PriceDiscount = ViewBag.Product.Price - ViewBag.Productd.Price / 100 * ViewBag.Product.Discount;
+                            <h4 class="product-price">@PriceDiscount <del class="product-old-price">@ViewBag.Product.Price</del></h4>}
+                        else
+                        { <h4 class="product-price">@ViewBag.Product.Price</h4>}
                         @if (ViewBag.Product.AvailableStatus == true)
                         {<span class="product-available">In Stock</span>}
                         else
                         {<span class="product-available">Out of Stock</span>}
                     </div>
-                    <p>@ViewBag.Product.Description</p>
-
-                    <div class="product-options">
-                        <label>
-                            Size
-                            <select class="input-select">
-                                <option value="0">X</option>
-                            </select>
-                        </label>
-                        <label>
-                            Color
-                            <select class="input-select">
-                                <option value="0">Red</option>
-                            </select>
-                        </label>
-                    </div>
 
                     <div class="add-to-cart">
-                        <div class="qty-label">
-                            Qty
-                            <div class="input-number">
-                                <input type="number">
-                                <span class="qty-up">+</span>
-                                <span class="qty-down">-</span>
-                            </div>
-                        </div>
                         <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
                     </div>
 
                     <ul class="product-btns">
                         <li><a href="#"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
-                        <li><a href="#"><i class="fa fa-exchange"></i> add to compare</a></li>
                     </ul>
 
                     <ul class="product-links">
                         <li>Category:</li>
                         <li><a href="#">Headphones</a></li>
                         <li><a href="#">Accessories</a></li>
-                    </ul>
-
-                    <ul class="product-links">
-                        <li>Share:</li>
-                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                        <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                        <li><a href="#"><i class="fa fa-envelope"></i></a></li>
                     </ul>
 
                 </div>
@@ -235,28 +207,27 @@
                                                 {
                                                     foreach (var rev in ViewBag.ProdReview)
                                                     {
-                                                <div class="review-heading">
-                                                    <h5 class="name">@rev.Username</h5>
-                                                    <p class="date">@rev.DateEdited</p>
-                                                    <div class="review-rating">
-                                                        @for (int i = 1; i <= 5; i++)
-                                                        {
-                                                            <i class="fa @(i <= rev.Rate ? "fa-star" : "fa-star-o")"></i>
-                                                        }
-                                                    </div>
-                                                </div>
-                                                <div class="review-body">
-                                                    <p>@rev.Message</p>
-                                                </div>
+                                                        ReviewCount++;
+                                                        <div class="review-heading">
+                                                            <h5 class="name">@rev.Username</h5>
+                                                            <p class="date">@rev.DateEdited</p>
+                                                            <div class="review-rating">
+                                                                @for (int i = 1; i <= 5; i++)
+                                                                {
+                                                                    <i class="fa @(i <= rev.Rate ? "fa-star" : "fa-star-o")"></i>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <div class="review-body">
+                                                            <p>@rev.Message</p>
+                                                        </div>
+                                                        if (ReviewCount >= 4) { break; }
                                                     }
                                                 }
                                             </li>
                                         </ul>
                                         <ul class="reviews-pagination">
-                                            <li class="active">1</li>
-                                            <li><a href="#">2</a></li>
-                                            <li><a href="#">3</a></li>
-                                            <li><a href="#">4</a></li>
+                                            <li><a href="#"><i class="fa fa-angle-left"></i></a></li>
                                             <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
                                         </ul>
                                     </div>
@@ -435,3 +406,40 @@
     <!-- /container -->
 </div>
 <!-- /Section -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var currentPage = 0; // Начинаем с нулевой страницы
+    var ReviewPerPage = @ReviewPerPage;
+    var review = document.querySelectorAll('.review');
+
+    function showProducts() {
+        var startIndex = currentPage * ReviewPerPage;
+        var endIndex = Math.min(startIndex + ReviewPerPage, Review.length);
+        for (var i = 0; i < Review.length; i++) {
+            if (i >= startIndex && i < endIndex) {
+
+                Review[i].style.display = '';
+            } else {
+
+                Review[i].style.display = 'none';
+            }
+        }
+    }
+
+    showProducts(); // Вызываем функцию для отображения продуктов при загрузке страницы
+
+    document.querySelector('.next-page').addEventListener('click', function () {
+        if ((currentPage + 1) * ReviewPerPage < Review.length) {
+            currentPage++;
+            showProducts();
+        }
+    });
+
+    document.querySelector('.prev-page').addEventListener('click', function () {
+        if (currentPage > 0) {
+            currentPage--;
+            showProducts();
+        }
+    });
+});
+</script>

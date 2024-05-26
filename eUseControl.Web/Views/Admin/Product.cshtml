@@ -4,7 +4,11 @@
 }
 
 @using System.Web.Optimization
-@model eUseControl.Web.Models.User.UserData
+@model eUseControl.Web.Models.Product.ProductRegistration
+@{
+    var ReviewPerPage = 5;
+    var ReviewCount = 0;
+}
 
 <!-- SECTION -->
 <div class="section">
@@ -35,333 +39,279 @@
                 <div class="container">
                     <!-- row -->
                     <div class="row">
-                        <!-- Product main img -->
-                        <div class="col-md-3 col-md-push-1">
-                            <div id="product-main-img">
-                                <div class="product-preview">
-                                    <img src="/Content/Images/product01.png" alt="">
-                                </div>
-
-                                <div class="product-preview">
-                                    <img src="/Content/Images/product03.png" alt="">
-                                </div>
-
-                                <div class="product-preview">
-                                    <img src="/Content/Images/product06.png" alt="">
-                                </div>
-
-                                <div class="product-preview">
-                                    <img src="./img/product08.png" alt="">
+                        @using (Html.BeginForm("ProductEdit", "Admin", FormMethod.Post, new { Id = ViewBag.Product.Id }))
+                        {
+                            <input hidden name="@Html.NameFor(x => x.Article)" id="@Html.IdFor(x => x.Article)" value="@ViewBag.Product.Article">
+                            <!-- Product main img -->
+                            <div class="col-md-3 col-md-push-1">
+                                <div id="product-main-img">
+                                    @if (ViewBag.ProductImgs != null)
+                                    {
+                                        foreach (var i in ViewBag.ProductImgs)
+                                        {
+                                            <div class="product-preview">
+                                                <img src="@i" alt="">
+                                            </div>
+                                        }
+                                    }
                                 </div>
                             </div>
-                        </div>
-                        <!-- /Product main img -->
-                        <!-- Product thumb imgs -->
-                        <div class="col-md-1  col-md-pull-3">
-                            <div id="product-imgs">
-                                <div class="product-preview">
-                                    <img src="/Content/Images/product01.png" alt="">
-                                </div>
-
-                                <div class="product-preview">
-                                    <img src="/Content/Images/product03.png" alt="">
-                                </div>
-
-                                <div class="product-preview">
-                                    <img src="/Content/Images/product06.png" alt="">
-                                </div>
-
-                                <div class="product-preview">
-                                    <img src="/Content/Images/product08.png" alt="">
+                            <!-- /Product main img -->
+                            <!-- Product thumb imgs -->
+                            <div class="col-md-1  col-md-pull-3">
+                                <div id="product-imgs">
+                                    <div class="product-preview">
+                                        @if (ViewBag.ProductImgs != null)
+                                        {
+                                            foreach (var i in ViewBag.ProductImgs)
+                                            {
+                                                <div class="product-preview">
+                                                    <img src="@i" alt="">
+                                                </div>
+                                            }
+                                        }
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- /Product thumb imgs -->
-                        <!-- Product details -->
-                        <div class="col-md-3">
-                            <div class="product-details">
-                                <h2 class="product-name">product name goes here</h2>
-                                <div>
-                                    <div class="product-rating">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-o"></i>
+                            <!-- /Product thumb imgs -->
+                            <!-- Product details -->
+                            <div class="col-md-3">
+                                <div class="product-details">
+                                    <p>#@ViewBag.Product.Article</p>
+                                    <h2 class="product-name">@ViewBag.Product.Name</h2>
+                                    <label>New Name:</label>
+                                    <input name="@Html.NameFor(x => x.Name)" id="@Html.IdFor(x => x.Name)" value="">
+                                    <div>
+                                        <div class="product-rating">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                <i class="fa @(i <= ViewBag.Product.AvarageRating ? "fa-star" : "fa-star-o")"></i>
+                                            }
+                                        </div>
+                                        <a class="review-link" href="#">@ViewBag.ProdReview.Count Review(s)</a>
                                     </div>
-                                    <a class="review-link" href="#">10 Review(s) | Add your review</a>
-                                </div>
-                                <div>
-                                    <h3 class="product-price">$980.00</h3>
+                                    <div>
+                                        @if (ViewBag.Product.Discount > 0)
+                                        {
+                                            var PriceDiscount = ViewBag.Product.Price - ViewBag.Product.Price / 100 * ViewBag.Product.Discount;
+                                            <h4 class="product-price">@PriceDiscount <del class="product-old-price">@ViewBag.Product.Price</del></h4>}
+                                        else
+                                        { <h4 class="product-price">@ViewBag.Product.Price</h4>}
 
-                                    <div class="input-radio">
-                                        <input type="radio" name="status" id="instock">
-                                        <label for="instock">
-                                            <span></span>
-                                            In Stock
-                                        </label>
-                                    </div>
-                                    <div class="input-radio">
-                                        <input type="radio" name="status" id="outofstock">
-                                        <label for="outofstock">
-                                            <span></span>
-                                            Out Of Stock
-                                        </label>
-                                    </div>
-                                </div>
-                                <p contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-
-                                <div class="product-options">
-                                    <label>
-                                        Size
-                                        <select class="input-select">
-                                            <option value="0">X</option>
-                                        </select>
-                                    </label>
-                                    <label>
-                                        Color
-                                        <select class="input-select">
-                                            <option value="0">Red</option>
-                                        </select>
-                                    </label>
-                                </div>
-
-                                <div class="add-to-cart">
-                                    <div class="qty-label">
-                                        Qty
-                                        <div class="input-number">
-                                            <input type="number">
-                                            <span class="qty-up">+</span>
-                                            <span class="qty-down">-</span>
+                                        <div class="input-radio">
+                                            @Html.RadioButtonFor(m => m.AvailableStatus, true)
+                                            <label for="instock">
+                                                <span></span>
+                                                In Stock
+                                            </label>
+                                        </div>
+                                        <div class="input-radio">
+                                            @Html.RadioButtonFor(m => m.AvailableStatus, false)
+                                            <label for="outofstock">
+                                                <span></span>
+                                                Out Of Stock
+                                            </label>
                                         </div>
                                     </div>
-                                    <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> save changing</button>
+                                    <label>New Price:</label>
+                                    <input name="@Html.NameFor(x => x.Price)" id="@Html.IdFor(x => x.Price)" value="">
+                                    <label>New Discount:</label>
+                                    <input name="@Html.NameFor(x => x.Discount)" id="@Html.IdFor(x => x.Discount)" value="">
+                                    <div class="add-to-cart">
+                                        <button> save changing</button>
+                                    </div>
+
+                                    <div>
+                                        <label>Brend:</label>
+                                        <p>Current brend: @ViewBag.Product.Brend</p>
+                                        <select name="@Html.NameFor(x => x.Brend)" id="@Html.IdFor(x => x.Brend)">
+                                            <option value="volvo">Volvo</option>
+                                            <option value="saab">Saab</option>
+                                            <option value="mercedes">Mercedes</option>
+                                            <option value="audi">Audi</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label>Category:</label>
+                                        <p>Current category: @ViewBag.Product.Category</p>
+                                        <select name="@Html.NameFor(x => x.Category)" id="@Html.IdFor(x => x.Category)">
+                                            <option value="volvo">Volvo</option>
+                                            <option value="saab">Saab</option>
+                                            <option value="mercedes">Mercedes</option>
+                                            <option value="audi">Audi</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label>Tag:</label>
+                                        <p>Current tag: @ViewBag.Product.Tag</p>
+                                        <select name="@Html.NameFor(x => x.Tag)" id="@Html.IdFor(x => x.Tag)">
+                                            <option value="volvo">Volvo</option>
+                                            <option value="saab">Saab</option>
+                                            <option value="mercedes">Mercedes</option>
+                                            <option value="audi">Audi</option>
+                                        </select>
+                                    </div>
+
                                 </div>
-
-                                <ul class="product-btns">
-                                    <li><a href="#"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
-                                    <li><a href="#"><i class="fa fa-exchange"></i> add to compare</a></li>
-                                </ul>
-
-                                <ul class="product-links">
-                                    <li>Category:</li>
-                                    <li><a href="#">Headphones</a></li>
-                                    <li><a href="#">Accessories</a></li>
-                                </ul>
-
-                                <ul class="product-links">
-                                    <li>Share:</li>
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-envelope"></i></a></li>
-                                </ul>
-
                             </div>
-                        </div>
-                        <!-- /Product details -->
-                        <!-- Product tab -->
-                        <div class="col-md-12">
-                            <div id="product-tab">
-                                <!-- product tab nav -->
-                                <ul class="tab-nav">
-                                    <li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
-                                    <li><a data-toggle="tab" href="#tab2">Details</a></li>
-                                    <li><a data-toggle="tab" href="#tab3">Reviews (3)</a></li>
-                                </ul>
-                                <!-- /product tab nav -->
-                                <!-- product tab content -->
-                                <div class="tab-content">
-                                    <!-- tab1  -->
-                                    <div id="tab1" class="tab-pane fade in active">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <p contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                            <!-- /Product details -->
+                            <!-- Product tab -->
+                            <div class="col-md-12">
+                                <div id="product-tab">
+                                    <!-- product tab nav -->
+                                    <ul class="tab-nav">
+                                        <li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
+                                        <li><a data-toggle="tab" href="#tab3">Reviews (@ViewBag.ProdReview.Count)</a></li>
+                                    </ul>
+                                    <!-- /product tab nav -->
+                                    <!-- product tab content -->
+                                    <div class="tab-content">
+                                        <!-- tab1  -->
+                                        <div id="tab1" class="tab-pane fade in active">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <input name="@Html.NameFor(x => x.Description)" id="@Html.IdFor(x => x.Description)" value="@ViewBag.Product.Description">
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <!-- /tab1  -->
-                                    <!-- tab2  -->
-                                    <div id="tab2" class="tab-pane fade in">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <p contenteditable="true">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /tab2  -->
-                                    <!-- tab3  -->
-                                    <div id="tab3" class="tab-pane fade in">
-                                        <div class="row">
-                                            <!-- Rating -->
-                                            <div class="col-md-3">
-                                                <div id="rating">
-                                                    <div class="rating-avg">
-                                                        <span>4.5</span>
-                                                        <div class="rating-stars">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-o"></i>
+                                        <!-- /tab1  -->
+                                        <!-- tab3  -->
+                                        <div id="tab3" class="tab-pane fade in">
+                                            <div class="row">
+                                                <!-- Rating -->
+                                                <div class="col-md-3">
+                                                    <div id="rating">
+                                                        <div class="rating-avg">
+                                                            <span>@ViewBag.Product.AvarageRating</span>
+                                                            <div class="rating-stars">
+                                                                @for (int i = 1; i <= 5; i++)
+                                                                {
+                                                                    <i class="fa @(i <= ViewBag.Product.AvarageRating ? "fa-star" : "fa-star-o")"></i>
+                                                                }
+                                                            </div>
                                                         </div>
+                                                        <ul class="rating">
+                                                            <li>
+                                                                <div class="rating-stars">
+                                                                    <i class="fa fa-star"></i>
+                                                                    <i class="fa fa-star"></i>
+                                                                    <i class="fa fa-star"></i>
+                                                                    <i class="fa fa-star"></i>
+                                                                    <i class="fa fa-star"></i>
+                                                                </div>
+                                                                <div class="rating-progress">
+                                                                    <div style="width: 80%;"></div>
+                                                                </div>
+                                                                <span class="sum">3</span>
+                                                            </li>
+                                                            <li>
+                                                                <div class="rating-stars">
+                                                                    <i class="fa fa-star"></i>
+                                                                    <i class="fa fa-star"></i>
+                                                                    <i class="fa fa-star"></i>
+                                                                    <i class="fa fa-star"></i>
+                                                                    <i class="fa fa-star-o"></i>
+                                                                </div>
+                                                                <div class="rating-progress">
+                                                                    <div style="width: 60%;"></div>
+                                                                </div>
+                                                                <span class="sum">2</span>
+                                                            </li>
+                                                            <li>
+                                                                <div class="rating-stars">
+                                                                    <i class="fa fa-star"></i>
+                                                                    <i class="fa fa-star"></i>
+                                                                    <i class="fa fa-star"></i>
+                                                                    <i class="fa fa-star-o"></i>
+                                                                    <i class="fa fa-star-o"></i>
+                                                                </div>
+                                                                <div class="rating-progress">
+                                                                    <div></div>
+                                                                </div>
+                                                                <span class="sum">0</span>
+                                                            </li>
+                                                            <li>
+                                                                <div class="rating-stars">
+                                                                    <i class="fa fa-star"></i>
+                                                                    <i class="fa fa-star"></i>
+                                                                    <i class="fa fa-star-o"></i>
+                                                                    <i class="fa fa-star-o"></i>
+                                                                    <i class="fa fa-star-o"></i>
+                                                                </div>
+                                                                <div class="rating-progress">
+                                                                    <div></div>
+                                                                </div>
+                                                                <span class="sum">0</span>
+                                                            </li>
+                                                            <li>
+                                                                <div class="rating-stars">
+                                                                    <i class="fa fa-star"></i>
+                                                                    <i class="fa fa-star-o"></i>
+                                                                    <i class="fa fa-star-o"></i>
+                                                                    <i class="fa fa-star-o"></i>
+                                                                    <i class="fa fa-star-o"></i>
+                                                                </div>
+                                                                <div class="rating-progress">
+                                                                    <div></div>
+                                                                </div>
+                                                                <span class="sum">0</span>
+                                                            </li>
+                                                        </ul>
                                                     </div>
-                                                    <ul class="rating">
-                                                        <li>
-                                                            <div class="rating-stars">
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                            </div>
-                                                            <div class="rating-progress">
-                                                                <div style="width: 80%;"></div>
-                                                            </div>
-                                                            <span class="sum">3</span>
-                                                        </li>
-                                                        <li>
-                                                            <div class="rating-stars">
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                            </div>
-                                                            <div class="rating-progress">
-                                                                <div style="width: 60%;"></div>
-                                                            </div>
-                                                            <span class="sum">2</span>
-                                                        </li>
-                                                        <li>
-                                                            <div class="rating-stars">
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                            </div>
-                                                            <div class="rating-progress">
-                                                                <div></div>
-                                                            </div>
-                                                            <span class="sum">0</span>
-                                                        </li>
-                                                        <li>
-                                                            <div class="rating-stars">
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                            </div>
-                                                            <div class="rating-progress">
-                                                                <div></div>
-                                                            </div>
-                                                            <span class="sum">0</span>
-                                                        </li>
-                                                        <li>
-                                                            <div class="rating-stars">
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                            </div>
-                                                            <div class="rating-progress">
-                                                                <div></div>
-                                                            </div>
-                                                            <span class="sum">0</span>
-                                                        </li>
-                                                    </ul>
                                                 </div>
-                                            </div>
-                                            <!-- /Rating -->
-                                            <!-- Reviews -->
-                                            <div class="col-md-6">
-                                                <div id="reviews">
-                                                    <ul class="reviews">
-                                                        <li>
-                                                            <div class="review-heading">
-                                                                <h5 class="name">John</h5>
-                                                                <p class="date">27 DEC 2018, 8:0 PM</p>
-                                                                <div class="review-rating">
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star-o empty"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="review-body">
-                                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-                                                                <div class="review-body">
-                                                                    <div class="col-sm-5">
-                                                                        <a href="#" class="primary-btn">delete</a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="review-heading">
-                                                                <h5 class="name">John</h5>
-                                                                <p class="date">27 DEC 2018, 8:0 PM</p>
-                                                                <div class="review-rating">
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star-o empty"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="review-body">
-                                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-                                                                <div class="review-body">
-                                                                    <div class="col-sm-5">
-                                                                        <a href="#" class="primary-btn">delete</a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="review-heading">
-                                                                <h5 class="name">John</h5>
-                                                                <p class="date">27 DEC 2018, 8:0 PM</p>
-                                                                <div class="review-rating">
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star-o empty"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="review-body">
-                                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-                                                                <div class="review-body">
-                                                                    <div class="col-sm-5">
-                                                                        <a href="#" class="primary-btn">delete</a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                    <ul class="reviews-pagination">
-                                                        <li class="active">1</li>
-                                                        <li><a href="#">2</a></li>
-                                                        <li><a href="#">3</a></li>
-                                                        <li><a href="#">4</a></li>
-                                                        <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
-                                                    </ul>
+                                                <!-- /Rating -->
+                                                <!-- Reviews -->
+                                                <div class="col-md-6">
+                                                    <div id="reviews">
+                                                        <ul class="reviews">
+                                                            <li>
+                                                                @if (ViewBag.ProdReview.Count > 0)
+                                                                {
+                                                                    foreach (var rev in ViewBag.ProdReview)
+                                                                    {
+                                                                        using (Html.BeginForm("DeleteReview", "Admin", FormMethod.Post, new { id = rev.Id }))
+                                                                        {
+                                                                            ReviewCount++;
+                                                                            <div class="review-heading">
+                                                                                <h5 class="name">@rev.Username</h5>
+                                                                                <p class="date">@rev.DateEdited</p>
+                                                                                <div class="review-rating">
+                                                                                    @for (int i = 1; i <= 5; i++)
+                                                                                    {
+                                                                                        <i class="fa @(i <= rev.Rate ? "fa-star" : "fa-star-o")"></i>
+                                                                                    }
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="review-body">
+                                                                                <p>@rev.Message</p>
+                                                                                <div class="review-body">
+                                                                                    <div class="col-sm-5">
+                                                                                        <a href="#" class="primary-btn">delete</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            if (ReviewCount >= 4) { break; }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </li>
+                                                        </ul>
+                                                        <ul class="reviews-pagination">
+                                                            <li><a href="#"><i class="fa fa-angle-left"></i></a></li>
+                                                            <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
+                                                <!-- /Reviews -->
                                             </div>
-                                            <!-- /Reviews -->
                                         </div>
+                                        <!-- /tab3  -->
                                     </div>
-                                    <!-- /tab3  -->
+                                    <!-- /product tab content  -->
                                 </div>
-                                <!-- /product tab content  -->
                             </div>
-                        </div>
-                        <!-- /product tab -->
+                            <!-- /product tab -->
+                        }
                     </div>
                     <!-- /row -->
                 </div>
@@ -371,3 +321,40 @@
         </div>
     </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var currentPage = 0; // Начинаем с нулевой страницы
+    var ReviewPerPage = @ReviewPerPage;
+    var review = document.querySelectorAll('.review');
+
+    function showProducts() {
+        var startIndex = currentPage * ReviewPerPage;
+        var endIndex = Math.min(startIndex + ReviewPerPage, Review.length);
+        for (var i = 0; i < Review.length; i++) {
+            if (i >= startIndex && i < endIndex) {
+
+                Review[i].style.display = '';
+            } else {
+
+                Review[i].style.display = 'none';
+            }
+        }
+    }
+
+    showProducts(); // Вызываем функцию для отображения продуктов при загрузке страницы
+
+    document.querySelector('.next-page').addEventListener('click', function () {
+        if ((currentPage + 1) * ReviewPerPage < Review.length) {
+            currentPage++;
+            showProducts();
+        }
+    });
+
+    document.querySelector('.prev-page').addEventListener('click', function () {
+        if (currentPage > 0) {
+            currentPage--;
+            showProducts();
+        }
+    });
+});
+</script>

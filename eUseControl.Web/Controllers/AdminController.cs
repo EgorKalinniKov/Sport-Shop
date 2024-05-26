@@ -35,6 +35,7 @@ namespace eUseControl.Web.Controllers
         }
         public ActionResult Products()
         {
+            ViewBag.Products = _product.GetAllProductsActionFlow();
             return View();
         }
         public ActionResult DeleteProduct()
@@ -53,8 +54,11 @@ namespace eUseControl.Web.Controllers
         {
             return View();
         }
-        public ActionResult Product()
+        public ActionResult Product(string Art)
         {
+            ViewBag.Product = _product.GetProductByArticleActionFlow(Art);
+            ViewBag.ProductImgs = _product.GetProductImgsActionFlow(Art);
+            ViewBag.ProdReview = _product.GetProductReviewsActionFlow(Art);
             return View();
         }
 
@@ -102,9 +106,22 @@ namespace eUseControl.Web.Controllers
 
         [AdminMod]
         [HttpPost]
-        public ActionResult ProductEdit ()
+        public ActionResult ProductEdit(ProductRegistration data)
         {
-            return null;
+            var pData = new PRegisterData
+            {
+                Name = data.Name,
+                Article = data.Article,
+                Description = data.Description,
+                Discount = data.Discount,
+                Price = data.Price,
+                Brend = data.Brend,
+                Category = data.Category,
+                Tag = data.Tag,
+                AvailableStatus = data.AvailableStatus,
+            };
+            BaseResponces resp = _admin.EditProductActionFlow(pData);
+            return RedirectToAction("Product", "Admin", new {Art = data.Article});
         }
 
         [AdminMod]

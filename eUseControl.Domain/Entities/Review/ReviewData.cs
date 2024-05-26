@@ -8,6 +8,7 @@ namespace eUseControl.Domain.Entities.Review
 {
     public class ReviewData
     {
+        public int Id { get; set; }
         public int UserId { get; set; }
         public string Username { get; set; }
         public string Message { get; set; }

@@ -14,10 +14,8 @@ namespace eUseControl.Domain.Entities.Product
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ItemId { get; set; }
-        public string ContainerId { get; set; }
-        public bool InContainer { get; set; }
+        public int UserId { get; set; }
         public DateTime DateAdded { get; set; }
-        public int ProductId { get; set; }
-        public virtual PDbTable Product { get; set; }
+        public string ProductArticle { get; set; }
     }
 }

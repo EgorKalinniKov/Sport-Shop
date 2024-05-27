@@ -3,6 +3,7 @@ using eUseControl.Domain.Entities.Product;
 using eUseControl.Domain.Entities.Review;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.UI.WebControls.WebParts;
 
 namespace eUseControl.BuisnessLogic.MainAPI
 {
@@ -173,7 +174,7 @@ namespace eUseControl.BuisnessLogic.MainAPI
             }
             return Prod;
         }
-        public List<ReviewData> GetProductReviews(string art)
+        internal List<ReviewData> GetProductReviews(string art)
         {
             List<ReviewData> ListR = new List<ReviewData>();
             using (var db = new ReviewContext())
@@ -196,7 +197,30 @@ namespace eUseControl.BuisnessLogic.MainAPI
             }
             return ListR;
         }
-        public List<string> GetProductImgs(string art)
+        internal List<ReviewData> GetAllComments()
+        {
+            List<ReviewData> ListR = new List<ReviewData>();
+            using (var db = new ReviewContext())
+            {
+                var reviews = db.Reviews;
+                if (reviews != null)
+                    foreach (var r in reviews)
+                    {
+                        var Rev = new ReviewData
+                        {
+                            Id = r.ReviewId,
+                            UserId = r.UserId,
+                            Username = r.Username,
+                            Message = r.Message,
+                            Rate = r.Rate,
+                            DateEdited = r.DateEdited,
+                        };
+                        ListR.Add(Rev);
+                    }
+            }
+            return ListR;
+        }
+        internal List<string> GetProductImgs(string art)
         {
             List<string> ListI = new List<string>();
             using (var db = new ImgContext())
@@ -225,5 +249,6 @@ namespace eUseControl.BuisnessLogic.MainAPI
             }
             return imgs;
         }
+        
     }
 }

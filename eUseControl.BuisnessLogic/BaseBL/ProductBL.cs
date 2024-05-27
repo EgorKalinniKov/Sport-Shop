@@ -32,6 +32,10 @@ namespace eUseControl.BuisnessLogic.BaseBL
         {
             return GetProductReviews(art);
         }
+        public List<ReviewData> GetAllCommentsActionFlow()
+        {
+            return GetAllComments();
+        }
         public List<string> GetProductImgsActionFlow(string art)
         {
             return GetProductImgs(art);

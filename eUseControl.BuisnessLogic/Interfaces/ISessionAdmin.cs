@@ -14,6 +14,6 @@ namespace eUseControl.BuisnessLogic.Interfaces
         BaseResponces RegisterProductActionFlow(PRegisterData pData);
         BaseResponces EditProductActionFlow(PRegisterData pData);
         BaseResponces DeleteProductActionFlow(string pData);
-        BaseResponces DeleteReviewActionFlow(string Msg);
+        BaseResponces DeleteReviewActionFlow(int? Id);
     }
 }

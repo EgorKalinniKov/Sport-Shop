@@ -147,6 +147,160 @@ namespace eUseControl.BuisnessLogic.MainAPI
             }
             return new BaseResponces { Status = true };
         }
+        internal List<ProdMin> GetUserCartAction(int? id)
+        {
+            List<Item> local = null;
+            List<ProdMin> ListP = null;
+            using (var db = new CartContext())
+            {
+                local = db.Cart.Where(x => x.UserId == id).ToList();
+            }
+            if (local != null)
+            {
+                using (var db = new ProductContext())
+                {
+                    foreach (var i in local)
+                    {
+                        var p = db.Products.FirstOrDefault(x => x.Article == i.ProductArticle);
+                        var prodMin = new ProdMin()
+                        {
+                            Id = p.Id,
+                            Article = p.Article,
+                            Name = p.Name,
+                            Description = p.Description,
+                            Price = p.Price,
+                            AvarageRating = p.AvarageRating,
+                            TotalRatings = p.TotalRatings,
+                            Discount = p.Discount,
+                            Directory = p.Directory,
+                            AvailableStatus = p.AvailableStatus,
+                            Brend = p.Brend,
+                            Category = p.Category,
+                            Tag = p.Tag,
+                            Image = p.Image,
+                        };
+                        ListP.Add(prodMin);
+                    }
+                }
+            }
+            return ListP;
+        }
+        internal List<ProdMin> GetUserFavAction(int? id)
+        {
+            List<Item> local = null;
+            List<ProdMin> ListP = null;
+            using (var db = new FavContext())
+            {
+                local = db.Favourites.Where(x => x.UserId == id).ToList();
+            }
+            if (local != null)
+            {
+                using (var db = new ProductContext())
+                {
+                    foreach(var i in local)
+                    {
+                        var p = db.Products.FirstOrDefault(x => x.Article == i.ProductArticle);
+                        var prodMin = new ProdMin()
+                        {
+                            Id = p.Id,
+                            Article = p.Article,
+                            Name = p.Name,
+                            Description = p.Description,
+                            Price = p.Price,
+                            AvarageRating = p.AvarageRating,
+                            TotalRatings = p.TotalRatings,
+                            Discount = p.Discount,
+                            Directory = p.Directory,
+                            AvailableStatus = p.AvailableStatus,
+                            Brend = p.Brend,
+                            Category = p.Category,
+                            Tag = p.Tag,
+                            Image = p.Image,
+                        };
+                        ListP.Add(prodMin);
+                    }
+                }
+            }
+            return ListP;
+        }
+        internal BaseResponces RemoveItemFromFavAction(string Art)
+        {
+            Item local = null;
+            using (var db = new FavContext())
+            {
+                local = db.Favourites.FirstOrDefault(x => x.ProductArticle == Art);
+            }
+            if(local == null) { return new BaseResponces { Status = false, StatusMessage = "There is no product in the favourites" }; }
+
+            using (var db = new FavContext())
+            {
+                var item = db.Favourites.FirstOrDefault(x => x.ProductArticle == Art);
+                db.Favourites.Remove(item);
+                db.SaveChanges();
+            }
+            return new BaseResponces { Status = true };
+        }
+        internal BaseResponces RemoveItemFromCartAction(string Art)
+        {
+            Item local = null;
+            using (var db = new CartContext())
+            {
+                local = db.Cart.FirstOrDefault(x => x.ProductArticle == Art);
+            }
+            if (local == null) { return new BaseResponces { Status = false, StatusMessage = "There is no product in the cart" }; }
+
+            using (var db = new CartContext())
+            {
+                var item = db.Cart.FirstOrDefault(x => x.ProductArticle == Art);
+                db.Cart.Remove(item);
+                db.SaveChanges();
+            }
+            return new BaseResponces { Status = true };
+        }
+        internal BaseResponces AddItemToCartAction(string Art)
+        {
+            Item local = null;
+            using (var db = new CartContext())
+            {
+                local = db.Cart.FirstOrDefault(x => x.ProductArticle == Art);
+            }
+            if (local != null) { return new BaseResponces { Status = false, StatusMessage = "Product already in the cart" }; }
+
+            var item = new Item
+            {
+                UserId = 1,////System.Web.HttpContext.Current.GetMySessionObject().UserId;
+                ProductArticle = Art,
+                DateAdded = DateTime.Now,
+            };
+            using (var db = new CartContext())
+            {
+                db.Cart.Add(item);
+                db.SaveChanges();
+            }
+            return new BaseResponces { Status = true };
+        }
+        internal BaseResponces AddItemToFavAction(string Art)
+        {
+            Item local = null;
+            using (var db = new FavContext())
+            {
+                local = db.Favourites.FirstOrDefault(x => x.ProductArticle == Art);
+            }
+            if (local != null) { return new BaseResponces { Status = false, StatusMessage = "Product already in favourites" }; }
+
+            var item = new Item
+            {
+                UserId = 1,////System.Web.HttpContext.Current.GetMySessionObject().UserId;
+                ProductArticle = Art,
+                DateAdded = DateTime.Now,
+            };
+            using (var db = new FavContext())
+            {
+                db.Favourites.Add(item);
+                db.SaveChanges();
+            }
+            return new BaseResponces { Status = true };
+        }
         internal HttpCookie Cookie(string loginCredential)
         {
             var apiCookie = new HttpCookie("X-KEY")

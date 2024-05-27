@@ -24,9 +24,9 @@ namespace eUseControl.BuisnessLogic.BaseBL
         {
             return DeleteProdAction(pData);
         }
-        public BaseResponces DeleteReviewActionFlow(string Msg)
+        public BaseResponces DeleteReviewActionFlow(int? Id)
         {
-            return DeleteReviewAction(Msg);
+            return DeleteReviewAction(Id);
         }
     }
 }

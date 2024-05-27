@@ -53,6 +53,7 @@ namespace eUseControl.Web.Controllers
         }
         public ActionResult Comments()
         {
+            ViewBag.ProdReview = _product.GetAllCommentsActionFlow();
             return View();
         }
         public ActionResult Product(string Art)
@@ -135,9 +136,13 @@ namespace eUseControl.Web.Controllers
 
         [AdminMod]
         [HttpPost]
-        public ActionResult DeleteReview()
+        public ActionResult DeleteReview(int? id, string Art)
         {
-            return null;
+            BaseResponces resp = _admin.DeleteReviewActionFlow(id);
+            if(Art!=null)
+            return RedirectToAction("Product", "Admin", new { Art = Art });
+            else
+            return RedirectToAction("Comments", "Admin");
         }
 
         [AdminMod]

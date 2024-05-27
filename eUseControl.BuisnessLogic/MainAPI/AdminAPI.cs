@@ -152,12 +152,12 @@ namespace eUseControl.BuisnessLogic.MainAPI
 
             return new BaseResponces { Status = true };
         }
-        internal BaseResponces DeleteReviewAction(string message)
+        internal BaseResponces DeleteReviewAction(int? id)
         {
             RDbTable deleteReview = null;
             using (var db = new ReviewContext())
             {
-                deleteReview = db.Reviews.FirstOrDefault(x => x.Message == message);
+                deleteReview = db.Reviews.FirstOrDefault(x => x.ReviewId == id);
             }
             if (deleteReview == null) { return new BaseResponces { Status = false, StatusMessage = "Review doesn't exist" }; }
 
@@ -170,7 +170,10 @@ namespace eUseControl.BuisnessLogic.MainAPI
 
             using (var db = new ProductContext())
             {
-                local.AvarageRating = local.AvarageRating - deleteReview.Rate / local.TotalRatings;
+                if (local.TotalRatings > 1)
+                { local.AvarageRating = (local.AvarageRating * local.TotalRatings - deleteReview.Rate) / (local.TotalRatings - 1); }
+                else
+                { local.AvarageRating = local.AvarageRating - deleteReview.Rate; }
                 local.TotalRatings--;
                 db.Entry(local).State = EntityState.Modified;
                 db.SaveChanges();
@@ -178,7 +181,8 @@ namespace eUseControl.BuisnessLogic.MainAPI
 
             using (var db = new ReviewContext())
             {
-                db.Reviews.Remove(deleteReview);
+                var rev = db.Reviews.FirstOrDefault(x => x.ReviewId == id);
+                db.Reviews.Remove(rev);
                 db.SaveChanges();
             }
             return new BaseResponces { Status = true };

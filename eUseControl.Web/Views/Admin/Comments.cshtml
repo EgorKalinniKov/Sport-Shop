@@ -4,7 +4,10 @@
 }
 
 @using System.Web.Optimization
-@model eUseControl.Web.Models.User.UserData
+@{
+    var ReviewPerPage = 6;
+    var ReviewCount = 0;
+}
 
 <!-- SECTION -->
 <div class="section">
@@ -36,15 +39,15 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-4">
-                    <div class="store-sort">
-                        <label>
-                            Sort By:
-                            <select class="input-select">
-                                <option value="0">Popular</option>
-                                <option value="1">Position</option>
-                            </select>
-                        </label>
-                    </div>
+                        <div class="store-sort">
+                            <label>
+                                Sort By:
+                                <select class="input-select">
+                                    <option value="0">Popular</option>
+                                    <option value="1">Position</option>
+                                </select>
+                            </label>
+                        </div>
                     </div>
                     <div class="col-sm-8">
                         <div class="header-search">
@@ -54,76 +57,81 @@
                             </form>
                         </div>
                     </div>
-                    </div>
-                    <ul class="reviews">
-                        <li>
-                            <div class="review-heading">
-                                <h5 class="name">John</h5>
-                                <p class="date">27 DEC 2018, 8:0 PM</p>
-                                <div class="review-rating">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star-o empty"></i>
-                                </div>
-                            </div>
-                            <div class="review-body">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-                                <div class="review-body">
-                                    <div class="col-sm-5">
-                                        <a href="#" class="primary-btn">delete</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="review-heading">
-                                <h5 class="name">John</h5>
-                                <p class="date">27 DEC 2018, 8:0 PM</p>
-                                <div class="review-rating">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star-o empty"></i>
-                                </div>
-                            </div>
-                            <div class="review-body">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-                                <div class="review-body">
-                                    <div class="col-sm-5">
-                                        <a href="#" class="primary-btn">delete</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="review-heading">
-                                <h5 class="name">John</h5>
-                                <p class="date">27 DEC 2018, 8:0 PM</p>
-                                <div class="review-rating">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star-o empty"></i>
-                                </div>
-                            </div>
-                            <div class="review-body">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-                                <div class="review-body">
-                                    <div class="col-sm-5">
-                                        <a href="#" class="primary-btn">delete</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
                 </div>
+                <ul class="reviews">
+                    @if (ViewBag.ProdReview.Count > 0)
+                    {
+                        foreach (var rev in ViewBag.ProdReview)
+                        {
+                            ReviewCount++;
+                            <li>
+                                <div class="review-heading">
+                                    <h5 class="name">@rev.Username</h5>
+                                    <p class="date">@rev.DateEdited</p>
+                                    <div class="review-rating">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <i class="fa @(i <= rev.Rate ? "fa-star" : "fa-star-o")"></i>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="review-body">
+                                    <p>@rev.Message</p>
+                                    <div class="review-body">
+                                        <div class="col-sm-5">
+                                            @using (Html.BeginForm("DeleteReview", "Admin", new { id = rev.Id, }, FormMethod.Post))
+                                            {
+                                                <button class="primary-btn">delete</button>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                @if (ReviewCount >= 5) { break; }
+                            </li>
+                        }
+                    }
+                </ul>
             </div>
+        </div>
         <!-- /row -->
     </div>
     <!-- /container -->
 </div>
 <!-- /SECTION -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var currentPage = 0; // Начинаем с нулевой страницы
+    var ReviewPerPage = @ReviewPerPage;
+    var review = document.querySelectorAll('.review');
+
+    function showProducts() {
+        var startIndex = currentPage * ReviewPerPage;
+        var endIndex = Math.min(startIndex + ReviewPerPage, Review.length);
+        for (var i = 0; i < Review.length; i++) {
+            if (i >= startIndex && i < endIndex) {
+
+                Review[i].style.display = '';
+            } else {
+
+                Review[i].style.display = 'none';
+            }
+        }
+    }
+
+    showProducts(); // Вызываем функцию для отображения продуктов при загрузке страницы
+
+    document.querySelector('.next-page').addEventListener('click', function () {
+        if ((currentPage + 1) * ReviewPerPage < Review.length) {
+            currentPage++;
+            showProducts();
+        }
+    });
+
+    document.querySelector('.prev-page').addEventListener('click', function () {
+        if (currentPage > 0) {
+            currentPage--;
+            showProducts();
+        }
+    });
+});
+</script>

@@ -39,8 +39,6 @@
                 <div class="container">
                     <!-- row -->
                     <div class="row">
-                        @using (Html.BeginForm("ProductEdit", "Admin", FormMethod.Post))
-                        {
                             <input hidden name="@Html.NameFor(x => x.Article)" id="@Html.IdFor(x => x.Article)" value="@ViewBag.Product.Article">
                             <!-- Product main img -->
                             <div class="col-md-3 col-md-push-1">
@@ -60,7 +58,6 @@
                             <!-- Product thumb imgs -->
                             <div class="col-md-1  col-md-pull-3">
                                 <div id="product-imgs">
-                                    <div class="product-preview">
                                         @if (ViewBag.ProductImgs != null)
                                         {
                                             foreach (var i in ViewBag.ProductImgs)
@@ -70,7 +67,6 @@
                                                 </div>
                                             }
                                         }
-                                    </div>
                                 </div>
                             </div>
                             <!-- /Product thumb imgs -->
@@ -102,8 +98,11 @@
                                         </div>
                                     </div>
                                     <div class="add-to-cart">
-                                        <button> save changing</button>
-                                    </div>
+                                        @using (Html.BeginForm("ProductEdit", "Admin", FormMethod.Post))
+                                        {
+                                            <button> save changing</button>
+                                        }
+                                        </div>
 
                                     <div>
                                         <label>Brend:</label>
@@ -168,7 +167,7 @@
                                                 <div class="col-md-3">
                                                     <div id="rating">
                                                         <div class="rating-avg">
-                                                            <span>@ViewBag.Product.AvarageRating</span>
+                                                            <span>@String.Format("{0:0.0}", ViewBag.Product.AvarageRating)</span>
                                                             <div class="rating-stars">
                                                                 @for (int i = 1; i <= 5; i++)
                                                                 {
@@ -250,14 +249,13 @@
                                                 <div class="col-md-6">
                                                     <div id="reviews">
                                                         <ul class="reviews">
-                                                            <li>
-                                                                @if (ViewBag.ProdReview.Count > 0)
+                                                            @if (ViewBag.ProdReview.Count > 0)
+                                                            {
+                                                                foreach (var rev in ViewBag.ProdReview)
                                                                 {
-                                                                    foreach (var rev in ViewBag.ProdReview)
-                                                                    {
-                                                                        using (Html.BeginForm("DeleteReview", "Admin", FormMethod.Post, new { id = rev.Id }))
-                                                                        {
-                                                                            ReviewCount++;
+                                                                        ReviewCount++;
+                                                                        <li>
+
                                                                             <div class="review-heading">
                                                                                 <h5 class="name">@rev.Username</h5>
                                                                                 <p class="date">@rev.DateEdited</p>
@@ -272,15 +270,17 @@
                                                                                 <p>@rev.Message</p>
                                                                                 <div class="review-body">
                                                                                     <div class="col-sm-5">
-                                                                                        <a href="#" class="primary-btn">delete</a>
+                                                                                        @using (Html.BeginForm("DeleteReview", "Admin", new { id = rev.Id, Art = ViewBag.Product.Article, }, FormMethod.Post))
+                                                                                        {
+                                                                                        <button class="primary-btn">delete</button>
+                                                                                        }
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            if (ReviewCount >= 4) { break; }
-                                                                        }
-                                                                    }
+                                                                            @if (ReviewCount >= 4) { break; }
+                                                                        </li>
                                                                 }
-                                                            </li>
+                                                            }
                                                         </ul>
                                                         <ul class="reviews-pagination">
                                                             <li><a href="#"><i class="fa fa-angle-left"></i></a></li>
@@ -297,7 +297,6 @@
                                 </div>
                             </div>
                             <!-- /product tab -->
-                        }
                     </div>
                     <!-- /row -->
                 </div>

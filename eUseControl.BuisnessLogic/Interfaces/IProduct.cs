@@ -15,6 +15,7 @@ namespace eUseControl.BuisnessLogic.Interfaces
         List<ProdMin> GetTopProductsActionFlow();
         ProdMin GetProductByArticleActionFlow(string art);
         List<ReviewData> GetProductReviewsActionFlow(string art);
+        List<ReviewData> GetAllCommentsActionFlow();
         List<string> GetProductImgsActionFlow(string art);
         ProdMin GetProductActionFlow(string Cred);
     }

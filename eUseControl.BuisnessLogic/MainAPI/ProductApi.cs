@@ -2,6 +2,7 @@
 using eUseControl.Domain.Entities.Product;
 using eUseControl.Domain.Entities.Review;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web.UI.WebControls.WebParts;
 
@@ -249,6 +250,88 @@ namespace eUseControl.BuisnessLogic.MainAPI
             }
             return imgs;
         }
-        
+        internal List<ProdMin> SortProducts(ProdSort list)
+        {
+            switch (list.SortOrder)
+            {
+                case "FromAToZ": list.ListP.Sort(delegate (ProdMin x, ProdMin y) { return x.Name.CompareTo(y.Name); }); break;
+                case "FromZToA": list.ListP.Sort(delegate (ProdMin x, ProdMin y) { return y.Name.CompareTo(x.Name); }); break;
+                case "HightToLowPrice": list.ListP.Sort(delegate (ProdMin x, ProdMin y) { return x.Price.CompareTo(y.Price); }); break;
+                case "LowToHightPrice": list.ListP.Sort(delegate (ProdMin x, ProdMin y) { return y.Price.CompareTo(x.Price); }); break;
+                case "HightToLowRate": list.ListP.Sort(delegate (ProdMin x, ProdMin y) { return x.AvarageRating.CompareTo(y.AvarageRating); }); break;
+                case "LowToHightRate": list.ListP.Sort(delegate (ProdMin x, ProdMin y) { return y.AvarageRating.CompareTo(x.AvarageRating); }); break;
+            }
+            return list.ListP;
+        }
+        internal List<ProdMin> FilterProductsBy(ProdFilter list)
+        {
+            List<ProdMin> ListP = new List<ProdMin>();
+            using (var db = new ProductContext())
+            {
+                var products = db.Products.ToList();
+
+                if (list.Brend != null)
+                    products = products.Where(x => x.Brend == list.Brend).ToList();
+                if (list.Tag != null)
+                    products = products.Where(x => x.Tag == list.Tag).ToList();
+
+                products = products.Where(x => x.Price - x.Price/100 * x.Discount < list.HighPrice &&
+                                                x.Price - x.Price / 100 * x.Discount > list.LowPrice).ToList();
+                foreach (var p in products)
+                {
+                    var prodMin = new ProdMin()
+                    {
+                        Id = p.Id,
+                        Article = p.Article,
+                        Name = p.Name,
+                        Description = p.Description,
+                        Price = p.Price,
+                        AvarageRating = p.AvarageRating,
+                        TotalRatings = p.TotalRatings,
+                        Discount = p.Discount,
+                        Directory = p.Directory,
+                        AvailableStatus = p.AvailableStatus,
+                        Brend = p.Brend,
+                        Category = p.Category,
+                        Tag = p.Tag,
+                        Image = p.Image,
+                    };
+                    ListP.Add(prodMin);
+                }
+            }
+            return ListP;
+        }
+        internal List<ProdMin> SearchProducts(PSearch data)
+        {
+            List<ProdMin> ListP = new List<ProdMin>();
+            using (var db = new ProductContext())
+            {
+                var products = db.Products.Where(x => x.Name.Contains(data.Credential) || x.Article.Contains(data.Credential)).ToList();
+                if(data.Category != "All")
+                    products = products.Where(x => x.Category == data.Category).ToList();    
+                foreach (var p in products)
+                {
+                    var prodMin = new ProdMin()
+                    {
+                        Id = p.Id,
+                        Article = p.Article,
+                        Name = p.Name,
+                        Description = p.Description,
+                        Price = p.Price,
+                        AvarageRating = p.AvarageRating,
+                        TotalRatings = p.TotalRatings,
+                        Discount = p.Discount,
+                        Directory = p.Directory,
+                        AvailableStatus = p.AvailableStatus,
+                        Brend = p.Brend,
+                        Category = p.Category,
+                        Tag = p.Tag,
+                        Image = p.Image,
+                    };
+                    ListP.Add(prodMin);
+                }
+            }
+            return ListP;
+        }
     }
 }

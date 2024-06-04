@@ -31,22 +31,22 @@
             <!-- /LOGO -->
             <!-- SEARCH BAR -->
 
-                <div class="col-md-6">
-                    <div class="header-search">
-                        <div>
-                            @using (Html.BeginForm("Search", "Home", FormMethod.Post, new { @id = "SearchForm" }))
-                            {
-                                <select class="input-select" name="@Html.NameFor(x => x.Category)" id="@Html.IdFor(x => x.Category)">
-                                    <option value="All">All Categories</option>
-                                    <option value="1">Category 01</option>
-                                    <option value="1">Category 02</option>
-                                </select>
-                                <input class="input" id="@Html.IdFor(x=>x.Credential)" name="@Html.NameFor(x=>x.Credential)" placeholder="Search here">
-                                <button class="search-btn">Search</button>
-                            }
-                        </div>
+            <div class="col-md-6">
+                <div class="header-search">
+                    <div>
+                        @using (Html.BeginForm("Store", "Home", FormMethod.Post, new { @id = "SearchForm" }))
+                        {
+                            <select class="input-select" name="@Html.NameFor(x => x.Category)" id="@Html.IdFor(x => x.Category)">
+                                <option value="All">All Categories</option>
+                                <option value="1">Category 01</option>
+                                <option value="1">Category 02</option>
+                            </select>
+                            <input class="input" id="@Html.IdFor(x=>x.Credential)" name="@Html.NameFor(x=>x.Credential)" placeholder="Search here">
+                            <button class="search-btn">Search</button>
+                        }
                     </div>
                 </div>
+            </div>
             <!-- /SEARCH BAR -->
             <!-- ACCOUNT -->
             <div class="col-md-3 clearfix">

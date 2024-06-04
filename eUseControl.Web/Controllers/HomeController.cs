@@ -30,7 +30,6 @@ namespace eUseControl.Web.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            ViewBag.Products = _product.GetAllProductsActionFlow();
             ViewBag.NewProducts = _product.GetNewProductsActionFlow();
             ViewBag.TopProducts = _product.GetTopProductsActionFlow();
 
@@ -45,9 +44,18 @@ namespace eUseControl.Web.Controllers
             return View();
         }
 
-        public ActionResult Store()
+        public ActionResult Store(SearchData data)
         {
-            ViewBag.Products =  _product.GetAllProductsActionFlow();
+            ViewBag.Products = _product.GetAllProductsActionFlow();
+            if (data.Credential != null)
+            {
+                var Search = new PSearch
+                {
+                    Category = data.Category,
+                    Credential = data.Credential,
+                };
+                ViewBag.Products = _product.SearchProductsAction(Search);
+            }
             return View();
         }
         [HttpPost]
@@ -57,14 +65,27 @@ namespace eUseControl.Web.Controllers
             {
                 UserId = 1,//System.Web.HttpContext.Current.GetMySessionObject().UserId;
                 Username = "2",//System.Web.HttpContext.Current.GetMySessionObject().Username;
-                Article = data.Article, 
+                Article = data.Article,
                 Message = data.Message,
                 Rate = data.Rate,
             };
 
             BaseResponces resp = _session.RegisterUReviewActionFlow(rData);
 
-            return RedirectToAction("Product", "Home", new {Art = data.Article }); 
+            return RedirectToAction("Product", "Home", new { Art = data.Article });
+        }
+        [HttpPost]
+        public ActionResult Store(ProdStore data)
+        {
+            var Filter = new ProdFilter
+            {
+                Brend = data.Brend,
+                Tag = data.Tag,
+                LowPrice = data.LowPrice,
+                HighPrice = data.HighPrice,
+            };
+            ViewBag.Products = _product.FilterProductsByAction(Filter);
+            return View();
         }
 
     }

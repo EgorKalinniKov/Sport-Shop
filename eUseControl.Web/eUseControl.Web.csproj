@@ -242,11 +242,11 @@
     </Compile>
     <Compile Include="Models\Authorization\LoginData.cs" />
     <Compile Include="Models\Authorization\UActionRegister.cs" />
+    <Compile Include="Models\Product\ProdStore.cs" />
     <Compile Include="Models\Product\ProductIconData.cs" />
     <Compile Include="Models\Product\ProductRegistration.cs" />
     <Compile Include="Models\Product\ReviewReg.cs" />
     <Compile Include="Models\Product\SearchData.cs" />
-    <Compile Include="Models\Product\SortData.cs" />
     <Compile Include="Models\User\UserData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

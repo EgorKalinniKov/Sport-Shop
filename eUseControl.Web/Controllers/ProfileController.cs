@@ -29,5 +29,26 @@ namespace eUseControl.Web.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public ActionResult AddToCart(string Art)
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult AddToFav(string Art)
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult RemoveFromCart(string Art)
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult RemoveFromFav(string Art)
+        {
+            return View();
+        }
     }
 }

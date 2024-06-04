@@ -31,7 +31,7 @@ namespace eUseControl.Web.Controllers
         }
         public ActionResult NewProduct()
         {
-            return View();
+            return View(new ProductRegistration());
         }
         public ActionResult Products()
         {
@@ -141,7 +141,6 @@ namespace eUseControl.Web.Controllers
             BaseResponces resp = _admin.DeleteReviewActionFlow(id);
             if(Art!=null)
             return RedirectToAction("Product", "Admin", new { Art = Art });
-            else
             return RedirectToAction("Comments", "Admin");
         }
 

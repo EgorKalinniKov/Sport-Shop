@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using eUseControl.BuisnessLogic.Interfaces;
+﻿using eUseControl.BuisnessLogic.Interfaces;
 using eUseControl.Domain.Entities.Responces;
 using eUseControl.Domain.Entities.User;
-using eUseControl.Web.Models;
 using eUseControl.Web.Models.Authorization;
+using System;
+using System.Web;
+using System.Web.Mvc;
 
 
 namespace eUseControl.Web.Controllers
@@ -40,8 +36,11 @@ namespace eUseControl.Web.Controllers
         }
 
         [HttpPost]
+        //[ValidateAntiForgeryToken]
         public ActionResult Login(LoginData data)
         {
+            if (!ModelState.IsValid) return View();
+
             var adress = base.Request.UserHostAddress;
             var ulData = new ULoginData
             {
@@ -56,13 +55,27 @@ namespace eUseControl.Web.Controllers
             if (resp.Status)
             {
                 BaseResponces auth = _session.GenerateUserSessionActionFlow(ulData);
+                if (auth.Status)
+                {
+                    HttpCookie cookie = _session.GenCookie(data.Credential);
+                    ControllerContext.HttpContext.Response.Cookies.Add(cookie);
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("", auth.StatusMessage);
+                    return View();
+                }
             }
-            return null;
+            return View();
         }
 
         [HttpPost]
-        public ActionResult Register(UActionRegister data) 
+        //[ValidateAntiForgeryToken]
+        public ActionResult Register(UActionRegister data)
         {
+            if (!ModelState.IsValid) return View();
+
             var adress = base.Request.UserHostAddress;
             var uData = new URegisterData
             {

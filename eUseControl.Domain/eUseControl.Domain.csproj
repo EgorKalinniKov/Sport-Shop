@@ -57,7 +57,9 @@
     <Compile Include="Entities\Product\PDbTable.cs" />
     <Compile Include="Entities\Product\PImgTable.cs" />
     <Compile Include="Entities\Product\PRegisterData.cs" />
+    <Compile Include="Entities\Product\ProdFilter.cs" />
     <Compile Include="Entities\Product\ProdMin.cs" />
+    <Compile Include="Entities\Product\ProdSort.cs" />
     <Compile Include="Entities\Product\PSearch.cs" />
     <Compile Include="Entities\Responces\BaseResponces.cs" />
     <Compile Include="Entities\Review\RDbTable.cs" />

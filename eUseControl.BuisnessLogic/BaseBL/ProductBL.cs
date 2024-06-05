@@ -44,17 +44,5 @@ namespace eUseControl.BuisnessLogic.BaseBL
         {
             return GetProduct(Cred);
         }
-        public List<ProdMin> SortProductsAction(ProdSort list)
-        {
-            return SortProducts(list);
-        }
-        public List<ProdMin> FilterProductsByAction(ProdFilter list)
-        {
-            return FilterProductsBy(list);
-        }
-        public List<ProdMin> SearchProductsAction(PSearch Cred)
-        {
-            return SearchProducts(Cred);
-        }
     }
 }

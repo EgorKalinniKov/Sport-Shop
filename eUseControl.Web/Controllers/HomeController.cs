@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.WebPages;
 using eUseControl.BuisnessLogic.Interfaces;
 using eUseControl.Domain.Entities.Product;
 using eUseControl.Domain.Entities.Responces;
@@ -44,19 +45,44 @@ namespace eUseControl.Web.Controllers
             return View();
         }
 
-        public ActionResult Store(SearchData data)
+        public ActionResult Store(ProdStore data)
         {
-            ViewBag.Products = _product.GetAllProductsActionFlow();
-            if (data.Credential != null)
+
+            data.Products = _product.GetAllProductsActionFlow();
+
+            if(!String.IsNullOrEmpty(data.SelectedCategory) && (data.SelectedCategory != "All"))
+                data.Products = data.Products.Where(x => x.Category == data.SelectedCategory).ToList();
+
+            switch(data.SelectedCategory)
             {
-                var Search = new PSearch
-                {
-                    Category = data.Category,
-                    Credential = data.Credential,
-                };
-                ViewBag.Products = _product.SearchProductsAction(Search);
+                case "Swimming":    ViewBag.Swimming = "active"; break;
+                case "Basketball":  ViewBag.Basketball = "active"; break;
+                case "Football":    ViewBag.Football = "active"; break;
+                case "Volleyball":  ViewBag.Volleyball = "active"; break;
+                case "Gym":         ViewBag.Gym = "active"; break;
             }
-            return View();
+
+            if (!String.IsNullOrEmpty(data.SelectedBrend))
+                data.Products = data.Products.Where(x => x.Brend == data.SelectedBrend).ToList();
+
+            if (!String.IsNullOrEmpty(data.SelectedTag))
+                data.Products = data.Products.Where(x => x.Tag == data.SelectedTag).ToList();
+
+            if (!String.IsNullOrEmpty(data.SelectedName))
+                data.Products = data.Products.Where(x => x.Name.Contains(data.SelectedName) || x.Article.Contains(data.SelectedName)).ToList();
+
+            switch (data.Sort)
+            {
+                case "FromAToZ":        data.Products = data.Products.OrderBy(x => x.Name).ToList();                      break;
+                case "FromZToA":        data.Products = data.Products.OrderByDescending(x => x.Name).ToList();            break;
+                case "HightToLowPrice": data.Products = data.Products.OrderBy(x => x.Price).ToList();                     break;
+                case "LowToHightPrice": data.Products = data.Products.OrderByDescending(x => x.Price).ToList();           break;
+                case "HightToLowRate":  data.Products = data.Products.OrderBy(x => x.AvarageRating).ToList();             break;
+                case "LowToHightRate":  data.Products = data.Products.OrderByDescending(x => x.AvarageRating).ToList();   break;
+                default:                data.Products = data.Products.OrderBy(x => x.Name).ToList();                      break;
+            }
+
+            return View(data);
         }
         [HttpPost]
         public ActionResult AddReview(ReviewReg data)
@@ -74,19 +100,7 @@ namespace eUseControl.Web.Controllers
 
             return RedirectToAction("Product", "Home", new { Art = data.Article });
         }
-        [HttpPost]
-        public ActionResult Store(ProdStore data)
-        {
-            var Filter = new ProdFilter
-            {
-                Brend = data.Brend,
-                Tag = data.Tag,
-                LowPrice = data.LowPrice,
-                HighPrice = data.HighPrice,
-            };
-            ViewBag.Products = _product.FilterProductsByAction(Filter);
-            return View();
-        }
+
 
     }
 }

@@ -5,13 +5,13 @@
         <div id="responsive-nav">
             <!-- NAV -->
             <ul class="main-nav nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#">Hot Deals</a></li>
-                <li><a href="#">Categories</a></li>
-                <li><a href="#">Laptops</a></li>
-                <li><a href="#">Smartphones</a></li>
-                <li><a href="#">Cameras</a></li>
-                <li><a href="#">Accessories</a></li>
+                <li class=@ViewBag.Index><a href="@Url.Action("Index", "Home")">Home</a></li>
+                <li class=@ViewBag.Store><a href="@Url.Action("Store", "Home")">Store</a></li>
+                <li class=@ViewBag.Swimming><a href="@Url.Action("Store", "Home", new {category = "Swimming"})">Swimming</a></li>
+                <li class=@ViewBag.Basketball><a href="@Url.Action("Store", "Home", new {category = "Basketball"})">Basketball</a></li>
+                <li class=@ViewBag.Football><a href="@Url.Action("Store", "Home", new {category = "Football"})">Football</a></li>
+                <li class=@ViewBag.Volleyball><a href="@Url.Action("Store", "Home", new {category = "Volleyball"})">Volleyball</a></li>
+                <li class=@ViewBag.Gym><a href="@Url.Action("Store", "Home", new {category = "Gym"})">Gym</a></li>
             </ul>
             <!-- /NAV -->
         </div>

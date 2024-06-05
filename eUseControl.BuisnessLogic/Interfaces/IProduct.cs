@@ -18,8 +18,5 @@ namespace eUseControl.BuisnessLogic.Interfaces
         List<ReviewData> GetAllCommentsActionFlow();
         List<string> GetProductImgsActionFlow(string art);
         ProdMin GetProductActionFlow(string Cred);
-        List<ProdMin> SortProductsAction(ProdSort list);
-        List<ProdMin> FilterProductsByAction(ProdFilter list);
-        List<ProdMin> SearchProductsAction(PSearch Cred);
     }
 }

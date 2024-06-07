@@ -25,6 +25,10 @@ namespace eUseControl.BuisnessLogic.BaseBL
         {
             return RegisterUserAction(uData);
         }
+        public BaseResponces CheckIfUserBannedActionFlow(UserMinimal data)
+        {
+            return CheckIfUserBanned(data);
+        }
         public BaseResponces GenerateUserSessionActionFlow(ULoginData ulData)
         {
             return GenerateUserSession(ulData);
@@ -40,6 +44,30 @@ namespace eUseControl.BuisnessLogic.BaseBL
         public UserMinimal GetUserByCookie(string apiCookieValue)
         {
             return UserCookie(apiCookieValue);
+        }
+        public List<ProdMin> GetUserCartActionFlow(int? id)
+        {
+            return GetUserCartAction(id);
+        }
+        public List<ProdMin> GetUserFavActionFlow(int? id)
+        {
+            return GetUserFavAction(id);
+        }
+        public BaseResponces AddItemToCartActionFlow (string Art, int? id)
+        {
+            return AddItemToCartActionFlow(Art, id);
+        }
+        public BaseResponces AddItemToFavActionFlow(string Art, int? id)
+        {
+            return AddItemToFavActionFlow(Art, id);
+        }
+        public BaseResponces RemoveItemFromCartActionFlow(string Art, int? id)
+        {
+            return RemoveItemFromCartAction(Art, id);
+        }
+        public BaseResponces RemoveItemFromFavActionFlow(string Art, int? id)
+        {
+            return RemoveItemFromFavActionFlow(Art, id);
         }
     }
 }

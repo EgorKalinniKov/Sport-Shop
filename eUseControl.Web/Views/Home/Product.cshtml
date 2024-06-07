@@ -235,7 +235,7 @@
                                 <div class="col-md-3">
                                     <div id="review-form">
                                         <div class="review-form">
-                                            @using (Html.BeginForm("AddReview", "Home", FormMethod.Post, new { @id = "ReviewForm" }))
+                                            @using (Html.BeginForm("AddReview", "Profle", FormMethod.Post, new { @id = "ReviewForm" }))
                                             {
                                                 <textarea class="input" name="@Html.NameFor(x => x.Message)" placeholder="Your Review"></textarea>
                                                 <div class="input-rating">

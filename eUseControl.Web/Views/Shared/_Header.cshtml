@@ -1,4 +1,7 @@
 ﻿@model eUseControl.Web.Models.Product.ProdStore
+@{ 
+    var totalcost = 0;
+}
 <!-- TOP HEADER -->
 <div id="top-header">
     <div class="container">
@@ -55,84 +58,94 @@
             <div class="col-md-3 clearfix">
                 <div class="header-ctn">
                     <!-- Wishlist -->
-                    <div class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                            <i class="fa fa-heart-o" "></i>
-                            <span>Your Wishlist</span>
-                            <div class="qty">2</div>
-                        </a>
-                        <div class="cart-dropdown">
-                            <div class="cart-list">
-                                <div class="product-widget">
-                                    <div class="product-img">
-                                        <img src="/Content/Images/product01.png" alt="">
+                    @if (ViewBag.Fav != null)
+                    {
+                      <div class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                <i class="fa fa-heart-o"></i>
+                                <span>Your Wishlist</span>
+                                <div class="qty">@ViewBag.Fav.Count</div>
+                            </a>
+                            @if (@ViewBag.Fav.Count > 0)
+                            {
+                            <div class="cart-dropdown">
+                                <div class="cart-list">
+                                    @foreach (var p in ViewBag.Fav)
+                                    {
+                                        <div class="product-widget">
+                                            <div class="product-img">
+                                                <img src="@p.Image" alt="">
+                                            </div>
+                                            <div class="product-body">
+                                                <h3 class="product-name"><a href="#">@p.Name</a></h3>
+                                                @if (p.Discount > 0)
+                                                {
+                                                    var PriceDiscount = p.Price - p.Price / 100 * p.Discount;
+                                                    <h4 class="product-price">@PriceDiscount <del class="product-old-price">@p.Price</del></h4>
+                                                }
+                                                else
+                                                { <h4 class="product-price">@p.Price</h4>}
+                                            </div>
+                                            <button class="delete"><i class="fa fa-close"></i></button>
+                                        </div>
+                                    }
+                                    <div class="cart-btns">
+                                        <a href="@Url.Action("Favourites","Profile")">View Wishlist </a>
                                     </div>
-                                    <div class="product-body">
-                                        <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                        <h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
-                                    </div>
-                                    <button class="delete"><i class="fa fa-close"></i></button>
                                 </div>
+                            </div> 
+                            }
+                      </div>
+                    }
 
-                                <div class="product-widget">
-                                    <div class="product-img">
-                                        <img src="/Content/Images/product02.png" alt="">
-                                    </div>
-                                    <div class="product-body">
-                                        <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                        <h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
-                                    </div>
-                                    <button class="delete"><i class="fa fa-close"></i></button>
-                                </div>
-                            </div>
-                            <div class="cart-btns">
-                                <a href="#">Add to Cart</a>
-                                <a href="#">View Wishlist </a>
-                            </div>
-                        </div>
-                    </div>
                     <!-- /Wishlist -->
                     <!-- Cart -->
+                    @if (ViewBag.Cart != null)
+                    {
                     <div class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                             <i class="fa fa-shopping-cart"></i>
                             <span>Your Cart</span>
-                            <div class="qty">3</div>
+                            <div class="qty">@ViewBag.Cart.Count</div>
                         </a>
+                        @if (@ViewBag.Cart.Count > 0)
+                        {
                         <div class="cart-dropdown">
                             <div class="cart-list">
-                                <div class="product-widget">
-                                    <div class="product-img">
-                                        <img src="/Content/Images/product01.png" alt="">
+                                @foreach (var p in ViewBag.Cart)
+                                {
+                                    <div class="product-widget">
+                                        <div class="product-img">
+                                            <img src="@p.Image" alt="">
+                                        </div>
+                                        <div class="product-body">
+                                            <h3 class="product-name"><a href="#">@p.Name</a></h3>
+                                            @if (p.Discount > 0)
+                                            {
+                                                var PriceDiscount = p.Price - p.Price / 100 * p.Discount;
+                                                totalcost += PriceDiscount;
+                                                <h4 class="product-price">@PriceDiscount <del class="product-old-price">@p.Price</del></h4>}
+                                            else
+                                            { <h4 class="product-price">@p.Price</h4> 
+                                                totalcost += p.Price;
+                                            }
+                                        </div>
+                                        <button class="delete"><i class="fa fa-close"></i></button>
                                     </div>
-                                    <div class="product-body">
-                                        <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                        <h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
-                                    </div>
-                                    <button class="delete"><i class="fa fa-close"></i></button>
+                                }
+                                <div class="cart-summary">
+                                    <small>@ViewBag.Cart.Count Item(s) selected</small>
+                                    <h5>SUBTOTAL: $@totalcost</h5>
                                 </div>
-
-                                <div class="product-widget">
-                                    <div class="product-img">
-                                        <img src="/Content/Images/product02.png" alt="">
-                                    </div>
-                                    <div class="product-body">
-                                        <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                        <h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
-                                    </div>
-                                    <button class="delete"><i class="fa fa-close"></i></button>
+                                <div class="cart-btns">
+                                    <a href="@Url.Action("Cart", "Profile")">View Cart</a>
+                                    <a href="@Url.Action("Checkout", "Profile")">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
                                 </div>
-                            </div>
-                            <div class="cart-summary">
-                                <small>3 Item(s) selected</small>
-                                <h5>SUBTOTAL: $2940.00</h5>
-                            </div>
-                            <div class="cart-btns">
-                                <a href="#">View Cart</a>
-                                <a href="@Url.Action("Checkout","Home")">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
+                        }
                     </div>
+                    }
                     <!-- /Cart -->
                     <!-- Menu Toogle -->
                     <div class="menu-toggle">

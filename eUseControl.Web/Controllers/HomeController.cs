@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.EnterpriseServices.CompensatingResourceManager;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -8,6 +9,8 @@ using eUseControl.BuisnessLogic.Interfaces;
 using eUseControl.Domain.Entities.Product;
 using eUseControl.Domain.Entities.Responces;
 using eUseControl.Domain.Entities.Review;
+using eUseControl.Domain.Entities.User;
+using eUseControl.Domain.Enums;
 using eUseControl.Web.Attribute;
 using eUseControl.Web.Extension;
 using eUseControl.Web.Models;
@@ -16,7 +19,7 @@ using eUseControl.Web.Models.User;
 
 namespace eUseControl.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ISession _session;
         private readonly IProduct _product;
@@ -31,36 +34,64 @@ namespace eUseControl.Web.Controllers
         // GET: Home
         public ActionResult Index()
         {
+            SessionStatus();
+
             ViewBag.NewProducts = _product.GetNewProductsActionFlow();
             ViewBag.TopProducts = _product.GetTopProductsActionFlow();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return View();
+            }
 
+            int UserId = System.Web.HttpContext.Current.GetMySessionObject().Id;
+            ViewBag.Cart = _session.GetUserCartActionFlow(UserId);
+            ViewBag.CartCount = ViewBag.Cart.Count;
+            ViewBag.Fav = _session.GetUserFavActionFlow(UserId);
             return View();
         }
 
         public ActionResult Product(string Art)
         {
+            SessionStatus();
             ViewBag.Product = _product.GetProductByArticleActionFlow(Art);
             ViewBag.ProductImgs = _product.GetProductImgsActionFlow(Art);
             ViewBag.ProdReview = _product.GetProductReviewsActionFlow(Art);
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return View();
+            }
+
+            int UserId = System.Web.HttpContext.Current.GetMySessionObject().Id;
+            ViewBag.Cart = _session.GetUserCartActionFlow(UserId);
+            ViewBag.Fav = _session.GetUserFavActionFlow(UserId);
             return View();
         }
 
+        public ActionResult Store(string category)
+        {
+            SessionStatus();
+            var data = new ProdStore();
+            data.Products = _product.GetAllProductsActionFlow();
+            if (!String.IsNullOrEmpty(data.SelectedCategory) && (data.SelectedCategory != "All"))
+                data.Products = data.Products.Where(x => x.Category == data.SelectedCategory).ToList();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return View(data);
+            }
+
+            int UserId = System.Web.HttpContext.Current.GetMySessionObject().Id;
+            ViewBag.Cart = _session.GetUserCartActionFlow(UserId);
+            ViewBag.Fav = _session.GetUserFavActionFlow(UserId);
+            return View(data);
+        }
+
+        [HttpPost]
         public ActionResult Store(ProdStore data)
         {
-
             data.Products = _product.GetAllProductsActionFlow();
 
-            if(!String.IsNullOrEmpty(data.SelectedCategory) && (data.SelectedCategory != "All"))
+            if (!String.IsNullOrEmpty(data.SelectedCategory) && (data.SelectedCategory != "All"))
                 data.Products = data.Products.Where(x => x.Category == data.SelectedCategory).ToList();
-
-            switch(data.SelectedCategory)
-            {
-                case "Swimming":    ViewBag.Swimming = "active"; break;
-                case "Basketball":  ViewBag.Basketball = "active"; break;
-                case "Football":    ViewBag.Football = "active"; break;
-                case "Volleyball":  ViewBag.Volleyball = "active"; break;
-                case "Gym":         ViewBag.Gym = "active"; break;
-            }
 
             if (!String.IsNullOrEmpty(data.SelectedBrend))
                 data.Products = data.Products.Where(x => x.Brend == data.SelectedBrend).ToList();
@@ -73,34 +104,17 @@ namespace eUseControl.Web.Controllers
 
             switch (data.Sort)
             {
-                case "FromAToZ":        data.Products = data.Products.OrderBy(x => x.Name).ToList();                      break;
-                case "FromZToA":        data.Products = data.Products.OrderByDescending(x => x.Name).ToList();            break;
-                case "HightToLowPrice": data.Products = data.Products.OrderBy(x => x.Price).ToList();                     break;
-                case "LowToHightPrice": data.Products = data.Products.OrderByDescending(x => x.Price).ToList();           break;
-                case "HightToLowRate":  data.Products = data.Products.OrderBy(x => x.AvarageRating).ToList();             break;
-                case "LowToHightRate":  data.Products = data.Products.OrderByDescending(x => x.AvarageRating).ToList();   break;
-                default:                data.Products = data.Products.OrderBy(x => x.Name).ToList();                      break;
+                case "FromAToZ": data.Products = data.Products.OrderBy(x => x.Name).ToList(); break;
+                case "FromZToA": data.Products = data.Products.OrderByDescending(x => x.Name).ToList(); break;
+                case "HightToLowPrice": data.Products = data.Products.OrderBy(x => x.Price).ToList(); break;
+                case "LowToHightPrice": data.Products = data.Products.OrderByDescending(x => x.Price).ToList(); break;
+                case "HightToLowRate": data.Products = data.Products.OrderBy(x => x.AvarageRating).ToList(); break;
+                case "LowToHightRate": data.Products = data.Products.OrderByDescending(x => x.AvarageRating).ToList(); break;
+                default: data.Products = data.Products.OrderBy(x => x.Name).ToList(); break;
             }
 
             return View(data);
         }
-        [HttpPost]
-        public ActionResult AddReview(ReviewReg data)
-        {
-            var rData = new RRegisterData
-            {
-                UserId = 1,//System.Web.HttpContext.Current.GetMySessionObject().UserId;
-                Username = "2",//System.Web.HttpContext.Current.GetMySessionObject().Username;
-                Article = data.Article,
-                Message = data.Message,
-                Rate = data.Rate,
-            };
-
-            BaseResponces resp = _session.RegisterUReviewActionFlow(rData);
-
-            return RedirectToAction("Product", "Home", new { Art = data.Article });
-        }
-
 
     }
 }

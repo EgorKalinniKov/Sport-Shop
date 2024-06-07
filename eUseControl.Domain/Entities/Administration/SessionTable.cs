@@ -12,19 +12,11 @@ namespace eUseControl.Domain.Entities.Administration
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int LoginId { get; set; }
+        public int SessionId { get; set; }
 
         [Required]
         [StringLength(30)]
         public string Email { get; set; }
-        public int UserId { get; set; }
-
-        [StringLength(30)]
-        public string LastIp { get; set; }
-
-        [DataType(DataType.Date)]
-        public DateTime LastLogin { get; set; }
-        public bool LoginStatus { get; set; }
 
         [Required]
         public string CookieString { get; set; }

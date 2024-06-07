@@ -29,7 +29,7 @@ namespace eUseControl.BuisnessLogic.MainAPI
         {
             if(data.Level == Domain.Enums.URole.Banned)
             {
-                if(data.BanTime > DateTime.Now)
+                if(data.BanTime <= DateTime.Now)
                 {
                     UDbTable local = null;
                     using(var db = new UserContext())
@@ -150,7 +150,7 @@ namespace eUseControl.BuisnessLogic.MainAPI
         internal List<ProdMin> GetUserCartAction(int? id)
         {
             List<Item> local = null;
-            List<ProdMin> ListP = null;
+            List<ProdMin> ListP = new List<ProdMin>();
             using (var db = new CartContext())
             {
                 local = db.Cart.Where(x => x.UserId == id).ToList();
@@ -188,7 +188,7 @@ namespace eUseControl.BuisnessLogic.MainAPI
         internal List<ProdMin> GetUserFavAction(int? id)
         {
             List<Item> local = null;
-            List<ProdMin> ListP = null;
+            List<ProdMin> ListP = new List<ProdMin>();
             using (var db = new FavContext())
             {
                 local = db.Favourites.Where(x => x.UserId == id).ToList();
@@ -223,52 +223,52 @@ namespace eUseControl.BuisnessLogic.MainAPI
             }
             return ListP;
         }
-        internal BaseResponces RemoveItemFromFavAction(string Art)
+        internal BaseResponces RemoveItemFromFavAction(string Art, int? id)
         {
             Item local = null;
             using (var db = new FavContext())
             {
-                local = db.Favourites.FirstOrDefault(x => x.ProductArticle == Art);
+                local = db.Favourites.FirstOrDefault(x => x.ProductArticle == Art && x.UserId == id);
             }
             if(local == null) { return new BaseResponces { Status = false, StatusMessage = "There is no product in the favourites" }; }
 
             using (var db = new FavContext())
             {
-                var item = db.Favourites.FirstOrDefault(x => x.ProductArticle == Art);
+                var item = db.Favourites.FirstOrDefault(x => x.ProductArticle == Art && x.UserId == id);
                 db.Favourites.Remove(item);
                 db.SaveChanges();
             }
             return new BaseResponces { Status = true };
         }
-        internal BaseResponces RemoveItemFromCartAction(string Art)
+        internal BaseResponces RemoveItemFromCartAction(string Art, int? id)
         {
             Item local = null;
             using (var db = new CartContext())
             {
-                local = db.Cart.FirstOrDefault(x => x.ProductArticle == Art);
+                local = db.Cart.FirstOrDefault(x => x.ProductArticle == Art && x.UserId == id);
             }
             if (local == null) { return new BaseResponces { Status = false, StatusMessage = "There is no product in the cart" }; }
 
             using (var db = new CartContext())
             {
-                var item = db.Cart.FirstOrDefault(x => x.ProductArticle == Art);
+                var item = db.Cart.FirstOrDefault(x => x.ProductArticle == Art && x.UserId == id);
                 db.Cart.Remove(item);
                 db.SaveChanges();
             }
             return new BaseResponces { Status = true };
         }
-        internal BaseResponces AddItemToCartAction(string Art)
+        internal BaseResponces AddItemToCartAction(string Art, int id)
         {
             Item local = null;
             using (var db = new CartContext())
             {
-                local = db.Cart.FirstOrDefault(x => x.ProductArticle == Art);
+                local = db.Cart.FirstOrDefault(x => x.ProductArticle == Art && x.UserId == id);
             }
             if (local != null) { return new BaseResponces { Status = false, StatusMessage = "Product already in the cart" }; }
 
             var item = new Item
             {
-                UserId = 1,////System.Web.HttpContext.Current.GetMySessionObject().UserId;
+                UserId = id,
                 ProductArticle = Art,
                 DateAdded = DateTime.Now,
             };
@@ -279,18 +279,18 @@ namespace eUseControl.BuisnessLogic.MainAPI
             }
             return new BaseResponces { Status = true };
         }
-        internal BaseResponces AddItemToFavAction(string Art)
+        internal BaseResponces AddItemToFavAction(string Art, int id)
         {
             Item local = null;
             using (var db = new FavContext())
             {
-                local = db.Favourites.FirstOrDefault(x => x.ProductArticle == Art);
+                local = db.Favourites.FirstOrDefault(x => x.ProductArticle == Art && x.UserId == id);
             }
             if (local != null) { return new BaseResponces { Status = false, StatusMessage = "Product already in favourites" }; }
 
             var item = new Item
             {
-                UserId = 1,////System.Web.HttpContext.Current.GetMySessionObject().UserId;
+                UserId = id,
                 ProductArticle = Art,
                 DateAdded = DateTime.Now,
             };
@@ -325,12 +325,13 @@ namespace eUseControl.BuisnessLogic.MainAPI
                 }
                 else
                 {
-                    db.Sessions.Add(new SessionTable
+                    var tmp = new SessionTable
                     {
                         Email = loginCredential,
                         CookieString = apiCookie.Value,
                         ExpireTime = DateTime.Now.AddMinutes(60)
-                    });
+                    };
+                    db.Sessions.Add(tmp);
                     db.SaveChanges();
                 }
             }

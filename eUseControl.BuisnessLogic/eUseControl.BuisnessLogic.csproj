@@ -61,6 +61,7 @@
     <Compile Include="DbModel\ImgContext.cs" />
     <Compile Include="DbModel\ProductContext.cs" />
     <Compile Include="DbModel\ReviewContext.cs" />
+    <Compile Include="DbModel\Seed\UserInit.cs" />
     <Compile Include="DbModel\SessionContext.cs" />
     <Compile Include="DbModel\UserContext.cs" />
     <Compile Include="Interfaces\IProduct.cs" />
@@ -85,9 +86,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DbModel\Seed\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

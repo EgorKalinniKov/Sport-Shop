@@ -4,6 +4,7 @@
 }
 
 @using System.Web.Optimization
+@model eUseControl.Web.Models.User.ReviewSearch
 @{
     var ReviewPerPage = 6;
     var ReviewCount = 0;
@@ -38,30 +39,33 @@
                     <h3 class="title">All comments</h3>
                 </div>
                 <div class="row">
-                    <div class="col-sm-4">
-                        <div class="store-sort">
-                            <label>
-                                Sort By:
-                                <select class="input-select">
-                                    <option value="0">Popular</option>
-                                    <option value="1">Position</option>
-                                </select>
-                            </label>
+                    @using (Html.BeginForm("Comments", "Admin", FormMethod.Post, new { @id = "SearchForm" }))
+                    {
+                        <div class="col-sm-4">
+                            <div class="store-sort">
+                                <label>
+                                    Sort By:
+                                    <select class="input-select">
+                                        <option value="0">Popular</option>
+                                        <option value="1">Position</option>
+                                    </select>
+                                </label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-8">
-                        <div class="header-search">
-                            <form>
-                                <input class="input" placeholder="Search here">
-                                <button class="search-btn">Search</button>
-                            </form>
+                        <div class="col-sm-8">
+                            <div class="header-search">
+                                <form>
+                                    <input class="input" placeholder="Search here">
+                                    <button class="search-btn">Search</button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
                 <ul class="reviews">
-                    @if (ViewBag.ProdReview.Count > 0)
+                    @if (Model.Reviews.Count > 0)
                     {
-                        foreach (var rev in ViewBag.ProdReview)
+                        foreach (var rev in Model.Reviews)
                         {
                             ReviewCount++;
                             <li>
@@ -91,6 +95,14 @@
                         }
                     }
                 </ul>
+                <!-- store bottom filter -->
+                <div class="store-filter clearfix">
+                    <ul class="store-pagination">
+                        <li><a href="#"><i class="fa fa-angle-left"></i></a></li>
+                        <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+                    </ul>
+                </div>
+                <!-- /store bottom filter -->
             </div>
         </div>
         <!-- /row -->

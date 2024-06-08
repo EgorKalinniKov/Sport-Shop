@@ -64,7 +64,7 @@ namespace eUseControl.Web.Controllers
             int UserId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             ViewBag.Cart = _session.GetUserCartActionFlow(UserId);
             ViewBag.Fav = _session.GetUserFavActionFlow(UserId);
-            return View();
+            return View(new ReviewReg());
         }
 
         public ActionResult Store(string category)
@@ -115,6 +115,5 @@ namespace eUseControl.Web.Controllers
 
             return View(data);
         }
-
     }
 }

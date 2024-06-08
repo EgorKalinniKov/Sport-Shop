@@ -1,6 +1,8 @@
 ﻿using eUseControl.BuisnessLogic.Interfaces;
 using eUseControl.Domain.Entities.Responces;
 using eUseControl.Domain.Entities.User;
+using eUseControl.Domain.Enums;
+using eUseControl.Web.Extension;
 using eUseControl.Web.Models.Authorization;
 using System;
 using System.Web;
@@ -9,7 +11,7 @@ using System.Web.Mvc;
 
 namespace eUseControl.Web.Controllers
 {
-    public class LoginController : Controller
+    public class LoginController : BaseController
     {
         private readonly ISession _session;
         public LoginController()
@@ -20,7 +22,15 @@ namespace eUseControl.Web.Controllers
         // GET: Login
         public ActionResult Index()
         {
-            return View(new LoginData());
+            SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+                return View(new LoginData());
+
+            if (System.Web.HttpContext.Current.GetMySessionObject().Level == URole.Admin)
+                return RedirectToAction("Index", "Admin");
+            
+            return RedirectToAction("Index", "Profile");
+
         }
         public ActionResult Registration()
         {

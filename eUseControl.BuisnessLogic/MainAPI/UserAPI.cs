@@ -364,7 +364,7 @@ namespace eUseControl.BuisnessLogic.MainAPI
                 Username = curentUser.Username,
                 Email = curentUser.Email,
                 BanTime = DateTime.Now,
-                Level = Domain.Enums.URole.User,
+                Level = curentUser.Level,
             };
 
             return userminimal;

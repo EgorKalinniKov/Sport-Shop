@@ -4,7 +4,7 @@
 }
 
 @using System.Web.Optimization
-@using System.Web.Optimization
+@model eUseControl.Web.Models.Product.ProdSearch
 @{
     var ProductPerPage = 12;
     var prodCount = 0;
@@ -38,81 +38,80 @@
             <div id="store" class="col-md-9">
                 <!-- store top filter -->
                 <div class="row">
-                    <div class="col-sm-4">
-                        <div class="store-sort">
-                            <label>
-                                Sort By:
-                                <select class="input-select">
-                                    <option value="0">Popular</option>
-                                    <option value="1">Position</option>
-                                </select>
-                            </label>
+                    @using (Html.BeginForm("DeleteProduct", "Admin", FormMethod.Post, new { @id = "SearchForm" }))
+                    {
+                        <div class="col-sm-4">
+                            <div class="store-sort">
+                                <label>
+                                    Sort By:
+                                    <select class="input-select">
+                                        <option value="0">Popular</option>
+                                        <option value="1">Position</option>
+                                    </select>
+                                </label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-8">
-                        <div class="header-search">
-                            <form>
-                                <input class="input" placeholder="Search here">
-                                <button class="search-btn">Search</button>
-                            </form>
+                        <div class="col-sm-8">
+                            <div class="header-search">
+                                <form>
+                                    <input class="input" placeholder="Search here">
+                                    <button class="search-btn">Search</button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
                 <!-- /store top filter -->
                 <!-- store products -->
                 <div class="row">
                     <!-- product -->
-                    @foreach (var prod in ViewBag.Products)
+                    @foreach (var prod in Model.Products)
                     {
-                            prodCount++;
-                            <!-- product -->
-                            <div class="col-md-4 col-xs-6">
-                                <div class="product">
-                                    <div class="product-img">
-                                        <img src="@prod.Image" name=" " alt="">
-                                        <div class="product-label">
-                                            @if (@prod.Discount > 0)
-                                            {<span class="sale">@prod.Discount%</span>}
-                                        </div>
+                        prodCount++;
+                        <!-- product -->
+                        <div class="col-md-4 col-xs-6">
+                            <div class="product">
+                                <div class="product-img">
+                                    <img src="@prod.Image" name=" " alt="">
+                                    <div class="product-label">
+                                        @if (@prod.Discount > 0)
+                                        {<span class="sale">@prod.Discount%</span>}
                                     </div>
-                                    <div class="product-body">
-                                        <p class="product-category">@prod.Category</p>
-                                        <h3 class="product-name">@prod.Name</h3>
-                                        @if (prod.Discount > 0)
-                                        {
-                                            var PriceDiscount = prod.Price - prod.Price / 100 * prod.Discount;
-                                            <h4 class="product-price">@PriceDiscount <del class="product-old-price">@prod.Price</del></h4>}
-                                        else
-                                        { <h4 class="product-price">@prod.Price</h4>}
-                                        <div class="product-rating">
-                                            @for (int i = 1; i <= 5; i++)
-                                            {
-                                                <i class="fa @(i <= prod.AvarageRating ? "fa-star" : "fa-star-o")"></i>
-                                            }
-                                        </div>
-                                    </div>
-                                    @using (Html.BeginForm("ProductDelete", "Admin", new { Art = prod.Article }, FormMethod.Post))
+                                </div>
+                                <div class="product-body">
+                                    <p class="product-category">@prod.Category</p>
+                                    <h3 class="product-name">@prod.Name</h3>
+                                    @if (prod.Discount > 0)
                                     {
+                                        var PriceDiscount = prod.Price - prod.Price / 100 * prod.Discount;
+                                        <h4 class="product-price">@PriceDiscount <del class="product-old-price">@prod.Price</del></h4>}
+                                    else
+                                    { <h4 class="product-price">@prod.Price</h4>}
+                                    <div class="product-rating">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <i class="fa @(i <= prod.AvarageRating ? "fa-star" : "fa-star-o")"></i>
+                                        }
+                                    </div>
+                                </div>
+                                @using (Html.BeginForm("ProductDelete", "Admin", new { Art = prod.Article }, FormMethod.Post))
+                                {
                                     <div class="add-to-cart">
                                         <button class="add-to-cart-btn"> delete</button>
                                     </div>
-                                    }
-                                </div>
+                                }
                             </div>
-                            if (prodCount >= 11) { break; }
-                            <!-- /product -->
+                        </div>
+                        if (prodCount >= 11) { break; }
+                        <!-- /product -->
                     }
                     <!-- /product -->
                 </div>
                 <!-- /store products -->
                 <!-- store bottom filter -->
                 <div class="store-filter clearfix">
-                    <span class="store-qty">Showing 20-100 products</span>
                     <ul class="store-pagination">
-                        <li class="active">1</li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
+                        <li><a href="#"><i class="fa fa-angle-left"></i></a></li>
                         <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
                     </ul>
                 </div>

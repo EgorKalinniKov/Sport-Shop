@@ -4,6 +4,7 @@
 }
 
 @using System.Web.Optimization
+@model eUseControl.Web.Models.Product.ProdSearch
 @{
     var ProductPerPage = 12;
     var prodCount = 0;
@@ -38,30 +39,33 @@
             <div id="store" class="col-md-9">
                 <!-- store top filter -->
                 <div class="row">
-                    <div class="col-sm-4">
-                        <div class="store-sort">
-                            <label>
-                                Sort By:
-                                <select class="input-select">
-                                    <option value="0">Popular</option>
-                                    <option value="1">Position</option>
-                                </select>
-                            </label>
+                    @using (Html.BeginForm("Products", "Admin", FormMethod.Post, new { @id = "SearchForm" }))
+                    {
+                        <div class="col-sm-4">
+                            <div class="store-sort">
+                                <label>
+                                    Sort By:
+                                    <select class="input-select">
+                                        <option value="0">Popular</option>
+                                        <option value="1">Position</option>
+                                    </select>
+                                </label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-8">
-                        <div class="header-search">
-                            <form>
-                                <input class="input" placeholder="Search here">
-                                <button class="search-btn">Search</button>
-                            </form>
+                        <div class="col-sm-8">
+                            <div class="header-search">
+                                <form>
+                                    <input class="input" placeholder="Search here">
+                                    <button class="search-btn">Search</button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
                 <!-- /store top filter -->
                 <!-- store products -->
                 <div class="row">
-                    @foreach (var prod in ViewBag.Products)
+                    @foreach (var prod in Model.Products)
                     {
                         prodCount++;
                         <!-- product -->

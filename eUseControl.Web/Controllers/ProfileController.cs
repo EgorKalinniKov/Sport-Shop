@@ -19,28 +19,52 @@ namespace eUseControl.Web.Controllers
         // GET: Profile
         public ActionResult Index()
         {
+            SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("index", "Login");
+            }
+            ViewBag.Name = System.Web.HttpContext.Current.GetMySessionObject().Username;
+            ViewBag.Email = System.Web.HttpContext.Current.GetMySessionObject().Email;
             return View();
         }
         public ActionResult Checkout()
         {
+            SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("index", "Login");
+            }
             return View();
         }
         public ActionResult Cart()
         {
             SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("index", "Login");
+            }
             int id = System.Web.HttpContext.Current.GetMySessionObject().Id;
-            ViewBag.Fav = _session.GetUserFavActionFlow(id);
+            ViewBag.Cart = _session.GetUserCartActionFlow(id);
             return View();
         }
         public ActionResult Favourites()
         {
             SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("index", "Login");
+            }
             int id = System.Web.HttpContext.Current.GetMySessionObject().Id;
             ViewBag.Fav = _session.GetUserFavActionFlow(id);
             return View();
         }
         public ActionResult Settings()
         {
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("index", "Login");
+            }
             return View();
         }
 
@@ -48,6 +72,10 @@ namespace eUseControl.Web.Controllers
         public ActionResult AddToCart(string Art, string page)
         {
             SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("index", "Login");
+            }
             int UserId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             BaseResponces resp = _session.AddItemToCartActionFlow(Art, UserId);
             if (!resp.Status) ModelState.AddModelError("", resp.StatusMessage);
@@ -59,6 +87,10 @@ namespace eUseControl.Web.Controllers
         public ActionResult AddToFav(string Art, string page)
         {
             SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("index", "Login");
+            }
             int UserId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             BaseResponces resp = _session.AddItemToFavActionFlow(Art, UserId);
             if (!resp.Status) ModelState.AddModelError("", resp.StatusMessage);
@@ -70,6 +102,10 @@ namespace eUseControl.Web.Controllers
         public ActionResult DeleteFromCart(string Art, string page)
         {
             SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("index", "Login");
+            }
             int UserId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             BaseResponces resp = _session.RemoveItemFromCartActionFlow(Art, UserId);
             if (!resp.Status) ModelState.AddModelError("", resp.StatusMessage);
@@ -81,6 +117,10 @@ namespace eUseControl.Web.Controllers
         public ActionResult DeleteFromFav(string Art, string page)
         {
             SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("index", "Login");
+            }
             int UserId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             BaseResponces resp = _session.RemoveItemFromFavActionFlow(Art, UserId);
             if (!resp.Status) ModelState.AddModelError("", resp.StatusMessage);
@@ -95,6 +135,10 @@ namespace eUseControl.Web.Controllers
             if (ModelState.IsValid)
             {
                 SessionStatus();
+                if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+                {
+                    return RedirectToAction("index", "Login");
+                }
                 var user = new UserMinimal
                 {
                     Level = System.Web.HttpContext.Current.GetMySessionObject().Level,

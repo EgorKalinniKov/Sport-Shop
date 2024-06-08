@@ -73,6 +73,19 @@ namespace eUseControl.BuisnessLogic.MainAPI
 
             return new BaseResponces { Status = true };
         }
+        internal void CloseUserSession(string cookie)
+        {
+            using (var db = new SessionContext())
+            {
+                var local = db.Sessions.FirstOrDefault(x => x.CookieString == cookie);
+                if(local != null)
+                {
+                    local.ExpireTime = DateTime.Now.AddDays(-1);
+                }
+                db.Entry(local).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
         internal BaseResponces RegisterUserAction(URegisterData data)
         {
             UDbTable local = null;

@@ -15,7 +15,7 @@ using System.Web.Mvc;
 
 namespace eUseControl.Web.Controllers
 {
-    public class AdminController : Controller
+    public class AdminController : BaseController
     {
         private readonly ISessionAdmin _admin;
         private readonly IProduct _product;
@@ -28,48 +28,93 @@ namespace eUseControl.Web.Controllers
         // GET: Admin
         public ActionResult Index()
         {
+            SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("Index", "Login");
+            }
             return View();
         }
         public ActionResult NewProduct()
         {
+            SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("Index", "Login");
+            }
             return View(new ProductRegistration());
         }
         public ActionResult Products()
         {
+            SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("Index", "Login");
+            }
             var data = new ProdSearch();
             data.Products = _product.GetAllProductsActionFlow();
             return View(data);
         }
         public ActionResult DeleteProduct()
         {
+            SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("Index", "Login");
+            }
             var data = new ProdSearch();
             data.Products = _product.GetAllProductsActionFlow();
             return View(data);
         }
         public ActionResult Users()
         {
+            SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("Index", "Login");
+            }
             var data = new UserSearch();
             //data.Users = _product.GetAllProductsActionFlow();
             return View(data);
         }
         public ActionResult BanUser()
         {
+            SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("Index", "Login");
+            }
             var data = new UserSearch();
             //data.Users = _product.GetAllProductsActionFlow();
             return View(data);
         }
         public ActionResult Comments()
         {
+            SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("Index", "Login");
+            }
             var data = new ReviewSearch();
             //data.Reviews = _product.GetAllProductsActionFlow();
             return View(data);
         }
         public ActionResult Product(string Art)
         {
+            SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("Index", "Login");
+            }
             ViewBag.Product = _product.GetProductByArticleActionFlow(Art);
             ViewBag.ProductImgs = _product.GetProductImgsActionFlow(Art);
             ViewBag.ProdReview = _product.GetProductReviewsActionFlow(Art);
             return View();
+        }
+        public ActionResult Logout()
+        {
+            CloseSession();
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]

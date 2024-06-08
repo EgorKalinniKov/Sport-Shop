@@ -18,6 +18,7 @@ namespace eUseControl.BuisnessLogic.Interfaces
         BaseResponces RegisterUserActionFlow(URegisterData uData);
         BaseResponces CheckIfUserBannedActionFlow(UserMinimal data);
         BaseResponces GenerateUserSessionActionFlow(ULoginData ulData);
+        void CloseUserSessionActionFlow(string cookie);
         BaseResponces RegisterUReviewActionFlow(RRegisterData rData);
         HttpCookie GenCookie(string loginCredential);
         UserMinimal GetUserByCookie(string apiCookieValue);

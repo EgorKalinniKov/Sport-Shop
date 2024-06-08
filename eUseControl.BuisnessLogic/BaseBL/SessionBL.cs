@@ -33,6 +33,10 @@ namespace eUseControl.BuisnessLogic.BaseBL
         {
             return GenerateUserSession(ulData);
         }
+        public void CloseUserSessionActionFlow(string cookie)
+        {
+            CloseUserSession(cookie);
+        }
         public BaseResponces RegisterUReviewActionFlow(RRegisterData rData)
         {
             return RegisterUReviewAction(rData);

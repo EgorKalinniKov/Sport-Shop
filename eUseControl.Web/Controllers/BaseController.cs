@@ -3,6 +3,7 @@ using eUseControl.Web.Extension;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -48,6 +49,14 @@ namespace eUseControl.Web.Controllers
             else
             {
                 System.Web.HttpContext.Current.Session["LoginStatus"] = "logout";
+            }
+        }
+        public void CloseSession()
+        {
+            var apiCookie = Request.Cookies["X-KEY"];
+            if (apiCookie != null)
+            {
+                _session.CloseUserSessionActionFlow(apiCookie.Value);
             }
         }
     }

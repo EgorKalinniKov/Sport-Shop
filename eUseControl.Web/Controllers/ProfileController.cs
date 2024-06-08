@@ -22,7 +22,7 @@ namespace eUseControl.Web.Controllers
             SessionStatus();
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
             {
-                return RedirectToAction("index", "Login");
+                return RedirectToAction("Index", "Login");
             }
             ViewBag.Name = System.Web.HttpContext.Current.GetMySessionObject().Username;
             ViewBag.Email = System.Web.HttpContext.Current.GetMySessionObject().Email;
@@ -33,7 +33,7 @@ namespace eUseControl.Web.Controllers
             SessionStatus();
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
             {
-                return RedirectToAction("index", "Login");
+                return RedirectToAction("Index", "Login");
             }
             return View();
         }
@@ -42,7 +42,7 @@ namespace eUseControl.Web.Controllers
             SessionStatus();
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
             {
-                return RedirectToAction("index", "Login");
+                return RedirectToAction("Index", "Login");
             }
             int id = System.Web.HttpContext.Current.GetMySessionObject().Id;
             ViewBag.Cart = _session.GetUserCartActionFlow(id);
@@ -53,7 +53,7 @@ namespace eUseControl.Web.Controllers
             SessionStatus();
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
             {
-                return RedirectToAction("index", "Login");
+                return RedirectToAction("Index", "Login");
             }
             int id = System.Web.HttpContext.Current.GetMySessionObject().Id;
             ViewBag.Fav = _session.GetUserFavActionFlow(id);
@@ -63,9 +63,14 @@ namespace eUseControl.Web.Controllers
         {
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
             {
-                return RedirectToAction("index", "Login");
+                return RedirectToAction("Index", "Login");
             }
             return View();
+        }
+        public ActionResult Logout()
+        {
+            CloseSession();
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]

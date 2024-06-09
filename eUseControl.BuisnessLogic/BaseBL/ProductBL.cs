@@ -1,6 +1,7 @@
 ﻿using eUseControl.BuisnessLogic.Interfaces;
 using eUseControl.BuisnessLogic.MainAPI;
 using eUseControl.Domain.Entities.Product;
+using eUseControl.Domain.Entities.Responces;
 using eUseControl.Domain.Entities.Review;
 using System;
 using System.Collections.Generic;
@@ -43,6 +44,10 @@ namespace eUseControl.BuisnessLogic.BaseBL
         public ProdMin GetProductActionFlow(string Cred)
         {
             return GetProduct(Cred);
+        }
+        public BaseResponces DeleteReviewActionFlow(int? Id)
+        {
+            return DeleteReviewAction(Id);
         }
     }
 }

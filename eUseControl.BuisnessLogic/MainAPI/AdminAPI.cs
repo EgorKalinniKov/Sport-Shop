@@ -1,9 +1,11 @@
 ﻿using eUseControl.BuisnessLogic.DbModel;
+using eUseControl.Domain.Entities.Administration;
 using eUseControl.Domain.Entities.Product;
 using eUseControl.Domain.Entities.Responces;
 using eUseControl.Domain.Entities.Review;
 using eUseControl.Domain.Entities.User;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
@@ -81,7 +83,7 @@ namespace eUseControl.BuisnessLogic.MainAPI
                 local = db.Products.FirstOrDefault(x => x.Article == data.Article);
             }
 
-            if (local == null) { return new BaseResponces { Status = false, StatusMessage = "Product doen't exist" }; }
+            if (local == null) { return new BaseResponces { Status = false, StatusMessage = "Product doesn't exist" }; }
 
             local.Name = data.Name;
             local.Description = data.Description;
@@ -152,56 +154,41 @@ namespace eUseControl.BuisnessLogic.MainAPI
 
             return new BaseResponces { Status = true };
         }
-        internal BaseResponces DeleteReviewAction(int? id)
-        {
-            RDbTable deleteReview = null;
-            using (var db = new ReviewContext())
-            {
-                deleteReview = db.Reviews.FirstOrDefault(x => x.ReviewId == id);
-            }
-            if (deleteReview == null) { return new BaseResponces { Status = false, StatusMessage = "Review doesn't exist" }; }
-
-            PDbTable local = null;
-            using (var db = new ProductContext())
-            {
-                local = db.Products.FirstOrDefault(x => x.Article == deleteReview.Article);
-            }
-            if (local == null) { return new BaseResponces { Status = false, StatusMessage = "Product doesn't exist" }; }
-
-            using (var db = new ProductContext())
-            {
-                if (local.TotalRatings > 1)
-                { local.AvarageRating = (local.AvarageRating * local.TotalRatings - deleteReview.Rate) / (local.TotalRatings - 1); }
-                else
-                { local.AvarageRating = local.AvarageRating - deleteReview.Rate; }
-                local.TotalRatings--;
-                db.Entry(local).State = EntityState.Modified;
-                db.SaveChanges();
-            }
-
-            using (var db = new ReviewContext())
-            {
-                var rev = db.Reviews.FirstOrDefault(x => x.ReviewId == id);
-                db.Reviews.Remove(rev);
-                db.SaveChanges();
-            }
-            return new BaseResponces { Status = true };
-        }
-        internal BaseResponces BanUserAction(string data)
+        internal BaseResponces BanUserAction(BanedUser data)
         {
             UDbTable BanUser = null;
             using (var db = new UserContext())
             {
-                BanUser = db.Users.FirstOrDefault(x => x.Email == data);
+                BanUser = db.Users.FirstOrDefault(x => x.Id == data.Id);
             }
+            if (BanUser == null) { return new BaseResponces { Status = false, StatusMessage = "User doesn't exist" }; }
 
-            if (BanUser != null)
-            {
-                BanUser.Level = Domain.Enums.URole.Banned;
-            }
+            BanUser.Level = Domain.Enums.URole.Banned;
+            BanUser.BanTime = data.BanTime;
+
             return new BaseResponces { Status = true };
         }
-        //internal BaseResponces EditUserAction(... data)
+        internal BaseResponces EditUserAction(UserEdit data)
+        {
+            UDbTable local = null;
+            using (var db = new UserContext())
+            {
+                local = db.Users.FirstOrDefault(x => x.Id == data.Id);
+            }
+
+            if (local == null) { return new BaseResponces { Status = false, StatusMessage = "User doesn't exist" }; }
+
+            local.Username = data.Credential;
+            local.DateEdited = DateTime.Now;
+
+            using (var db = new UserContext())
+            {
+                db.Entry(local).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return new BaseResponces { Status = true };
+        }
 
     }
 

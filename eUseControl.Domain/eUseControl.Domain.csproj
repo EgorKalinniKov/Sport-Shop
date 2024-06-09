@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Administration\BanedUser.cs" />
     <Compile Include="Entities\Administration\SessionTable.cs" />
     <Compile Include="Entities\Product\Item.cs" />
     <Compile Include="Entities\Product\PDbTable.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Entities\User\UDbTable.cs" />
     <Compile Include="Entities\User\ULoginData.cs" />
     <Compile Include="Entities\User\URegisterData.cs" />
+    <Compile Include="Entities\User\UserEdit.cs" />
     <Compile Include="Entities\User\UserMinimal.cs" />
     <Compile Include="Enums\URole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

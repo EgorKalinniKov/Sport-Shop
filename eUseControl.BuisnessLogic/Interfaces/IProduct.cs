@@ -1,4 +1,5 @@
 ﻿using eUseControl.Domain.Entities.Product;
+using eUseControl.Domain.Entities.Responces;
 using eUseControl.Domain.Entities.Review;
 using System;
 using System.Collections.Generic;
@@ -18,5 +19,6 @@ namespace eUseControl.BuisnessLogic.Interfaces
         List<ReviewData> GetAllCommentsActionFlow();
         List<string> GetProductImgsActionFlow(string art);
         ProdMin GetProductActionFlow(string Cred);
+        BaseResponces DeleteReviewActionFlow(int? Id);
     }
 }

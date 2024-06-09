@@ -248,6 +248,7 @@
     <Compile Include="Models\Product\ReviewReg.cs" />
     <Compile Include="Models\User\ReviewSearch.cs" />
     <Compile Include="Models\User\UserData.cs" />
+    <Compile Include="Models\User\UserEditM.cs" />
     <Compile Include="Models\User\UserSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

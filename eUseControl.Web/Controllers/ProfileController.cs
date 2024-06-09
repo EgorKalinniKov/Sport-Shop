@@ -4,6 +4,7 @@ using eUseControl.Domain.Entities.Review;
 using eUseControl.Domain.Entities.User;
 using eUseControl.Web.Extension;
 using eUseControl.Web.Models.Product;
+using eUseControl.Web.Models.User;
 using System.Web.Mvc;
 
 namespace eUseControl.Web.Controllers
@@ -65,7 +66,7 @@ namespace eUseControl.Web.Controllers
             {
                 return RedirectToAction("Index", "Login");
             }
-            return View();
+            return View(new UserEditM());
         }
         public ActionResult Logout()
         {
@@ -170,6 +171,26 @@ namespace eUseControl.Web.Controllers
                 else ModelState.AddModelError("", check.StatusMessage);
             }
             return RedirectToAction("Product", "Home", new { Art = data.Article });
+        }
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult Settings(UserEditM data)
+        {
+            SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("index", "Login");
+            }
+            var user = new UserEdit
+            {
+                Id = System.Web.HttpContext.Current.GetMySessionObject().Id,
+                Form = data.FormName,
+                Credential = data.Credential,
+            };
+
+            BaseResponces resp = _session.EditUserActionFlow(user);
+            return RedirectToAction("Index", "Profile");
+
         }
     }
 }

@@ -16,6 +16,27 @@ namespace eUseControl.BuisnessLogic.MainAPI
 {
     public class UserAPI
     {
+        internal List<UserMinimal> GetAllUsers()
+        {
+            List<UserMinimal> ListU = new List<UserMinimal>();
+            using (var db = new UserContext())
+            {
+                var users = db.Users;
+                foreach (var u in users)
+                {
+                    var userMin = new UserMinimal()
+                    {
+                        Id = u.Id,
+                        Username = u.Username,
+                        Email = u.Email,
+                        BanTime = u.BanTime,
+                        Level = u.Level,
+                    };
+                    ListU.Add(userMin);
+                }
+            }
+            return ListU;
+        }
         internal BaseResponces CheckUserCredintial(ULoginData data)
         {
             UDbTable local = null;
@@ -27,17 +48,17 @@ namespace eUseControl.BuisnessLogic.MainAPI
         }
         internal BaseResponces CheckIfUserBanned(UserMinimal data)
         {
-            if(data.Level == Domain.Enums.URole.Banned)
+            if (data.Level == Domain.Enums.URole.Banned)
             {
-                if(data.BanTime <= DateTime.Now)
+                if (data.BanTime <= DateTime.Now)
                 {
                     UDbTable local = null;
-                    using(var db = new UserContext())
+                    using (var db = new UserContext())
                     {
                         local = db.Users.FirstOrDefault(x => x.Email == data.Email);
                     }
 
-                    if(local == null) { return new BaseResponces { Status = false, StatusMessage = "User doesn't exist" }; }
+                    if (local == null) { return new BaseResponces { Status = false, StatusMessage = "User doesn't exist" }; }
 
                     local.Level = Domain.Enums.URole.User;
                     using (var db = new SessionContext())
@@ -78,7 +99,7 @@ namespace eUseControl.BuisnessLogic.MainAPI
             using (var db = new SessionContext())
             {
                 var local = db.Sessions.FirstOrDefault(x => x.CookieString == cookie);
-                if(local != null)
+                if (local != null)
                 {
                     local.ExpireTime = DateTime.Now.AddDays(-1);
                 }
@@ -133,8 +154,8 @@ namespace eUseControl.BuisnessLogic.MainAPI
                 Article = data.Article,
                 Message = data.Message,
                 Rate = data.Rate,
-                DateCreated= DateTime.Now,
-                DateEdited= DateTime.Now,
+                DateCreated = DateTime.Now,
+                DateEdited = DateTime.Now,
             };
 
             using (var db = new ReviewContext())
@@ -148,9 +169,9 @@ namespace eUseControl.BuisnessLogic.MainAPI
             {
                 product = db.Products.FirstOrDefault(x => x.Article == data.Article);
             }
-            if(product != null)
+            if (product != null)
             {
-                product.AvarageRating = (product.AvarageRating * product.TotalRatings + data.Rate)/(product.TotalRatings + 1);
+                product.AvarageRating = (product.AvarageRating * product.TotalRatings + data.Rate) / (product.TotalRatings + 1);
                 product.TotalRatings++;
             }
             using (var db = new ProductContext())
@@ -210,7 +231,7 @@ namespace eUseControl.BuisnessLogic.MainAPI
             {
                 using (var db = new ProductContext())
                 {
-                    foreach(var i in local)
+                    foreach (var i in local)
                     {
                         var p = db.Products.FirstOrDefault(x => x.Article == i.ProductArticle);
                         var prodMin = new ProdMin()
@@ -243,7 +264,7 @@ namespace eUseControl.BuisnessLogic.MainAPI
             {
                 local = db.Favourites.FirstOrDefault(x => x.ProductArticle == Art && x.UserId == id);
             }
-            if(local == null) { return new BaseResponces { Status = false, StatusMessage = "There is no product in the favourites" }; }
+            if (local == null) { return new BaseResponces { Status = false, StatusMessage = "There is no product in the favourites" }; }
 
             using (var db = new FavContext())
             {
@@ -376,11 +397,88 @@ namespace eUseControl.BuisnessLogic.MainAPI
             {
                 Username = curentUser.Username,
                 Email = curentUser.Email,
-                BanTime = DateTime.Now,
+                BanTime = curentUser.BanTime,
                 Level = curentUser.Level,
             };
 
             return userminimal;
+        }
+        internal BaseResponces EditUserAction(UserEdit data)
+        {
+            UDbTable local = null;
+            using (var db = new UserContext())
+            {
+                local = db.Users.FirstOrDefault(x => x.Id == data.Id);
+            }
+
+            if (local == null) { return new BaseResponces { Status = false, StatusMessage = "User doesn't exist" }; }
+
+            switch (data.Form)
+            {
+                case "Email": local.Email = data.Credential; break;
+                case "Username": local.Username = data.Credential; break;
+                case "Password": local.Password = data.Credential; break;
+                default: return new BaseResponces { Status = false, StatusMessage = "Unregistered action" };
+            }
+            local.DateEdited = DateTime.Now;
+
+            using (var db = new UserContext())
+            {
+                db.Entry(local).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return new BaseResponces { Status = true };
+        }
+        internal void DeleteUserAction(int id)
+        {
+            UDbTable local = null;
+            using (var db = new UserContext())
+            {
+                local = db.Users.FirstOrDefault(x => x.Id == id);
+            }
+
+            if (local != null)
+            {
+                using (var db = new CartContext())
+                {
+                    var cart = db.Cart.Where(x => x.UserId == id).ToList();
+                    db.Cart.RemoveRange(cart);
+                    db.SaveChanges();
+                }
+                using (var db = new FavContext())
+                {
+                    var fav = db.Favourites.Where(x => x.UserId == id).ToList();
+                    db.Favourites.RemoveRange(fav);
+                    db.SaveChanges();
+                }
+                using (var db = new ReviewContext())
+                {
+                    var rev = db.Reviews.Where(x => x.UserId == id).ToList();
+                    using (var db1 = new ProductContext())
+                    {
+                        foreach (var r in rev)
+                        {
+                            var prod = db1.Products.FirstOrDefault(x => x.Article == r.Article);
+                            if (prod.TotalRatings > 1)
+                            { prod.AvarageRating = (prod.AvarageRating * prod.TotalRatings - r.Rate) / (prod.TotalRatings - 1); }
+                            else
+                            { prod.AvarageRating = prod.AvarageRating - r.Rate; }
+                            prod.TotalRatings--;
+                            db.Entry(prod).State = EntityState.Modified;
+                        }
+                        db.SaveChanges();
+                    }
+                    db.Reviews.RemoveRange(rev);
+                    db.SaveChanges();
+                }
+                using (var db = new UserContext())
+                {
+                    var user = db.Users.FirstOrDefault(x => x.Id == id);
+                    db.Users.Remove(user);
+                    db.SaveChanges();
+                }
+            }
         }
 
     }

@@ -17,6 +17,10 @@ namespace eUseControl.BuisnessLogic.BaseBL
 {
     public class SessionBL: UserAPI, ISession
     {
+        public List<UserMinimal> GetAllUsersActionFlow()
+        {
+            return GetAllUsers();
+        }
         public BaseResponces ValidateUserCredentialAction(ULoginData ulData)
         {
             return CheckUserCredintial(ulData);
@@ -72,6 +76,14 @@ namespace eUseControl.BuisnessLogic.BaseBL
         public BaseResponces RemoveItemFromFavActionFlow(string Art, int? id)
         {
             return RemoveItemFromFavActionFlow(Art, id);
+        }
+        public BaseResponces EditUserActionFlow(UserEdit data)
+        {
+            return EditUserAction(data);
+        }
+        public void DeleteUserActionFlow(int id)
+        {
+            DeleteUserAction(id);
         }
     }
 }

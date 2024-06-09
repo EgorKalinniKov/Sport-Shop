@@ -1,8 +1,10 @@
 ﻿using eUseControl.BuisnessLogic.DbModel;
 using eUseControl.Domain.Entities.Product;
+using eUseControl.Domain.Entities.Responces;
 using eUseControl.Domain.Entities.Review;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.UI.WebControls.WebParts;
 
@@ -249,6 +251,41 @@ namespace eUseControl.BuisnessLogic.MainAPI
                 imgs.Add(p.Img);
             }
             return imgs;
+        }
+        internal BaseResponces DeleteReviewAction(int? id)
+        {
+            RDbTable deleteReview = null;
+            using (var db = new ReviewContext())
+            {
+                deleteReview = db.Reviews.FirstOrDefault(x => x.ReviewId == id);
+            }
+            if (deleteReview == null) { return new BaseResponces { Status = false, StatusMessage = "Review doesn't exist" }; }
+
+            PDbTable local = null;
+            using (var db = new ProductContext())
+            {
+                local = db.Products.FirstOrDefault(x => x.Article == deleteReview.Article);
+            }
+            if (local == null) { return new BaseResponces { Status = false, StatusMessage = "Product doesn't exist" }; }
+
+            using (var db = new ProductContext())
+            {
+                if (local.TotalRatings > 1)
+                { local.AvarageRating = (local.AvarageRating * local.TotalRatings - deleteReview.Rate) / (local.TotalRatings - 1); }
+                else
+                { local.AvarageRating = local.AvarageRating - deleteReview.Rate; }
+                local.TotalRatings--;
+                db.Entry(local).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            using (var db = new ReviewContext())
+            {
+                var rev = db.Reviews.FirstOrDefault(x => x.ReviewId == id);
+                db.Reviews.Remove(rev);
+                db.SaveChanges();
+            }
+            return new BaseResponces { Status = true };
         }
     }
 }

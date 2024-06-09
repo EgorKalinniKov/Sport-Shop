@@ -1,4 +1,5 @@
 ﻿using eUseControl.BuisnessLogic.Interfaces;
+using eUseControl.Domain.Entities.Administration;
 using eUseControl.Domain.Entities.Product;
 using eUseControl.Domain.Entities.Responces;
 using eUseControl.Domain.Entities.User;
@@ -19,11 +20,13 @@ namespace eUseControl.Web.Controllers
     {
         private readonly ISessionAdmin _admin;
         private readonly IProduct _product;
+        private readonly ISession _user;
         public AdminController()
         {
             var bl = new BuisnessLogic.BuisnessLogic();
             _admin = bl.GetSessionAdminBL();
             _product = bl.GetProductBL();
+            _user = bl.GetSessionBL();
         }
         // GET: Admin
         public ActionResult Index()
@@ -74,7 +77,7 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Index", "Login");
             }
             var data = new UserSearch();
-            //data.Users = _product.GetAllProductsActionFlow();
+            data.Users = _user.GetAllUsersActionFlow();
             return View(data);
         }
         public ActionResult BanUser()
@@ -85,7 +88,7 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Index", "Login");
             }
             var data = new UserSearch();
-            //data.Users = _product.GetAllProductsActionFlow();
+            data.Users = _user.GetAllUsersActionFlow();
             return View(data);
         }
         public ActionResult Comments()
@@ -96,7 +99,7 @@ namespace eUseControl.Web.Controllers
                 return RedirectToAction("Index", "Login");
             }
             var data = new ReviewSearch();
-            //data.Reviews = _product.GetAllProductsActionFlow();
+            data.Reviews = _product.GetAllCommentsActionFlow();
             return View(data);
         }
         public ActionResult Product(string Art)
@@ -157,66 +160,54 @@ namespace eUseControl.Web.Controllers
             }
             return View(data);
         }
-        /*[HttpPost]
+        [HttpPost]
         public ActionResult Users(UserSearch data)
         {
-            data.Users = _product.GetAllProductsActionFlow();
+            data.Users = _user.GetAllUsersActionFlow();
 
             if (!String.IsNullOrEmpty(data.SelectedName))
-                data.Products = data.Products.Where(x => x.Name.Contains(data.SelectedName) || x.Article.Contains(data.SelectedName)).ToList();
+                data.Users = data.Users.Where(x => x.Username.Contains(data.SelectedName) || x.Email.Contains(data.SelectedName)).ToList();
 
             switch (data.Sort)
             {
-                case "FromAToZ": data.Products = data.Products.OrderBy(x => x.Name).ToList(); break;
-                case "FromZToA": data.Products = data.Products.OrderByDescending(x => x.Name).ToList(); break;
-                case "HightToLowPrice": data.Products = data.Products.OrderBy(x => x.Price).ToList(); break;
-                case "LowToHightPrice": data.Products = data.Products.OrderByDescending(x => x.Price).ToList(); break;
-                case "HightToLowRate": data.Products = data.Products.OrderBy(x => x.AvarageRating).ToList(); break;
-                case "LowToHightRate": data.Products = data.Products.OrderByDescending(x => x.AvarageRating).ToList(); break;
-                default: data.Products = data.Products.OrderBy(x => x.Name).ToList(); break;
+                case "FromAToZ": data.Users = data.Users.OrderBy(x => x.Username).ToList(); break;
+                case "FromZToA": data.Users = data.Users.OrderByDescending(x => x.Username).ToList(); break;
+                default: data.Users = data.Users.OrderBy(x => x.Username).ToList(); break;
             }
             return View(data);
         }
         [HttpPost]
         public ActionResult BanUser(UserSearch data)
         {
-            data.Products = _product.GetAllProductsActionFlow();
+            data.Users = _user.GetAllUsersActionFlow();
 
             if (!String.IsNullOrEmpty(data.SelectedName))
-                data.Products = data.Products.Where(x => x.Name.Contains(data.SelectedName) || x.Article.Contains(data.SelectedName)).ToList();
+                data.Users = data.Users.Where(x => x.Username.Contains(data.SelectedName) || x.Email.Contains(data.SelectedName)).ToList();
 
             switch (data.Sort)
             {
-                case "FromAToZ": data.Products = data.Products.OrderBy(x => x.Name).ToList(); break;
-                case "FromZToA": data.Products = data.Products.OrderByDescending(x => x.Name).ToList(); break;
-                case "HightToLowPrice": data.Products = data.Products.OrderBy(x => x.Price).ToList(); break;
-                case "LowToHightPrice": data.Products = data.Products.OrderByDescending(x => x.Price).ToList(); break;
-                case "HightToLowRate": data.Products = data.Products.OrderBy(x => x.AvarageRating).ToList(); break;
-                case "LowToHightRate": data.Products = data.Products.OrderByDescending(x => x.AvarageRating).ToList(); break;
-                default: data.Products = data.Products.OrderBy(x => x.Name).ToList(); break;
+                case "FromAToZ": data.Users = data.Users.OrderBy(x => x.Username).ToList(); break;
+                case "FromZToA": data.Users = data.Users.OrderByDescending(x => x.Username).ToList(); break;
+                default: data.Users = data.Users.OrderBy(x => x.Username).ToList(); break;
             }
             return View(data);
         }
         [HttpPost]
         public ActionResult Comments(ReviewSearch data)
         {
-            data.Products = _product.GetAllProductsActionFlow();
+            data.Reviews = _product.GetAllCommentsActionFlow();
 
             if (!String.IsNullOrEmpty(data.SelectedName))
-                data.Products = data.Products.Where(x => x.Name.Contains(data.SelectedName) || x.Article.Contains(data.SelectedName)).ToList();
+                data.Reviews = data.Reviews.Where(x => x.Username.Contains(data.SelectedName) || x.Message.Contains(data.SelectedName)).ToList();
 
             switch (data.Sort)
             {
-                case "FromAToZ": data.Products = data.Products.OrderBy(x => x.Name).ToList(); break;
-                case "FromZToA": data.Products = data.Products.OrderByDescending(x => x.Name).ToList(); break;
-                case "HightToLowPrice": data.Products = data.Products.OrderBy(x => x.Price).ToList(); break;
-                case "LowToHightPrice": data.Products = data.Products.OrderByDescending(x => x.Price).ToList(); break;
-                case "HightToLowRate": data.Products = data.Products.OrderBy(x => x.AvarageRating).ToList(); break;
-                case "LowToHightRate": data.Products = data.Products.OrderByDescending(x => x.AvarageRating).ToList(); break;
-                default: data.Products = data.Products.OrderBy(x => x.Name).ToList(); break;
+                case "FromAToZ": data.Reviews = data.Reviews.OrderBy(x => x.Username).ToList(); break;
+                case "FromZToA": data.Reviews = data.Reviews.OrderByDescending(x => x.Username).ToList(); break;
+                default: data.Reviews = data.Reviews.OrderBy(x => x.Username).ToList(); break;
             }
             return View(data);
-        }*/
+        }
         [AdminMod]
         [HttpPost]
         public ActionResult ProductRegistration(ProductRegistration data)
@@ -291,7 +282,7 @@ namespace eUseControl.Web.Controllers
         [HttpPost]
         public ActionResult DeleteReview(int? id, string Art)
         {
-            BaseResponces resp = _admin.DeleteReviewActionFlow(id);
+            BaseResponces resp = _product.DeleteReviewActionFlow(id);
             if(!String.IsNullOrEmpty(Art))
             return RedirectToAction("Product", "Admin", new { Art = Art });
             return RedirectToAction("Comments", "Admin");
@@ -299,15 +290,27 @@ namespace eUseControl.Web.Controllers
 
         [AdminMod]
         [HttpPost]
-        public ActionResult UserBan()
+        public ActionResult UserBan(DateTime BanTime, int id)
         {
-            return null;
+            var user = new BanedUser
+            {
+                Id = id,
+                BanTime = BanTime,
+            };
+            BaseResponces resp = _admin.BanUserActionFlow(user);
+            return RedirectToAction("BanUser","Admin");
         }
 
         [AdminMod]
         [HttpPost]
-        public ActionResult UserEdit()
+        public ActionResult UserEdit(string cred, int id)
         {
+            var user = new UserEdit
+            {
+                Id = id,
+                Credential = cred,
+            };
+            BaseResponces resp = _admin.EditUserActionFlow(user);
             return null;
         }
     }

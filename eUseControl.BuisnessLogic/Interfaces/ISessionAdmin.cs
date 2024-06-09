@@ -1,4 +1,5 @@
-﻿using eUseControl.Domain.Entities.Product;
+﻿using eUseControl.Domain.Entities.Administration;
+using eUseControl.Domain.Entities.Product;
 using eUseControl.Domain.Entities.Responces;
 using eUseControl.Domain.Entities.User;
 using System;
@@ -14,6 +15,7 @@ namespace eUseControl.BuisnessLogic.Interfaces
         BaseResponces RegisterProductActionFlow(PRegisterData pData);
         BaseResponces EditProductActionFlow(PRegisterData pData);
         BaseResponces DeleteProductActionFlow(string pData);
-        BaseResponces DeleteReviewActionFlow(int? Id);
+        BaseResponces BanUserActionFlow(BanedUser data);
+        BaseResponces EditUserActionFlow(UserEdit data);
     }
 }

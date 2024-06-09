@@ -1,7 +1,9 @@
 ﻿using eUseControl.BuisnessLogic.Interfaces;
 using eUseControl.BuisnessLogic.MainAPI;
+using eUseControl.Domain.Entities.Administration;
 using eUseControl.Domain.Entities.Product;
 using eUseControl.Domain.Entities.Responces;
+using eUseControl.Domain.Entities.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +26,13 @@ namespace eUseControl.BuisnessLogic.BaseBL
         {
             return DeleteProdAction(pData);
         }
-        public BaseResponces DeleteReviewActionFlow(int? Id)
+        public BaseResponces BanUserActionFlow(BanedUser data)
         {
-            return DeleteReviewAction(Id);
+            return BanUserAction(data);
+        }
+        public BaseResponces EditUserActionFlow(UserEdit data)
+        {
+            return EditUserAction(data);
         }
     }
 }

@@ -35,49 +35,53 @@
                     <h3 class="title">All users</h3>
                 </div>
                 <div class="row">
-                    <div class="col-sm-4">
-                        <div class="store-sort">
-                            <label>
-                                Sort By:
-                                <select class="input-select">
-                                    <option value="0">Popular</option>
-                                    <option value="1">Position</option>
-                                </select>
-                            </label>
+                    @using (Html.BeginForm("BanUser", "Admin", FormMethod.Post, new { @id = "FilterForm" }))
+                    {
+                        <div class="col-sm-4">
+                            <div class="store-sort">
+                                <label>
+                                    <select class="input-select" name="@Html.NameFor(x => x.Sort)" id="@Html.IdFor(x => x.Sort)">
+                                        <option class="active" value="FromAToZ">A to Z</option>
+                                        <option value="FromZToA">Z to A</option>
+                                    </select>
+                                </label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-8">
-                        <div class="header-search">
-                            <form>
-                                <input class="input" placeholder="Search here">
+                        <div class="col-sm-8">
+                            <div class="header-search">
+                                <input class="input" id="@Html.IdFor(x=>x.SelectedName)" name="@Html.NameFor(x=>x.SelectedName)" placeholder="Search here">
                                 <button class="search-btn">Search</button>
-                            </form>
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
                 <ul class="reviews">
-                    <li>
-                        <div class="review-heading">
-                            <h5 class="name">John</h5>
-                            <p class="name">online</p>
-                            <p class="name">unbanned</p>
-                        </div>
-                        <div class="review-body">
-                            <p>total reviews:</p>
-                            <p>last login:</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="review-heading">
-                            <h5 class="name">John</h5>
-                            <p class="name">online</p>
-                            <p class="name">unbanned</p>
-                        </div>
-                        <div class="review-body">
-                            <p>total reviews:</p>
-                            <p>last login:</p>
-                        </div>
-                    </li>
+                    @foreach (var u in Model.Users)
+                    {
+                        <li>
+                            <div class="review-heading">
+                                <h5 class="name">@u.Username</h5>
+                                <p class="email">@u.Email</p>
+                                @if (u.Level == eUseControl.Domain.Enums.URole.Banned)
+                                {
+                                    <p>banned</p>
+                                    <p>Until: @u.BanTime </p>
+                                }
+                                <p>LastLogin:@u.LastLogin</p>
+                                <p>LastIp:@u.LastIp</p>
+                            </div>
+                            <div class="review-body">
+                                @using (Html.BeginForm("UserEdit", "Admin", FormMethod.Post, new { @id = "EditForm" }))
+                                {
+                                    <div class="col-md-5">
+                                        <input name="@Html.NameFor(x => x.SelectedName)" id="@Html.IdFor(x => x.SelectedName)" value="@u.Username">>
+                                        <input hidden name="@Html.NameFor(x => x.Id)" id="@Html.IdFor(x => x.Id)" value="@u.Id">
+                                        <button type="submit" class="primary-btn">Edit</button>
+                                    </div>
+                                }
+                            </div>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>

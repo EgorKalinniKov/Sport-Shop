@@ -290,12 +290,12 @@ namespace eUseControl.Web.Controllers
 
         [AdminMod]
         [HttpPost]
-        public ActionResult UserBan(DateTime BanTime, int id)
+        public ActionResult UserBan(UserSearch data)
         {
             var user = new BanedUser
             {
-                Id = id,
-                BanTime = BanTime,
+                Id = data.Id,
+                BanTime = data.BanTime,
             };
             BaseResponces resp = _admin.BanUserActionFlow(user);
             return RedirectToAction("BanUser","Admin");

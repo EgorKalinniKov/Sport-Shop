@@ -4,7 +4,7 @@
 }
 
 @using System.Web.Optimization
-@model eUseControl.Web.Models.User.UserData
+@model eUseControl.Web.Models.User.UserEditM
 
 <!-- SECTION -->
 <div class="section">
@@ -32,57 +32,46 @@
                 <div class="section-title">
                     <h3 class="title">Settings</h3>
                 </div>
-
-                <div class="input-radio">
-                    <input type="radio" name="setting" id="username">
-                    <label for="username">
-                        <span></span>
-                        Change Username
-                    </label>
-                    <div class="caption">
-                        <div class="form-group">
-                            <input class="input" type="text" name="username" placeholder="New Username">
-                        </div>
-                        <div class="col-sm-5">
-                            <a href="#" class="primary-btn">Save</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="input-radio">
-                    <input type="radio" name="setting" id="password">
-                    <label for="password">
-                        <span></span>
-                        Change Password
-                    </label>
-                    <div class="caption">
-                        <div class="form-group">
-                            <input class="input" type="password" name="password" placeholder="New password">
-                        </div>
-                        <div class="form-group">
-                            <input class="input" type="password" name="passwordconfirm" placeholder="Confirm password">
-                        </div>
-                        <div class="col-sm-5">
-                            <a href="#" class="primary-btn">Save</a>
+                @using (Html.BeginForm("Settings", "Prodile", FormMethod.Post, new { @id = "SettingsForm" }))
+                {
+                    <div class="input-radio">
+                        <input type="radio" id="category-1" name="@Html.NameFor(x => x.FormName)" value="Username">
+                        <label for="category-1">Change Username</label>
+                        <div class="caption">
+                            <div class="form-group">
+                                <input class="input" type="text" name="@Html.NameFor(x => x.Credential)" placeholder="New Username">
+                            </div>
+                            <div class="col-sm-5">
+                                <a href="#" class="primary-btn">Save</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="input-radio">
-                    <input type="radio" name="setting" id="email">
-                    <label for="email">
-                        <span></span>
-                        Change E-mail
-                    </label>
-                    <div class="caption">
-                        <div class="form-group">
-                            <input class="input" type="email" name="email" placeholder="New email">
-                        </div>
-                        <div class="col-sm-5">
-                            <a href="#" class="primary-btn">Save</a>
+                    <div class="input-radio">
+                        <input type="radio" id="category-2" name="@Html.NameFor(x => x.FormName)" value="Email">
+                        <label for="category-2">Change Email</label>
+                        <div class="caption">
+                            <div class="form-group">
+                                <input class="input" type="email" name="@Html.NameFor(x => x.Credential)" placeholder="New Email">
+                            </div>
+                            <div class="col-sm-5">
+                                <a href="#" class="primary-btn">Save</a>
+                            </div>
                         </div>
                     </div>
+                    <div class="input-radio">
+                        <input type="radio" id="category-3" name="@Html.NameFor(x => x.FormName)" value="Password">
+                        <label for="category-3">Change Username</label>
+                        <div class="caption">
+                            <div class="form-group">
+                                <input class="input" type="password" name="@Html.NameFor(x => x.Credential)" placeholder="New Password">
+                            </div>
+                            <div class="col-sm-5">
+                                <a href="#" class="primary-btn">Save</a>
+                            </div>
+                        </div>
+                    </div>
+                }
                 </div>
-            </div>
         </div>
         <!-- /row -->
     </div>

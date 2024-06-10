@@ -28,6 +28,8 @@ namespace eUseControl.Web.Controllers
             ViewBag.Id = System.Web.HttpContext.Current.GetMySessionObject().Id;
             ViewBag.Name = System.Web.HttpContext.Current.GetMySessionObject().Username;
             ViewBag.Email = System.Web.HttpContext.Current.GetMySessionObject().Email;
+            ViewBag.Status = System.Web.HttpContext.Current.GetMySessionObject().Level;
+            ViewBag.BanTime = System.Web.HttpContext.Current.GetMySessionObject().BanTime;
             return View();
         }
         public ActionResult Checkout()

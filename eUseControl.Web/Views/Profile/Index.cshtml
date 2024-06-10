@@ -38,6 +38,15 @@
                 <div>
                     <span><strong>Email: </strong></span>@ViewBag.Email
                 </div>
+                <div>
+                    <span><strong>Status: </strong></span>@ViewBag.Status
+                </div>
+                @if (ViewBag.Status == eUseControl.Domain.Enums.URole.Banned)
+                {
+                    <div>
+                        <span><strong>BanTime: </strong></span>@ViewBag.BanTime
+                    </div>
+                }
             </div>
         </div>
         <!-- /row -->

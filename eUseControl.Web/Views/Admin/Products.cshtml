@@ -5,10 +5,6 @@
 
 @using System.Web.Optimization
 @model eUseControl.Web.Models.Product.ProdSearch
-@{
-    var ProductPerPage = 12;
-    var prodCount = 0;
-}
 
 
 <!-- SECTION -->
@@ -54,10 +50,8 @@
                         </div>
                         <div class="col-sm-8">
                             <div class="header-search">
-                                <form>
-                                    <input class="input" placeholder="Search here">
+                                    <input class="input" id="@Html.IdFor(x=>x.SelectedName)" name="@Html.NameFor(x=>x.SelectedName)" placeholder="Search here">
                                     <button class="search-btn">Search</button>
-                                </form>
                             </div>
                         </div>
                     }
@@ -67,12 +61,11 @@
                 <div class="row">
                     @foreach (var prod in Model.Products)
                     {
-                        prodCount++;
                         <!-- product -->
                         <div class="col-md-4 col-xs-6">
                             <div class="product">
                                 <div class="product-img">
-                                    <img src="@prod.Image" name=" " alt="">
+                                    <img src="@prod.Image" name=" " alt="" height="275">
                                     <div class="product-label">
                                         @if (@prod.Discount > 0)
                                         {<span class="sale">@prod.Discount%</span>}
@@ -97,7 +90,6 @@
 
                             </div>
                         </div>
-                        if (prodCount >= 11) { break; }
                         <!-- /product -->
                     }
                 </div>
@@ -118,40 +110,3 @@
     </div>
     <!-- /SECTION -->
 </div>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    var currentPage = 0; // Начинаем с нулевой страницы
-    var productsPerPage = @ProductPerPage;
-    var products = document.querySelectorAll('.product');
-
-    function showProducts() {
-        var startIndex = currentPage * productsPerPage;
-        var endIndex = Math.min(startIndex + productsPerPage, products.length);
-        for (var i = 0; i < products.length; i++) {
-            if (i >= startIndex && i < endIndex) {
-
-                products[i].style.display = '';
-            } else {
-
-                products[i].style.display = 'none';
-            }
-        }
-    }
-
-    showProducts(); // Вызываем функцию для отображения продуктов при загрузке страницы
-
-    document.querySelector('.next-page').addEventListener('click', function () {
-        if ((currentPage + 1) * productsPerPage < products.length) {
-            currentPage++;
-            showProducts();
-        }
-    });
-
-    document.querySelector('.prev-page').addEventListener('click', function () {
-        if (currentPage > 0) {
-            currentPage--;
-            showProducts();
-        }
-    });
-});
-</script>

@@ -121,7 +121,7 @@ namespace eUseControl.BuisnessLogic.MainAPI
                 int k = 0;
                 foreach (var p in products)
                 {
-                    if (k < 10)
+                    if (k < 12)
                     {
                         var prodMin = new ProdMin()
                         {

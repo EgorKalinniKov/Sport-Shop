@@ -53,10 +53,8 @@
                         </div>
                         <div class="col-sm-8">
                             <div class="header-search">
-                                <form>
-                                    <input class="input" placeholder="Search here">
+                                    <input class="input" id="@Html.IdFor(x=>x.SelectedName)" name="@Html.NameFor(x=>x.SelectedName)" placeholder="Search here">
                                     <button class="search-btn">Search</button>
-                                </form>
                             </div>
                         </div>
                     }
@@ -72,7 +70,7 @@
                         <div class="col-md-4 col-xs-6">
                             <div class="product">
                                 <div class="product-img">
-                                    <img src="@prod.Image" name=" " alt="">
+                                    <img src="@prod.Image" name=" " alt="" height="275">
                                     <div class="product-label">
                                         @if (@prod.Discount > 0)
                                         {<span class="sale">@prod.Discount%</span>}

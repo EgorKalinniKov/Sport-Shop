@@ -66,38 +66,38 @@
                                 <span>Your Wishlist</span>
                                 <div class="qty">@ViewBag.Fav.Count</div>
                             </a>
-                            @if (@ViewBag.Fav.Count > 0)
-                            {
                             <div class="cart-dropdown">
-                                <div class="cart-list">
-                                    @foreach (var p in ViewBag.Fav)
-                                    {
-                                        <div class="product-widget">
-                                            <div class="product-img">
-                                                <img src="@p.Image" alt="">
-                                            </div>
-                                            <div class="product-body">
-                                                <h3 class="product-name"><a href="#">@p.Name</a></h3>
-                                                @if (p.Discount > 0)
+                                @if (@ViewBag.Fav.Count > 0)
+                                {
+                                    <div class="cart-list">
+                                        @foreach (var p in ViewBag.Fav)
+                                        {
+                                            <div class="product-widget">
+                                                <div class="product-img">
+                                                    <img src="@p.Image" alt="">
+                                                </div>
+                                                <div class="product-body">
+                                                    <h3 class="product-name"><a href="#">@p.Name</a></h3>
+                                                    @if (p.Discount > 0)
+                                                    {
+                                                        var PriceDiscount = p.Price - p.Price / 100 * p.Discount;
+                                                        <h4 class="product-price">@PriceDiscount <del class="product-old-price">@p.Price</del></h4>
+                                                    }
+                                                    else
+                                                    { <h4 class="product-price">@p.Price</h4>}
+                                                </div>
+                                                @using (Html.BeginForm("DeleteFromFav", "Profile", new { Art = p.Article, page = ViewBag.CurrentPage }, FormMethod.Post))
                                                 {
-                                                    var PriceDiscount = p.Price - p.Price / 100 * p.Discount;
-                                                    <h4 class="product-price">@PriceDiscount <del class="product-old-price">@p.Price</del></h4>
+                                                    <button class="delete"><i class="fa fa-close"></i></button>
                                                 }
-                                                else
-                                                { <h4 class="product-price">@p.Price</h4>}
                                             </div>
-                                            @using (Html.BeginForm("DeleteFromFav", "Profile", new {Art = p.Article, page = ViewBag.CurrentPage }, FormMethod.Post))
-                                            {
-                                                <button class="delete"><i class="fa fa-close"></i></button>
-                                            }   
-                                        </div>
-                                    }
-                                    <div class="cart-btns">
-                                        <a href="@Url.Action("Favourites","Profile")">View Wishlist </a>
+                                        }
                                     </div>
+                                }
+                                <div class="cart-btns">
+                                    <a href="@Url.Action("Favourites", "Profile")">View Wishlist </a>
                                 </div>
                             </div> 
-                            }
                       </div>
                     }
 
@@ -111,34 +111,35 @@
                             <span>Your Cart</span>
                             <div class="qty">@ViewBag.Cart.Count</div>
                         </a>
-                        @if (@ViewBag.Cart.Count > 0)
-                        {
                         <div class="cart-dropdown">
-                            <div class="cart-list">
-                                @foreach (var p in ViewBag.Cart)
-                                {
-                                    <div class="product-widget">
-                                        <div class="product-img">
-                                            <img src="@p.Image" alt="">
-                                        </div>
-                                        <div class="product-body">
-                                            <h3 class="product-name"><a href="#">@p.Name</a></h3>
-                                            @if (p.Discount > 0)
+                            @if (@ViewBag.Cart.Count > 0)
+                            {
+                                <div class="cart-list">
+                                    @foreach (var p in ViewBag.Cart)
+                                    {
+                                        <div class="product-widget">
+                                            <div class="product-img">
+                                                <img src="@p.Image" alt="">
+                                            </div>
+                                            <div class="product-body">
+                                                <h3 class="product-name"><a href="#">@p.Name</a></h3>
+                                                @if (p.Discount > 0)
+                                                {
+                                                    var PriceDiscount = p.Price - p.Price / 100 * p.Discount;
+                                                    totalcost += PriceDiscount;
+                                                    <h4 class="product-price">@PriceDiscount <del class="product-old-price">@p.Price</del></h4>}
+                                                else
+                                                { <h4 class="product-price">@p.Price</h4>
+                                                totalcost += p.Price;
+                                            }
+                                            </div>
+                                            @using (Html.BeginForm("DeleteFromCart", "Profile", new { Art = p.Article, page = ViewBag.CurrentPage }, FormMethod.Post))
                                             {
-                                                var PriceDiscount = p.Price - p.Price / 100 * p.Discount;
-                                                totalcost += PriceDiscount;
-                                                <h4 class="product-price">@PriceDiscount <del class="product-old-price">@p.Price</del></h4>}
-                                            else
-                                            { <h4 class="product-price">@p.Price</h4>
-                                            totalcost += p.Price;
-                                        }
+                                                <button class="delete"><i class="fa fa-close"></i></button>
+                                            }
                                         </div>
-                                        @using (Html.BeginForm("DeleteFromCart", "Profile", new { Art = p.Article, page = ViewBag.CurrentPage }, FormMethod.Post))
-                                        {
-                                            <button class="delete"><i class="fa fa-close"></i></button>
-                                        }
-                                    </div>
-                                }
+                                    }
+                                </div>
                                 <div class="cart-summary">
                                     <small>@ViewBag.Cart.Count Item(s) selected</small>
                                     <h5>SUBTOTAL: $@totalcost</h5>
@@ -147,9 +148,8 @@
                                     <a href="@Url.Action("Cart", "Profile")">View Cart</a>
                                     <a href="@Url.Action("Checkout", "Profile")">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
                                 </div>
-                            </div>
+                            }
                         </div>
-                        }
                     </div>
                     }
                     <!-- /Cart -->

@@ -112,7 +112,7 @@ namespace eUseControl.Web.Controllers
             ViewBag.Product = _product.GetProductByArticleActionFlow(Art);
             ViewBag.ProductImgs = _product.GetProductImgsActionFlow(Art);
             ViewBag.ProdReview = _product.GetProductReviewsActionFlow(Art);
-            return View();
+            return View(new ProductRegistration());
         }
         public ActionResult Logout()
         {

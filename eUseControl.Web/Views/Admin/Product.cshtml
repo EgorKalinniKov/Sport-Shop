@@ -7,7 +7,7 @@
 @model eUseControl.Web.Models.Product.ProductRegistration
 @{
     var ReviewPerPage = 5;
-    var ReviewCount = 0;
+    int ReviewCount = 0;
 }
 
 <!-- SECTION -->
@@ -39,6 +39,8 @@
                 <div class="container">
                     <!-- row -->
                     <div class="row">
+                        @using (Html.BeginForm("ProductEdit", "Admin", FormMethod.Post))
+                        {
                             <input hidden name="@Html.NameFor(x => x.Article)" id="@Html.IdFor(x => x.Article)" value="@ViewBag.Product.Article">
                             <!-- Product main img -->
                             <div class="col-md-3 col-md-push-1">
@@ -58,15 +60,15 @@
                             <!-- Product thumb imgs -->
                             <div class="col-md-1  col-md-pull-3">
                                 <div id="product-imgs">
-                                        @if (ViewBag.ProductImgs != null)
+                                    @if (ViewBag.ProductImgs != null)
+                                    {
+                                        foreach (var i in ViewBag.ProductImgs)
                                         {
-                                            foreach (var i in ViewBag.ProductImgs)
-                                            {
-                                                <div class="product-preview">
-                                                    <img src="@i" alt="">
-                                                </div>
-                                            }
+                                            <div class="product-preview">
+                                                <img src="@i" alt="">
+                                            </div>
                                         }
+                                    }
                                 </div>
                             </div>
                             <!-- /Product thumb imgs -->
@@ -98,40 +100,46 @@
                                         </div>
                                     </div>
                                     <div class="add-to-cart">
-                                        @using (Html.BeginForm("ProductEdit", "Admin", FormMethod.Post))
-                                        {
                                             <button> save changing</button>
-                                        }
-                                        </div>
+                                    </div>
 
                                     <div>
                                         <label>Brend:</label>
                                         <p>Current brend: @ViewBag.Product.Brend</p>
                                         <select name="@Html.NameFor(x => x.Brend)" id="@Html.IdFor(x => x.Brend)">
-                                            <option value="volvo">Volvo</option>
-                                            <option value="saab">Saab</option>
-                                            <option value="mercedes">Mercedes</option>
-                                            <option value="audi">Audi</option>
+                                            <option value="Adidas">Adidas</option>
+                                            <option value="Nike">Nike</option>
+                                            <option value="Puma">Puma</option>
+                                            <option value="Wilson">Wilson</option>
+                                            <option value="Everlast">Everlast</option>
+                                            <option value="Speedo">Speedo</option>
+                                            <option value="Arena">Arena</option>
+                                            <option value="Slazenger">Slazenger</option>
                                         </select>
                                     </div>
                                     <div>
                                         <label>Category:</label>
                                         <p>Current category: @ViewBag.Product.Category</p>
                                         <select name="@Html.NameFor(x => x.Category)" id="@Html.IdFor(x => x.Category)">
-                                            <option value="volvo">Volvo</option>
-                                            <option value="saab">Saab</option>
-                                            <option value="mercedes">Mercedes</option>
-                                            <option value="audi">Audi</option>
+                                            <option value="Swimming">Swimming</option>
+                                            <option value="Basketball">Basketball</option>
+                                            <option value="Football">Football</option>
+                                            <option value="Volleyball">Volleyball</option>
+                                            <option value="Gym">Gym</option>
                                         </select>
                                     </div>
                                     <div>
                                         <label>Tag:</label>
                                         <p>Current tag: @ViewBag.Product.Tag</p>
                                         <select name="@Html.NameFor(x => x.Tag)" id="@Html.IdFor(x => x.Tag)">
-                                            <option value="volvo">Volvo</option>
-                                            <option value="saab">Saab</option>
-                                            <option value="mercedes">Mercedes</option>
-                                            <option value="audi">Audi</option>
+                                            <option value="Balls">Balls</option>
+                                            <option value="Shoes">Shoes</option>
+                                            <option value="Topwear">Topwear</option>
+                                            <option value="Bottom">Bottom</option>
+                                            <option value="Googles">Googles</option>
+                                            <option value="Caps">Caps</option>
+                                            <option value="Dumbbells">Dumbbells</option>
+                                            <option value="Equipment">Equipment</option>
                                         </select>
                                     </div>
 
@@ -253,32 +261,32 @@
                                                             {
                                                                 foreach (var rev in ViewBag.ProdReview)
                                                                 {
-                                                                        ReviewCount++;
-                                                                        <li>
+                                                                    ReviewCount++;
+                                                                    <li>
 
-                                                                            <div class="review-heading">
-                                                                                <h5 class="name">@rev.Username</h5>
-                                                                                <p class="date">@rev.DateEdited</p>
-                                                                                <div class="review-rating">
-                                                                                    @for (int i = 1; i <= 5; i++)
+                                                                        <div class="review-heading">
+                                                                            <h5 class="name">@rev.Username</h5>
+                                                                            <p class="date">@rev.DateEdited</p>
+                                                                            <div class="review-rating">
+                                                                                @for (int i = 1; i <= 5; i++)
+                                                                                {
+                                                                                    <i class="fa @(i <= rev.Rate ? "fa-star" : "fa-star-o")"></i>
+                                                                                }
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="review-body">
+                                                                            <p>@rev.Message</p>
+                                                                            <div class="review-body">
+                                                                                <div class="col-sm-5">
+                                                                                    @using (Html.BeginForm("DeleteReview", "Admin", new { id = rev.Id, Art = ViewBag.Product.Article, }, FormMethod.Post))
                                                                                     {
-                                                                                        <i class="fa @(i <= rev.Rate ? "fa-star" : "fa-star-o")"></i>
+                                                                                        <button class="primary-btn">delete</button>
                                                                                     }
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="review-body">
-                                                                                <p>@rev.Message</p>
-                                                                                <div class="review-body">
-                                                                                    <div class="col-sm-5">
-                                                                                        @using (Html.BeginForm("DeleteReview", "Admin", new { id = rev.Id, Art = ViewBag.Product.Article, }, FormMethod.Post))
-                                                                                        {
-                                                                                        <button class="primary-btn">delete</button>
-                                                                                        }
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            @if (ReviewCount >= 4) { break; }
-                                                                        </li>
+                                                                        </div>
+                                                                        @if (ReviewCount >= 4) { break; }
+                                                                    </li>
                                                                 }
                                                             }
                                                         </ul>
@@ -297,7 +305,8 @@
                                 </div>
                             </div>
                             <!-- /product tab -->
-                    </div>
+                        }
+                        </div>
                     <!-- /row -->
                 </div>
                 <!-- /container -->

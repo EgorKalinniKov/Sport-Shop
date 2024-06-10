@@ -5,10 +5,6 @@
 
 @using System.Web.Optimization
 @model eUseControl.Web.Models.Product.ProdStore
-@{
-    var ProductPerPage = 12;
-    var prodCount = 0;
-}
 
 <!-- SECTION -->
 <div class="section">
@@ -16,10 +12,10 @@
     <div class="container">
         <!-- row -->
         <div class="row">
-            @using (Html.BeginForm("Store", "Home", FormMethod.Post, new { @id = "FilterForm" }))
-            {
                 <!-- ASIDE -->
-                <div id="aside" class="col-md-3">
+            <div id="aside" class="col-md-3">
+                @using (Html.BeginForm("Store", "Home", FormMethod.Post, new { @id = "FilterForm" }))
+                {
                     <!-- aside Widget -->
                     <div class="aside">
                         <h3 class="aside-title">Brends</h3>
@@ -52,12 +48,38 @@
                         <h3 class="aside-title">Brends</h3>
                         <div class="checkbox-filter">
                             <div class="input-checkbox">
-                                <input type="checkbox" id="brend-1" name="@Html.NameFor(x => x.SelectedBrend)" value="volvo">
-                                <label for="brend-1">
-                                    <span></span>
-                                    SAMSUNG
-                                </label>
+                                <input type="radio" id="brend-1" name="@Html.NameFor(x => x.SelectedBrend)" value="Adidas">
+                                <label for="brend-1">Adidas</label>
                             </div>
+                            <div class="input-checkbox">
+                                <input type="radio" id="brend-2" name="@Html.NameFor(x => x.SelectedBrend)" value="Arena">
+                                <label for="brend-2">Arena</label>
+                            </div>
+                            <div class="input-checkbox">
+                                <input type="radio" id="brend-3" name="@Html.NameFor(x => x.SelectedBrend)" value="Everlast">
+                                <label for="brend-3">Everlast</label>
+                            </div>
+                            <div class="input-checkbox">
+                                <input type="radio" id="brend-4" name="@Html.NameFor(x => x.SelectedBrend)" value="Nike">
+                                <label for="brend-4">Nike</label>
+                            </div>
+                            <div class="input-checkbox">
+                                <input type="radio" id="brend-5" name="@Html.NameFor(x => x.SelectedBrend)" value="Puma">
+                                <label for="brend-5">Puma</label>
+                            </div>
+                            <div class="input-checkbox">
+                                <input type="radio" id="brend-6" name="@Html.NameFor(x => x.SelectedBrend)" value="Speedo">
+                                <label for="brend-6">Speedo</label>
+                            </div>
+                            <div class="input-checkbox">
+                                <input type="radio" id="brend-7" name="@Html.NameFor(x => x.SelectedBrend)" value="Slazenger">
+                                <label for="brend-7">Slazenger</label>
+                            </div>
+                            <div class="input-checkbox">
+                                <input type="radio" id="brend-8" name="@Html.NameFor(x => x.SelectedBrend)" value="Wilson">
+                                <label for="brend-8">Wilson</label>
+                            </div>
+
                         </div>
                     </div>
                     <!-- /aside Widget -->
@@ -85,18 +107,36 @@
                         <h3 class="aside-title">Tags</h3>
                         <div class="checkbox-filter">
                             <div class="input-checkbox">
-                                <input type="checkbox" id="tag-1" name="@Html.NameFor(x => x.SelectedTag)" value="Volvo">
-                                <label for="tag-1">
-                                    <span></span>
-                                    SAMSUNG
-                                </label>
+                                <input type="checkbox" id="tag-1" name="@Html.NameFor(x => x.SelectedTag)" value="Balls">
+                                <label for="tag-1">Balls</label>
                             </div>
                             <div class="input-checkbox">
-                                <input type="checkbox" id="brand-2">
-                                <label for="brand-2">
-                                    <span></span>
-                                    LG
-                                </label>
+                                <input type="checkbox" id="tag-1" name="@Html.NameFor(x => x.SelectedTag)" value="Shoes">
+                                <label for="tag-2">Shoes</label>
+                            </div>
+                            <div class="input-checkbox">
+                                <input type="checkbox" id="tag-1" name="@Html.NameFor(x => x.SelectedTag)" value="Topwear">
+                                <label for="tag-3">Topwear</label>
+                            </div>
+                            <div class="input-checkbox">
+                                <input type="checkbox" id="tag-1" name="@Html.NameFor(x => x.SelectedTag)" value="Bottom">
+                                <label for="tag-4">Bottom</label>
+                            </div>
+                            <div class="input-checkbox">
+                                <input type="checkbox" id="tag-1" name="@Html.NameFor(x => x.SelectedTag)" value="Googles">
+                                <label for="tag-5">Googles</label>
+                            </div>
+                            <div class="input-checkbox">
+                                <input type="checkbox" id="tag-1" name="@Html.NameFor(x => x.SelectedTag)" value="Caps">
+                                <label for="tag-6">Caps</label>
+                            </div>
+                            <div class="input-checkbox">
+                                <input type="checkbox" id="tag-1" name="@Html.NameFor(x => x.SelectedTag)" value="Dumbbells">
+                                <label for="tag-7">Dumbbells</label>
+                            </div>
+                            <div class="input-checkbox">
+                                <input type="checkbox" id="tag-1" name="@Html.NameFor(x => x.SelectedTag)" value="Equipment">
+                                <label for="tag-8">Equipment</label>
                             </div>
                         </div>
                     </div>
@@ -104,6 +144,7 @@
                     <div>
                         <button class="primary-btn">Submit</button>
                     </div>
+                }
                 </div>
                 <!-- /ASIDE -->
                 <!-- STORE -->
@@ -130,15 +171,14 @@
                     </div>
                     <!-- /store top filter -->
                     <!-- store products -->
-                    <div class="row">
+                    <div class="row" id="store-product">
                         @foreach (var prod in Model.Products)
                         {
-                            prodCount++;
                             <!-- product -->
                             <div class="col-md-4 col-xs-6">
                                 <div class="product">
                                     <div class="product-img">
-                                        <img src="@prod.Image" name=" " alt="">
+                                        <img src="@prod.Image" height="275">
                                         <div class="product-label">
                                             @if (@prod.Discount > 0)
                                             {<span class="sale">@prod.Discount%</span>}
@@ -159,72 +199,38 @@
                                                 <i class="fa @(i <= prod.AvarageRating ? "fa-star" : "fa-star-o")"></i>
                                             }
                                         </div>
-                                        <div class="product-btns">
-                                            <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+                                        @using (Html.BeginForm("AddToFav", "Profile", new { Art = prod.Article, page = ViewBag.CurrentPage }, FormMethod.Post))
+                                        {
+                                            <div class="product-btns">
+
+                                                <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+                                            </div>
+                                        }
+                                    </div>
+                                    @using (Html.BeginForm("AddToCart", "Profile", new { Art = prod.Article, page = ViewBag.CurrentPage }, FormMethod.Post))
+                                    {
+                                        <div class="add-to-cart">
+                                            <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
                                         </div>
-                                    </div>
-                                    <div class="add-to-cart">
-                                        <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-                                    </div>
+                                    }
                                 </div>
                             </div>
-                            if (prodCount >= 11) { break; }
-                            <!-- /product -->
                         }
                     </div>
                     <!-- /store products -->
                     <!-- store bottom filter -->
                     <div class="store-filter clearfix">
-                        <ul class="store-pagination">
-                            <li><a href="#"><i class="fa fa-angle-left"></i></a></li>
-
-                            <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
-                        </ul>
+                        <div class="store-pagination">
+                            <button class="fa fa-angle-left"></button>
+                            <button class="fa fa-angle-right"></button>
+                        </div>
                     </div>
                     <!-- /store bottom filter -->
                 </div>
                 <!-- /STORE -->
-            }
             </div>
         <!-- /row -->
     </div>
     <!-- /container -->
 </div>
 <!-- /SECTION -->
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    var currentPage = 0; // Начинаем с нулевой страницы
-    var productsPerPage = @ProductPerPage;
-    var products = document.querySelectorAll('.product');
-
-    function showProducts() {
-        var startIndex = currentPage * productsPerPage;
-        var endIndex = Math.min(startIndex + productsPerPage, products.length);
-        for (var i = 0; i < products.length; i++) {
-            if (i >= startIndex && i < endIndex) {
-
-                products[i].style.display = '';
-            } else {
-
-                products[i].style.display = 'none';
-            }
-        }
-    }
-
-    showProducts(); // Вызываем функцию для отображения продуктов при загрузке страницы
-
-    document.querySelector('.next-page').addEventListener('click', function () {
-        if ((currentPage + 1) * productsPerPage < products.length) {
-            currentPage++;
-            showProducts();
-        }
-    });
-
-    document.querySelector('.prev-page').addEventListener('click', function () {
-        if (currentPage > 0) {
-            currentPage--;
-            showProducts();
-        }
-    });
-});
-</script>

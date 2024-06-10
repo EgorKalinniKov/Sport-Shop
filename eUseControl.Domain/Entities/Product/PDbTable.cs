@@ -17,17 +17,14 @@ namespace eUseControl.Domain.Entities.Product
 
         [Required]
         [Display(Name = "Product Article")]
-        [StringLength(30, MinimumLength = 5, ErrorMessage = "Product article cannot be longer than 30 characters.")]
         public string Article { get; set; }
 
         [Required]
         [Display(Name = "Product Name")]
-        [StringLength(30, MinimumLength = 5, ErrorMessage = "Name of product cannot be longer than 30 characters.")]
         public string Name { get; set; }
 
         [Required]
         [Display(Name = "Product Description")]
-        [StringLength(300, MinimumLength = 5, ErrorMessage = "Product description cannot be longer than 300 characters.")]
         public string Description { get; set; }
 
         [Required]

@@ -12,6 +12,6 @@ namespace eUseControl.BuisnessLogic.DbModel
     {
         public FavContext() : base("name=eUseControl") { }
 
-        public virtual DbSet<Item> Favourites { get; set; }
+        public virtual DbSet<ItemsFav> Favourites { get; set; }
     }
 }

@@ -49,7 +49,7 @@ namespace eUseControl.Web.Controllers
         //[ValidateAntiForgeryToken]
         public ActionResult Login(LoginData data)
         {
-            if (!ModelState.IsValid) return View();
+            if (!ModelState.IsValid) return RedirectToAction("Index", "Login");
 
             var adress = base.Request.UserHostAddress;
             var ulData = new ULoginData
@@ -74,10 +74,10 @@ namespace eUseControl.Web.Controllers
                 else
                 {
                     ModelState.AddModelError("", auth.StatusMessage);
-                    return View();
+                    return RedirectToAction("Index", "Login");
                 }
             }
-            return View();
+            return RedirectToAction("Index", "Login");
         }
 
         [HttpPost]
@@ -98,7 +98,14 @@ namespace eUseControl.Web.Controllers
 
             BaseResponces resp = _session.RegisterUserActionFlow(uData);
 
-            return RedirectToAction("Index", "Home");
+            if(resp.Status)
+                return RedirectToAction("Index", "Home");
+            else
+            {
+                ModelState.AddModelError("", resp.StatusMessage);
+                return RedirectToAction("Registration", "Login");
+            }
+
         }
     }
 }

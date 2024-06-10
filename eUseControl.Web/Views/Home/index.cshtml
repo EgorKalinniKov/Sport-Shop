@@ -20,8 +20,6 @@
             <!-- Products tab & slick -->
             <div class="col-md-12">
                 <div class="row">
-                    @using (Html.BeginForm("Product", "Home", FormMethod.Post))
-                    {
                     <div class="products-tabs">
                         <!-- tab -->
                         <div id="tab1" class="tab-pane active">
@@ -30,36 +28,43 @@
                                 {
                                     <!-- product -->
 
-                                    <div class="product">
-                                        <div class="product-img">
-                                            <img src="@prod.Image" name=" " alt="">
-                                            <div class="product-label">
-                                                @if (@prod.Discount > 0)
-                                                {<span class="sale">@prod.Discount%</span>}
-                                                <span class="new">NEW</span>
-                                            </div>
+                                <div class="product">
+                                    <div class="product-img">
+                                        <img src="@prod.Image" name=" " alt="">
+                                        <div class="product-label">
+                                            @if (@prod.Discount > 0)
+                                            {<span class="sale">@prod.Discount%</span>}
+                                            <span class="new">NEW</span>
                                         </div>
-                                        <div class="product-body">
-                                            <p class="product-category">@prod.Category</p>
-                                            <h3 class="product-name"><a href="@Url.Action("Product", "Home", new { Art = prod.Article })">@prod.Name</a></h3>
-                                            @if (prod.Discount > 0)
-                                            {<h4 class="product-price">@prod.PriceDiscount <del class="product-old-price">@prod.Price</del></h4>}
-                                            else
-                                            { <h4 class="product-price">@prod.Price</h4>}
+                                    </div>
+                                    <div class="product-body">
+                                        <p class="product-category">@prod.Category</p>
+                                        <h3 class="product-name"><a href="@Url.Action("Product", "Home", new { Art = prod.Article })">@prod.Name</a></h3>
+                                        @if (prod.Discount > 0)
+                                        {<h4 class="product-price">@prod.PriceDiscount <del class="product-old-price">@prod.Price</del></h4>}
+                                    else
+                                    { <h4 class="product-price">@prod.Price</h4>}
                                         <div class="product-rating">
                                             @for (int i = 1; i <= 5; i++)
                                             {
                                                 <i class="fa @(i <= prod.AvarageRating ? "fa-star" : "fa-star-o")"></i>
                                             }
                                         </div>
+                                        @using (Html.BeginForm("AddToFav", "Profile", new { Art = prod.Article, page = ViewBag.CurrentPage }, FormMethod.Post))
+                                        {
                                             <div class="product-btns">
+
                                                 <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
                                             </div>
-                                        </div>
+                                        }
+                                    </div>
+                                    @using (Html.BeginForm("AddToCart", "Profile", new { Art = prod.Article, page = ViewBag.CurrentPage }, FormMethod.Post))
+                                    {
                                         <div class="add-to-cart">
                                             <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
                                         </div>
-                                    </div>
+                                    }
+                                </div>
                                     <!-- /product -->
                                     }
                             </div>
@@ -67,7 +72,6 @@
                         </div>
                         <!-- /tab -->
                     </div>
-                    }
                 </div>
             </div>
             <!-- Products tab & slick -->
@@ -100,36 +104,43 @@
                                 @foreach (var prod in ViewBag.TopProducts)
                                 {
                                     <!-- product -->
-                                    <div class="product">
-                                        <div class="product-img">
-                                            <img src="@prod.Image" alt="">
-                                            <div class="product-label">
-                                                @if (@prod.Discount > 0)
-                                                { <span class="sale">@prod.Discount%</span>}
-                                                <span class="new">NEW</span>
-                                            </div>
+                                <div class="product">
+                                    <div class="product-img">
+                                        <img src="@prod.Image" alt="">
+                                        <div class="product-label">
+                                            @if (@prod.Discount > 0)
+                                            {<span class="sale">@prod.Discount%</span>}
+                                            <span class="new">NEW</span>
                                         </div>
-                                        <div class="product-body">
-                                            <p class="product-category">@prod.Category</p>
-                                            <h3 class="product-name"><a href="@Url.Action("Product", "Home", new { Art = prod.Article })">@prod.Name</a></h3>
-                                            @if (prod.Discount > 0)
-                                            {<h4 class="product-price">@prod.PriceDiscount <del class="product-old-price">@prod.Price</del></h4>}
-                                            else
-                                            { <h4 class="product-price">@prod.Price</h4>}
+                                    </div>
+                                    <div class="product-body">
+                                        <p class="product-category">@prod.Category</p>
+                                        <h3 class="product-name"><a href="@Url.Action("Product", "Home", new { Art = prod.Article })">@prod.Name</a></h3>
+                                        @if (prod.Discount > 0)
+                                        {<h4 class="product-price">@prod.PriceDiscount <del class="product-old-price">@prod.Price</del></h4>}
+                                    else
+                                    { <h4 class="product-price">@prod.Price</h4>}
                                         <div class="product-rating">
                                             @for (int i = 1; i <= 5; i++)
                                             {
                                                 <i class="fa @(i <= prod.AvarageRating ? "fa-star" : "fa-star-o")"></i>
                                             }
                                         </div>
+                                        @using (Html.BeginForm("AddToFav", "Profile", new { Art = prod.Article, page = ViewBag.CurrentPage }, FormMethod.Post))
+                                        {
                                             <div class="product-btns">
+
                                                 <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
                                             </div>
-                                        </div>
+                                        }
+                                    </div>
+                                    @using (Html.BeginForm("AddToCart", "Profile", new { Art = prod.Article, page = ViewBag.CurrentPage }, FormMethod.Post))
+                                    {
                                         <div class="add-to-cart">
                                             <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
                                         </div>
-                                    </div>
+                                    }
+                                </div>
                                     <!-- /product -->
                                 }
                             </div>

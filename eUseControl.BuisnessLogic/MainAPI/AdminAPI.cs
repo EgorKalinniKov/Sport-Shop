@@ -166,6 +166,12 @@ namespace eUseControl.BuisnessLogic.MainAPI
             BanUser.Level = Domain.Enums.URole.Banned;
             BanUser.BanTime = data.BanTime;
 
+
+            using (var db = new UserContext())
+            {
+                db.Entry(BanUser).State = EntityState.Modified;
+                db.SaveChanges();
+            }
             return new BaseResponces { Status = true };
         }
         internal BaseResponces EditUserAction(UserEdit data)

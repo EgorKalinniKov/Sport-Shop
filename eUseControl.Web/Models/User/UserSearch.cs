@@ -10,6 +10,7 @@ namespace eUseControl.Web.Models.User
     {
         public List<UserMinimal> Users { get; set; }
         public int Id { get; set; }
+        public string Name { get; set; }
         public DateTime BanTime { get; set; }
 
         public string SelectedName { get; set; }

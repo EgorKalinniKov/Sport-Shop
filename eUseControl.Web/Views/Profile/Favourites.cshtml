@@ -84,13 +84,19 @@
                                             <i class="fa @(i <= prod.AvarageRating ? "fa-star" : "fa-star-o")"></i>
                                         }
                                     </div>
-                                    <div class="product-btns">
-                                        <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+                                    @using (Html.BeginForm("DeleteFromFav", "Profile", new { Art = prod.Article, page = ViewBag.CurrentPage }, FormMethod.Post))
+                                    {
+                                        <div class="product-btns">
+                                            <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">Delete From wishlist</span></button>
+                                        </div>
+                                    }
+                                </div>
+                                @using (Html.BeginForm("AddToCart", "Profile", new { Art = prod.Article, page = ViewBag.CurrentPage }, FormMethod.Post))
+                                {
+                                    <div class="add-to-cart">
+                                        <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
                                     </div>
-                                </div>
-                                <div class="add-to-cart">
-                                    <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-                                </div>
+                                }
                             </div>
                         </div>
                         if (prodCount >= 11) { break; }

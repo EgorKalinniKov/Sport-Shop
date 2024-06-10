@@ -31,6 +31,8 @@ namespace eUseControl.BuisnessLogic.MainAPI
                         Email = u.Email,
                         BanTime = u.BanTime,
                         Level = u.Level,
+                        LastIp = u.LastIp,
+                        LastLogin = u.LastLogin,
                     };
                     ListU.Add(userMin);
                 }
@@ -61,16 +63,16 @@ namespace eUseControl.BuisnessLogic.MainAPI
                     if (local == null) { return new BaseResponces { Status = false, StatusMessage = "User doesn't exist" }; }
 
                     local.Level = Domain.Enums.URole.User;
-                    using (var db = new SessionContext())
+                    using (var db = new UserContext())
                     {
                         db.Entry(local).State = EntityState.Modified;
                         db.SaveChanges();
                     }
-                    return new BaseResponces { Status = true };
                 }
+                return new BaseResponces { Status = false, StatusMessage = "User is still banned" };
             }
 
-            return new BaseResponces { Status = false, StatusMessage = "User is still banned" };
+            return new BaseResponces { Status = true };
         }
         internal BaseResponces GenerateUserSession(ULoginData data)
         {
@@ -181,9 +183,44 @@ namespace eUseControl.BuisnessLogic.MainAPI
             }
             return new BaseResponces { Status = true };
         }
+        internal BaseResponces DeleteReviewAction(int? id)
+        {
+            RDbTable deleteReview = null;
+            using (var db = new ReviewContext())
+            {
+                deleteReview = db.Reviews.FirstOrDefault(x => x.ReviewId == id);
+            }
+            if (deleteReview == null) { return new BaseResponces { Status = false, StatusMessage = "Review doesn't exist" }; }
+
+            PDbTable local = null;
+            using (var db = new ProductContext())
+            {
+                local = db.Products.FirstOrDefault(x => x.Article == deleteReview.Article);
+            }
+            if (local == null) { return new BaseResponces { Status = false, StatusMessage = "Product doesn't exist" }; }
+
+            using (var db = new ProductContext())
+            {
+                if (local.TotalRatings > 1)
+                { local.AvarageRating = (local.AvarageRating * local.TotalRatings - deleteReview.Rate) / (local.TotalRatings - 1); }
+                else
+                { local.AvarageRating = local.AvarageRating - deleteReview.Rate; }
+                local.TotalRatings--;
+                db.Entry(local).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            using (var db = new ReviewContext())
+            {
+                var rev = db.Reviews.FirstOrDefault(x => x.ReviewId == id);
+                db.Reviews.Remove(rev);
+                db.SaveChanges();
+            }
+            return new BaseResponces { Status = true };
+        }
         internal List<ProdMin> GetUserCartAction(int? id)
         {
-            List<Item> local = null;
+            List<ItemsCart> local = null;
             List<ProdMin> ListP = new List<ProdMin>();
             using (var db = new CartContext())
             {
@@ -221,7 +258,7 @@ namespace eUseControl.BuisnessLogic.MainAPI
         }
         internal List<ProdMin> GetUserFavAction(int? id)
         {
-            List<Item> local = null;
+            List<ItemsFav> local = null;
             List<ProdMin> ListP = new List<ProdMin>();
             using (var db = new FavContext())
             {
@@ -259,7 +296,7 @@ namespace eUseControl.BuisnessLogic.MainAPI
         }
         internal BaseResponces RemoveItemFromFavAction(string Art, int? id)
         {
-            Item local = null;
+            ItemsFav local = null;
             using (var db = new FavContext())
             {
                 local = db.Favourites.FirstOrDefault(x => x.ProductArticle == Art && x.UserId == id);
@@ -276,7 +313,7 @@ namespace eUseControl.BuisnessLogic.MainAPI
         }
         internal BaseResponces RemoveItemFromCartAction(string Art, int? id)
         {
-            Item local = null;
+            ItemsCart local = null;
             using (var db = new CartContext())
             {
                 local = db.Cart.FirstOrDefault(x => x.ProductArticle == Art && x.UserId == id);
@@ -293,14 +330,14 @@ namespace eUseControl.BuisnessLogic.MainAPI
         }
         internal BaseResponces AddItemToCartAction(string Art, int id)
         {
-            Item local = null;
+            ItemsCart local = null;
             using (var db = new CartContext())
             {
                 local = db.Cart.FirstOrDefault(x => x.ProductArticle == Art && x.UserId == id);
             }
             if (local != null) { return new BaseResponces { Status = false, StatusMessage = "Product already in the cart" }; }
 
-            var item = new Item
+            var item = new ItemsCart
             {
                 UserId = id,
                 ProductArticle = Art,
@@ -315,14 +352,14 @@ namespace eUseControl.BuisnessLogic.MainAPI
         }
         internal BaseResponces AddItemToFavAction(string Art, int id)
         {
-            Item local = null;
+            ItemsFav local = null;
             using (var db = new FavContext())
             {
                 local = db.Favourites.FirstOrDefault(x => x.ProductArticle == Art && x.UserId == id);
             }
             if (local != null) { return new BaseResponces { Status = false, StatusMessage = "Product already in favourites" }; }
 
-            var item = new Item
+            var item = new ItemsFav
             {
                 UserId = id,
                 ProductArticle = Art,
@@ -395,6 +432,7 @@ namespace eUseControl.BuisnessLogic.MainAPI
             if (curentUser == null) return null;
             var userminimal = new UserMinimal
             {
+                Id = curentUser.Id,
                 Username = curentUser.Username,
                 Email = curentUser.Email,
                 BanTime = curentUser.BanTime,
@@ -417,7 +455,7 @@ namespace eUseControl.BuisnessLogic.MainAPI
             {
                 case "Email": local.Email = data.Credential; break;
                 case "Username": local.Username = data.Credential; break;
-                case "Password": local.Password = data.Credential; break;
+                case "Password": local.Password = LoginHelper.HashGen(data.Credential); break;
                 default: return new BaseResponces { Status = false, StatusMessage = "Unregistered action" };
             }
             local.DateEdited = DateTime.Now;

@@ -4,7 +4,7 @@
 }
 
 @using System.Web.Optimization
-@model eUseControl.Web.Models.Product.ReviewReg
+@model eUseControl.Web.Models.Product.ProdStore
 @{
     var ReviewPerPage = 5;
     var ReviewCount = 0;
@@ -75,12 +75,18 @@
                     </div>
 
                     <div class="add-to-cart">
-                        <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                        @using (Html.BeginForm("AddToCart", "Profile", new { Art = ViewBag.Product.Article, page = "Product" }, FormMethod.Post))
+                        {
+                            <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                        }
                     </div>
 
-                    <ul class="product-btns">
-                        <li><a href="#"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
-                    </ul>
+                    @using (Html.BeginForm("AddToFav", "Profile", new { Art = ViewBag.Product.Article, page = "Product" }, FormMethod.Post))
+                    {
+                        <div class="product-btns">
+                            <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+                        </div>
+                    }
 
                     <ul class="product-links">
                         <li>Category:</li>
@@ -219,37 +225,46 @@
                                                         <div class="review-body">
                                                             <p>@rev.Message</p>
                                                         </div>
-                                                    </li>
+                                                        @if (ViewBag.Role == eUseControl.Domain.Enums.URole.Admin || ViewBag.UserId == rev.UserId)
+                                                        {
+                                                        <div class="col-sm-5">
+                                                            @using (Html.BeginForm("DeleteReview", "Profile", new { id = rev.Id, Article = ViewBag.Product.Article, }, FormMethod.Post))
+                                                            {
+                                                                <button class="primary-btn">delete</button>
+                                                            }
+                                                        </div>
+                                                        }
+                                                     </li>
                                                     if (ReviewCount >= 4) { break; }
                                                 }
                                             }
-                                        </ul>
-                                        <ul class="reviews-pagination">
-                                            <li><a href="#"><i class="fa fa-angle-left"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
-                                        </ul>
-                                    </div>
+                                            </ul>
+                                            <ul class="reviews-pagination">
+                                                <li><a href="#"><i class="fa fa-angle-left"></i></a></li>
+                                                <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+                                            </ul>
+                                        </div>
                                 </div>
                                 <!-- /Reviews -->
                                 <!-- Review Form -->
                                 <div class="col-md-3">
                                     <div id="review-form">
                                         <div class="review-form">
-                                            @using (Html.BeginForm("AddReview", "Profle", FormMethod.Post, new { @id = "ReviewForm" }))
+                                            @using (Html.BeginForm("AddReview", "Profile", FormMethod.Post, new { @id = "ReviewForm" }))
                                             {
-                                                <textarea class="input" name="@Html.NameFor(x => x.Message)" placeholder="Your Review"></textarea>
+                                                <textarea class="input" name="@Html.NameFor(x => x.ReviewReg.Message)" placeholder="Your Review"></textarea>
                                                 <div class="input-rating">
                                                     <span>Your Rating: </span>
                                                     <div class="stars">
-                                                        <input id="star5" name="@Html.NameFor(x => x.Rate)" value="5" type="radio"><label for="star5"></label>
-                                                        <input id="star4" name="@Html.NameFor(x => x.Rate)" value="4" type="radio"><label for="star4"></label>
-                                                        <input id="star3" name="@Html.NameFor(x => x.Rate)" value="3" type="radio"><label for="star3"></label>
-                                                        <input id="star2" name="@Html.NameFor(x => x.Rate)" value="2" type="radio"><label for="star2"></label>
-                                                        <input id="star1" name="@Html.NameFor(x => x.Rate)" value="1" type="radio"><label for="star1"></label>
+                                                        <input id="star5" name="@Html.NameFor(x => x.ReviewReg.Rate)" value="5" type="radio"><label for="star5"></label>
+                                                        <input id="star4" name="@Html.NameFor(x => x.ReviewReg.Rate)" value="4" type="radio"><label for="star4"></label>
+                                                        <input id="star3" name="@Html.NameFor(x => x.ReviewReg.Rate)" value="3" type="radio"><label for="star3"></label>
+                                                        <input id="star2" name="@Html.NameFor(x => x.ReviewReg.Rate)" value="2" type="radio"><label for="star2"></label>
+                                                        <input id="star1" name="@Html.NameFor(x => x.ReviewReg.Rate)" value="1" type="radio"><label for="star1"></label>
                                                     </div>
                                                 </div>
 
-                                                <input hidden name="@Html.NameFor(x => x.Article)" id="@Html.IdFor(x => x.Article)" value="@ViewBag.Product.Article">
+                                                <input hidden name="@Html.NameFor(x => x.ReviewReg.Article)" id="@Html.IdFor(x => x.ReviewReg.Article)" value="@ViewBag.Product.Article">
                                                 <button class="primary-btn">Submit</button>
                                             }
                                             </div>

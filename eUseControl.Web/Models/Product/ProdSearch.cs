@@ -11,6 +11,7 @@ namespace eUseControl.Web.Models.Product
         public List<ProdMin> Products { get; set; }
         public string SelectedName { get; set; }
         public string Sort { get; set; }
+        public ReviewReg ReviewReg { get; set; }
         public ProdSearch()
         {
             Products = new List<ProdMin>();

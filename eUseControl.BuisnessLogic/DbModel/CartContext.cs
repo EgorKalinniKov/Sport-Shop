@@ -12,6 +12,6 @@ namespace eUseControl.BuisnessLogic.DbModel
     {
         public CartContext() : base("name=eUseControl") { }
 
-        public virtual DbSet<Item> Cart { get; set; }
+        public virtual DbSet<ItemsCart> Cart { get; set; }
     }
 }

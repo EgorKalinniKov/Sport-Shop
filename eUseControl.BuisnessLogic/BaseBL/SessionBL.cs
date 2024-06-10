@@ -45,6 +45,10 @@ namespace eUseControl.BuisnessLogic.BaseBL
         {
             return RegisterUReviewAction(rData);
         }
+        public BaseResponces DeleteReviewActionFlow(int Id)
+        {
+            return DeleteReviewAction(Id);
+        }
         public HttpCookie GenCookie(string loginCredential)
         {
             return Cookie(loginCredential);
@@ -53,29 +57,29 @@ namespace eUseControl.BuisnessLogic.BaseBL
         {
             return UserCookie(apiCookieValue);
         }
-        public List<ProdMin> GetUserCartActionFlow(int? id)
+        public List<ProdMin> GetUserCartActionFlow(int id)
         {
             return GetUserCartAction(id);
         }
-        public List<ProdMin> GetUserFavActionFlow(int? id)
+        public List<ProdMin> GetUserFavActionFlow(int id)
         {
             return GetUserFavAction(id);
         }
-        public BaseResponces AddItemToCartActionFlow (string Art, int? id)
+        public BaseResponces AddItemToCartActionFlow (string Art, int id)
         {
-            return AddItemToCartActionFlow(Art, id);
+            return AddItemToCartAction(Art, id);
         }
-        public BaseResponces AddItemToFavActionFlow(string Art, int? id)
+        public BaseResponces AddItemToFavActionFlow(string Art, int id)
         {
-            return AddItemToFavActionFlow(Art, id);
+            return AddItemToFavAction(Art, id);
         }
-        public BaseResponces RemoveItemFromCartActionFlow(string Art, int? id)
+        public BaseResponces RemoveItemFromCartActionFlow(string Art, int id)
         {
             return RemoveItemFromCartAction(Art, id);
         }
-        public BaseResponces RemoveItemFromFavActionFlow(string Art, int? id)
+        public BaseResponces RemoveItemFromFavActionFlow(string Art, int id)
         {
-            return RemoveItemFromFavActionFlow(Art, id);
+            return RemoveItemFromFavAction(Art, id);
         }
         public BaseResponces EditUserActionFlow(UserEdit data)
         {

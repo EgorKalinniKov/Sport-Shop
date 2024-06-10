@@ -54,7 +54,8 @@
   <ItemGroup>
     <Compile Include="Entities\Administration\BanedUser.cs" />
     <Compile Include="Entities\Administration\SessionTable.cs" />
-    <Compile Include="Entities\Product\Item.cs" />
+    <Compile Include="Entities\Product\ItemsCart.cs" />
+    <Compile Include="Entities\Product\ItemsFav.cs" />
     <Compile Include="Entities\Product\PDbTable.cs" />
     <Compile Include="Entities\Product\PImgTable.cs" />
     <Compile Include="Entities\Product\PRegisterData.cs" />

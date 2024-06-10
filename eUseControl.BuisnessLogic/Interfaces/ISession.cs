@@ -21,14 +21,15 @@ namespace eUseControl.BuisnessLogic.Interfaces
         BaseResponces GenerateUserSessionActionFlow(ULoginData ulData);
         void CloseUserSessionActionFlow(string cookie);
         BaseResponces RegisterUReviewActionFlow(RRegisterData rData);
+        BaseResponces DeleteReviewActionFlow(int Id);
         HttpCookie GenCookie(string loginCredential);
         UserMinimal GetUserByCookie(string apiCookieValue);
-        List<ProdMin> GetUserCartActionFlow(int? id);
-        List<ProdMin> GetUserFavActionFlow(int? id);
-        BaseResponces AddItemToCartActionFlow(string Art, int? id);
-        BaseResponces AddItemToFavActionFlow(string Art, int? id);
-        BaseResponces RemoveItemFromCartActionFlow(string Art, int? id);
-        BaseResponces RemoveItemFromFavActionFlow(string Art, int? id);
+        List<ProdMin> GetUserCartActionFlow(int id);
+        List<ProdMin> GetUserFavActionFlow(int id);
+        BaseResponces AddItemToCartActionFlow(string Art, int id);
+        BaseResponces AddItemToFavActionFlow(string Art, int id);
+        BaseResponces RemoveItemFromCartActionFlow(string Art, int id);
+        BaseResponces RemoveItemFromFavActionFlow(string Art, int id);
         BaseResponces EditUserActionFlow(UserEdit data);
         void DeleteUserActionFlow(int id);
     }

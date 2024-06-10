@@ -280,9 +280,9 @@ namespace eUseControl.Web.Controllers
 
         [AdminMod]
         [HttpPost]
-        public ActionResult DeleteReview(int? id, string Art)
+        public ActionResult DeleteReview(int id, string Art)
         {
-            BaseResponces resp = _product.DeleteReviewActionFlow(id);
+            BaseResponces resp = _user.DeleteReviewActionFlow(id);
             if(!String.IsNullOrEmpty(Art))
             return RedirectToAction("Product", "Admin", new { Art = Art });
             return RedirectToAction("Comments", "Admin");
@@ -290,12 +290,12 @@ namespace eUseControl.Web.Controllers
 
         [AdminMod]
         [HttpPost]
-        public ActionResult UserBan(UserSearch data)
+        public ActionResult UserBan(DateTime BanTime, int id)
         {
             var user = new BanedUser
             {
-                Id = data.Id,
-                BanTime = data.BanTime,
+                Id = id,
+                BanTime = BanTime,
             };
             BaseResponces resp = _admin.BanUserActionFlow(user);
             return RedirectToAction("BanUser","Admin");
@@ -303,15 +303,15 @@ namespace eUseControl.Web.Controllers
 
         [AdminMod]
         [HttpPost]
-        public ActionResult UserEdit(string cred, int id)
+        public ActionResult UserEdit(string name, int id)
         {
             var user = new UserEdit
             {
                 Id = id,
-                Credential = cred,
+                Credential = name,
             };
             BaseResponces resp = _admin.EditUserActionFlow(user);
-            return null;
+            return RedirectToAction("Users", "Admin");
         }
     }
 }

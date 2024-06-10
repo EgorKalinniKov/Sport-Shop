@@ -86,7 +86,10 @@
                                                 else
                                                 { <h4 class="product-price">@p.Price</h4>}
                                             </div>
-                                            <button class="delete"><i class="fa fa-close"></i></button>
+                                            @using (Html.BeginForm("DeleteFromFav", "Profile", new {Art = p.Article, page = ViewBag.CurrentPage }, FormMethod.Post))
+                                            {
+                                                <button class="delete"><i class="fa fa-close"></i></button>
+                                            }   
                                         </div>
                                     }
                                     <div class="cart-btns">
@@ -126,11 +129,14 @@
                                                 totalcost += PriceDiscount;
                                                 <h4 class="product-price">@PriceDiscount <del class="product-old-price">@p.Price</del></h4>}
                                             else
-                                            { <h4 class="product-price">@p.Price</h4> 
-                                                totalcost += p.Price;
-                                            }
+                                            { <h4 class="product-price">@p.Price</h4>
+                                            totalcost += p.Price;
+                                        }
                                         </div>
-                                        <button class="delete"><i class="fa fa-close"></i></button>
+                                        @using (Html.BeginForm("DeleteFromCart", "Profile", new { Art = p.Article, page = ViewBag.CurrentPage }, FormMethod.Post))
+                                        {
+                                            <button class="delete"><i class="fa fa-close"></i></button>
+                                        }
                                     </div>
                                 }
                                 <div class="cart-summary">

@@ -45,9 +45,6 @@ namespace eUseControl.BuisnessLogic.BaseBL
         {
             return GetProduct(Cred);
         }
-        public BaseResponces DeleteReviewActionFlow(int? Id)
-        {
-            return DeleteReviewAction(Id);
-        }
+
     }
 }

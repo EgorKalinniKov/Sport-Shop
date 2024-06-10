@@ -35,7 +35,7 @@ namespace eUseControl.Web.Controllers
         public ActionResult Index()
         {
             SessionStatus();
-
+            ViewBag.CurrentPage = "Index";
             ViewBag.NewProducts = _product.GetNewProductsActionFlow();
             ViewBag.TopProducts = _product.GetTopProductsActionFlow();
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
@@ -53,6 +53,7 @@ namespace eUseControl.Web.Controllers
         public ActionResult Product(string Art)
         {
             SessionStatus();
+            ViewBag.CurrentPage = "Product";
             ViewBag.Product = _product.GetProductByArticleActionFlow(Art);
             ViewBag.ProductImgs = _product.GetProductImgsActionFlow(Art);
             ViewBag.ProdReview = _product.GetProductReviewsActionFlow(Art);
@@ -61,17 +62,20 @@ namespace eUseControl.Web.Controllers
                 return View();
             }
 
-            int UserId = System.Web.HttpContext.Current.GetMySessionObject().Id;
-            ViewBag.Cart = _session.GetUserCartActionFlow(UserId);
-            ViewBag.Fav = _session.GetUserFavActionFlow(UserId);
-            return View(new ReviewReg());
+            ViewBag.UserId = System.Web.HttpContext.Current.GetMySessionObject().Id;
+            ViewBag.Role = System.Web.HttpContext.Current.GetMySessionObject().Level;
+            ViewBag.Cart = _session.GetUserCartActionFlow(ViewBag.UserId);
+            ViewBag.Fav = _session.GetUserFavActionFlow(ViewBag.UserId);
+            return View(new ProdStore());
         }
 
         public ActionResult Store(string category)
         {
             SessionStatus();
+            ViewBag.CurrentPage = "Store";
             var data = new ProdStore();
             data.Products = _product.GetAllProductsActionFlow();
+            data.SelectedCategory = category;
             if (!String.IsNullOrEmpty(data.SelectedCategory) && (data.SelectedCategory != "All"))
                 data.Products = data.Products.Where(x => x.Category == data.SelectedCategory).ToList();
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")

@@ -19,6 +19,6 @@ namespace eUseControl.BuisnessLogic.Interfaces
         List<ReviewData> GetAllCommentsActionFlow();
         List<string> GetProductImgsActionFlow(string art);
         ProdMin GetProductActionFlow(string Cred);
-        BaseResponces DeleteReviewActionFlow(int? Id);
+
     }
 }

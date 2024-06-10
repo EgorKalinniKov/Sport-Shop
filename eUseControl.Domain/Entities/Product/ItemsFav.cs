@@ -5,11 +5,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using eUseControl.Domain.Enums;
 
 namespace eUseControl.Domain.Entities.Product
 {
-    public class Item
+    public class ItemsFav
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

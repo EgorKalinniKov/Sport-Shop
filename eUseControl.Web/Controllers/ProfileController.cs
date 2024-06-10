@@ -25,6 +25,7 @@ namespace eUseControl.Web.Controllers
             {
                 return RedirectToAction("Index", "Login");
             }
+            ViewBag.Id = System.Web.HttpContext.Current.GetMySessionObject().Id;
             ViewBag.Name = System.Web.HttpContext.Current.GetMySessionObject().Username;
             ViewBag.Email = System.Web.HttpContext.Current.GetMySessionObject().Email;
             return View();
@@ -41,6 +42,7 @@ namespace eUseControl.Web.Controllers
         public ActionResult Cart()
         {
             SessionStatus();
+            ViewBag.CurrentPage = "Cart";
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
             {
                 return RedirectToAction("Index", "Login");
@@ -52,6 +54,7 @@ namespace eUseControl.Web.Controllers
         public ActionResult Favourites()
         {
             SessionStatus();
+            ViewBag.CurrentPage = "Favourites";
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
             {
                 return RedirectToAction("Index", "Login");
@@ -85,9 +88,13 @@ namespace eUseControl.Web.Controllers
             int UserId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             BaseResponces resp = _session.AddItemToCartActionFlow(Art, UserId);
             if (!resp.Status) ModelState.AddModelError("", resp.StatusMessage);
-            if (page == "Product")
-                return RedirectToAction(page, "Home", new { Art = Art });
-            return RedirectToAction(page, "Home");
+            switch (page)
+            {
+                case "index": return RedirectToAction(page, "Home");
+                case "Cart": return RedirectToAction(page, "Profile");
+                case "Favourites": return RedirectToAction(page, "Profile");
+            }
+            return RedirectToAction(page, "Home", new { Art = Art });
         }
         [HttpPost]
         public ActionResult AddToFav(string Art, string page)
@@ -100,9 +107,13 @@ namespace eUseControl.Web.Controllers
             int UserId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             BaseResponces resp = _session.AddItemToFavActionFlow(Art, UserId);
             if (!resp.Status) ModelState.AddModelError("", resp.StatusMessage);
-            if (page == "Product")
-                return RedirectToAction(page, "Home", new { Art = Art });
-            return RedirectToAction(page, "Home");
+            switch(page)
+            {
+                case "index":   return RedirectToAction(page, "Home");
+                case "Cart":    return RedirectToAction(page, "Profile");
+                case "Favourites":     return RedirectToAction(page, "Profile");
+            }
+            return RedirectToAction(page, "Home", new { Art = Art });
         }
         [HttpPost]
         public ActionResult DeleteFromCart(string Art, string page)
@@ -115,9 +126,13 @@ namespace eUseControl.Web.Controllers
             int UserId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             BaseResponces resp = _session.RemoveItemFromCartActionFlow(Art, UserId);
             if (!resp.Status) ModelState.AddModelError("", resp.StatusMessage);
-            if (page == "Product")
-                return RedirectToAction(page, "Home", new { Art = Art });
-            return RedirectToAction(page, "Home");
+            switch (page)
+            {
+                case "index": return RedirectToAction(page, "Home");
+                case "Cart": return RedirectToAction(page, "Profile");
+                case "Favourites": return RedirectToAction(page, "Profile");
+            }
+            return RedirectToAction(page, "Home", new { Art = Art });
         }
         [HttpPost]
         public ActionResult DeleteFromFav(string Art, string page)
@@ -130,13 +145,17 @@ namespace eUseControl.Web.Controllers
             int UserId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             BaseResponces resp = _session.RemoveItemFromFavActionFlow(Art, UserId);
             if (!resp.Status) ModelState.AddModelError("", resp.StatusMessage);
-            if (page == "Product")
-                return RedirectToAction(page, "Home", new { Art = Art });
-            return RedirectToAction(page, "Home");
+            switch (page)
+            {
+                case "index": return RedirectToAction(page, "Home");
+                case "Cart": return RedirectToAction(page, "Profile");
+                case "Favourites": return RedirectToAction(page, "Profile");
+            }
+            return RedirectToAction(page, "Home", new { Art = Art });
         }
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public ActionResult AddReview(ReviewReg data)
+        public ActionResult AddReview(ProdStore data)
         {
             if (ModelState.IsValid)
             {
@@ -160,9 +179,9 @@ namespace eUseControl.Web.Controllers
                     {
                         UserId = System.Web.HttpContext.Current.GetMySessionObject().Id,
                         Username = System.Web.HttpContext.Current.GetMySessionObject().Username,
-                        Article = data.Article,
-                        Message = data.Message,
-                        Rate = data.Rate,
+                        Article = data.ReviewReg.Article,
+                        Message = data.ReviewReg.Message,
+                        Rate = data.ReviewReg.Rate,
                     };
 
                     BaseResponces resp = _session.RegisterUReviewActionFlow(rData);
@@ -170,7 +189,36 @@ namespace eUseControl.Web.Controllers
                 }
                 else ModelState.AddModelError("", check.StatusMessage);
             }
-            return RedirectToAction("Product", "Home", new { Art = data.Article });
+            return RedirectToAction("Product", "Home", new { Art = data.ReviewReg.Article });
+        }
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult DeleteReview(int id, string Article)
+        {
+            if (ModelState.IsValid)
+            {
+                SessionStatus();
+                if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+                {
+                    return RedirectToAction("index", "Login");
+                }
+                var user = new UserMinimal
+                {
+                    Level = System.Web.HttpContext.Current.GetMySessionObject().Level,
+                    Email = System.Web.HttpContext.Current.GetMySessionObject().Email,
+                    BanTime = System.Web.HttpContext.Current.GetMySessionObject().BanTime,
+                };
+
+                BaseResponces check = _session.CheckIfUserBannedActionFlow(user);
+
+                if (check.Status)
+                {
+                    BaseResponces resp = _session.DeleteReviewActionFlow(id);
+                    if (!resp.Status) ModelState.AddModelError("", check.StatusMessage);
+                }
+                else ModelState.AddModelError("", check.StatusMessage);
+            }
+            return RedirectToAction("Product", "Home", new { Art = Article });
         }
         [HttpPost]
         //[ValidateAntiForgeryToken]
@@ -181,16 +229,37 @@ namespace eUseControl.Web.Controllers
             {
                 return RedirectToAction("index", "Login");
             }
+
+            string cred = "";
+            switch(data.FormName)
+            {
+                case "Email":       cred = data.Email; break;
+                case "Username":    cred = data.Username; break;
+                case "Password":    cred = data.Password; break;
+                default: return RedirectToAction("Index", "Profile");
+            }
+
             var user = new UserEdit
             {
                 Id = System.Web.HttpContext.Current.GetMySessionObject().Id,
                 Form = data.FormName,
-                Credential = data.Credential,
+                Credential = cred,
             };
 
             BaseResponces resp = _session.EditUserActionFlow(user);
             return RedirectToAction("Index", "Profile");
 
+        }
+        [HttpPost]
+        public ActionResult Delete()
+        {
+            SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("index", "Login");
+            }
+            _session.DeleteUserActionFlow(System.Web.HttpContext.Current.GetMySessionObject().Id);
+            return RedirectToAction("Index", "Login");
         }
     }
 }
